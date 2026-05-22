@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mal's Admin — Menu Manager</title>
+<style>
+  :root {
+    --gold: #D4A017;
+    --gold-light: #F0C040;
+    --gold-dark: #A07810;
+    --black: #0a0a0a;
+    --dark: #111111;
+    --card: #1a1a1a;
+    --border: #2a2a2a;
+    --text: #f0f0f0;
+    --muted: #888;
+    --red: #e05555;
+    --green: #4caf7d;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--black); color: var(--text); font-family: 'Segoe UI', system-ui, sans-serif; min-height: 100vh; }
+
+  /* LOGIN */
+  #login-screen {
+    display: flex; align-items: center; justify-content: center;
+    min-height: 100vh; padding: 20px;
+  }
+  .login-box {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 16px; padding: 48px 40px; width: 100%; max-width: 400px; text-align: center;
+  }
+  .login-logo { font-size: 48px; margin-bottom: 8px; }
+  .login-box h1 { color: var(--gold); font-size: 22px; margin-bottom: 4px; }
+  .login-box p { color: var(--muted); font-size: 14px; margin-bottom: 32px; }
+  .login-box input {
+    width: 100%; padding: 14px 16px; background: var(--black);
+    border: 1px solid var(--border); border-radius: 10px; color: var(--text);
+    font-size: 16px; margin-bottom: 16px; outline: none;
+  }
+  .login-box input:focus { border-color: var(--gold); }
+  .btn-login {
+    width: 100%; padding: 14px; background: var(--gold); color: var(--black);
+    border: none; border-radius: 10px; font-size: 16px; font-weight: 700;
+    cursor: pointer; transition: background .2s;
+  }
+  .btn-login:hover { background: var(--gold-light); }
+  .login-error { color: var(--red); font-size: 13px; margin-top: 12px; display: none; }
+
+  /* ADMIN LAYOUT */
+  #admin-app { display: none; }
+  .top-bar {
+    background: var(--card); border-bottom: 1px solid var(--border);
+    padding: 16px 24px; display: flex; align-items: center; justify-content: space-between;
+    position: sticky; top: 0; z-index: 100;
+  }
+  .top-bar-left { display: flex; align-items: center; gap: 12px; }
+  .top-bar-logo { font-size: 28px; }
+  .top-bar h1 { color: var(--gold); font-size: 18px; font-weight: 700; }
+  .top-bar-sub { color: var(--muted); font-size: 12px; }
+  .top-bar-actions { display: flex; gap: 10px; align-items: center; }
+  .btn { padding: 10px 20px; border-radius: 8px; border: none; font-size: 14px; font-weight: 600; cursor: pointer; transition: all .2s; }
+  .btn-gold { background: var(--gold); color: var(--black); }
+  .btn-gold:hover { background: var(--gold-light); }
+  .btn-outline { background: transparent; color: var(--gold); border: 1px solid var(--gold); }
+  .btn-outline:hover { background: rgba(212,160,23,0.1); }
+  .btn-danger { background: transparent; color: var(--red); border: 1px solid var(--red); }
+  .btn-danger:hover { background: rgba(224,85,85,0.1); }
+  .btn-sm { padding: 6px 14px; font-size: 13px; }
+  .btn-icon { padding: 6px 10px; font-size: 16px; }
+
+  .main { max-width: 960px; margin: 0 auto; padding: 32px 24px; }
+
+  /* SAVE BANNER */
+  .save-banner {
+    background: rgba(212,160,23,0.12); border: 1px solid var(--gold);
+    border-radius: 10px; padding: 14px 20px; margin-bottom: 28px;
+    display: none; align-items: center; justify-content: space-between; gap: 12px;
+  }
+  .save-banner.show { display: flex; }
+  .save-banner span { color: var(--gold); font-size: 14px; }
+
+  /* SECTION HEADER */
+  .section-header {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 20px; padding-bottom: 12px; border-bottom: 1px solid var(--border);
+  }
+  .section-header h2 { font-size: 22px; color: var(--gold); }
+  .section-header p { color: var(--muted); font-size: 13px; margin-top: 2px; }
+
+  /* CATEGORY CARD */
+  .cat-card {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 12px; margin-bottom: 20px; overflow: hidden;
+  }
+  .cat-header {
+    padding: 16px 20px; display: flex; align-items: center; justify-content: space-between;
+    cursor: pointer; user-select: none; background: rgba(255,255,255,0.02);
+    border-bottom: 1px solid var(--border);
+  }
+  .cat-header:hover { background: rgba(212,160,23,0.05); }
+  .cat-header-left { display: flex; align-items: center; gap: 12px; }
+  .cat-emoji { font-size: 22px; }
+  .cat-name { font-size: 16px; font-weight: 700; color: var(--text); }
+  .cat-count { font-size: 12px; color: var(--muted); margin-left: 8px; }
+  .cat-chevron { color: var(--muted); font-size: 18px; transition: transform .2s; }
+  .cat-card.collapsed .cat-chevron { transform: rotate(-90deg); }
+  .cat-card.collapsed .cat-body { display: none; }
+  .cat-body { padding: 0; }
+
+  /* ITEM ROW */
+  .item-row {
+    display: grid; grid-template-columns: 1fr auto auto auto;
+    align-items: center; gap: 12px; padding: 12px 20px;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+  }
+  .item-row:last-child { border-bottom: none; }
+  .item-row.unavailable { opacity: 0.45; }
+  .item-name-group { display: flex; flex-direction: column; gap: 4px; }
+  .item-name-input {
+    background: transparent; border: none; color: var(--text);
+    font-size: 15px; font-weight: 500; outline: none; width: 100%;
+    border-bottom: 1px solid transparent; padding: 2px 0;
+    transition: border-color .2s;
+  }
+  .item-name-input:hover, .item-name-input:focus {
+    border-bottom-color: var(--gold);
+  }
+  .item-note-input {
+    background: transparent; border: none; color: var(--muted);
+    font-size: 12px; outline: none; width: 100%;
+    border-bottom: 1px dashed transparent; padding: 1px 0;
+    transition: border-color .2s;
+  }
+  .item-note-input:hover, .item-note-input:focus {
+    border-bottom-color: var(--border);
+    color: var(--text);
+  }
+  .item-note-input::placeholder { color: #444; font-style: italic; }
+  .price-wrap { display: flex; align-items: center; gap: 4px; }
+  .price-prefix { color: var(--gold); font-size: 15px; font-weight: 600; }
+  .price-input {
+    width: 72px; padding: 6px 8px; background: var(--black);
+    border: 1px solid var(--border); border-radius: 6px; color: var(--gold);
+    font-size: 15px; font-weight: 700; outline: none; text-align: center;
+  }
+  .price-input:focus { border-color: var(--gold); }
+  .avail-toggle {
+    position: relative; width: 40px; height: 22px; flex-shrink: 0;
+  }
+  .avail-toggle input { opacity: 0; width: 0; height: 0; }
+  .avail-slider {
+    position: absolute; inset: 0; background: #333; border-radius: 11px;
+    cursor: pointer; transition: background .2s;
+  }
+  .avail-slider:before {
+    content: ''; position: absolute; width: 16px; height: 16px;
+    left: 3px; top: 3px; background: #666; border-radius: 50%;
+    transition: transform .2s, background .2s;
+  }
+  .avail-toggle input:checked + .avail-slider { background: rgba(76,175,125,0.3); }
+  .avail-toggle input:checked + .avail-slider:before { transform: translateX(18px); background: var(--green); }
+  .delete-btn {
+    background: none; border: none; color: #444; font-size: 18px;
+    cursor: pointer; padding: 4px; border-radius: 4px; transition: color .2s;
+    flex-shrink: 0;
+  }
+  .delete-btn:hover { color: var(--red); }
+
+  /* ADD ITEM */
+  .add-item-row {
+    padding: 12px 20px; border-top: 1px solid var(--border);
+    display: flex; gap: 10px; align-items: center;
+    background: rgba(212,160,23,0.02);
+  }
+  .add-item-name {
+    flex: 1; padding: 8px 12px; background: var(--black);
+    border: 1px solid var(--border); border-radius: 6px; color: var(--text);
+    font-size: 14px; outline: none;
+  }
+  .add-item-name:focus { border-color: var(--gold); }
+  .add-item-price {
+    width: 80px; padding: 8px 10px; background: var(--black);
+    border: 1px solid var(--border); border-radius: 6px; color: var(--gold);
+    font-size: 14px; font-weight: 700; outline: none; text-align: center;
+  }
+  .add-item-price:focus { border-color: var(--gold); }
+  .btn-add-item {
+    padding: 8px 16px; background: rgba(212,160,23,0.15); color: var(--gold);
+    border: 1px solid var(--gold-dark); border-radius: 6px; font-size: 13px;
+    font-weight: 600; cursor: pointer; transition: all .2s; white-space: nowrap;
+  }
+  .btn-add-item:hover { background: rgba(212,160,23,0.25); }
+
+  /* ADD CATEGORY */
+  .add-cat-section {
+    background: var(--card); border: 1px dashed var(--border);
+    border-radius: 12px; padding: 20px; margin-bottom: 20px;
+  }
+  .add-cat-section h3 { color: var(--muted); font-size: 14px; margin-bottom: 12px; }
+  .add-cat-row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+  .add-cat-input {
+    flex: 1; min-width: 160px; padding: 10px 14px; background: var(--black);
+    border: 1px solid var(--border); border-radius: 8px; color: var(--text);
+    font-size: 14px; outline: none;
+  }
+  .add-cat-input:focus { border-color: var(--gold); }
+
+  /* TOAST */
+  .toast {
+    position: fixed; bottom: 30px; right: 30px; background: var(--green);
+    color: #fff; padding: 14px 22px; border-radius: 10px; font-size: 14px;
+    font-weight: 600; transform: translateY(80px); opacity: 0;
+    transition: all .3s; z-index: 999; pointer-events: none;
+  }
+  .toast.show { transform: translateY(0); opacity: 1; }
+
+  /* STATS */
+  .stats-row { display: flex; gap: 14px; margin-bottom: 28px; flex-wrap: wrap; }
+  .stat-card {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 10px; padding: 16px 20px; flex: 1; min-width: 120px;
+  }
+  .stat-val { font-size: 28px; font-weight: 800; color: var(--gold); }
+  .stat-label { color: var(--muted); font-size: 12px; margin-top: 2px; }
+
+  /* INSTRUCTIONS */
+  .info-box {
+    background: rgba(212,160,23,0.06); border: 1px solid rgba(212,160,23,0.2);
+    border-radius: 10px; padding: 16px 20px; margin-bottom: 28px;
+    font-size: 13px; color: var(--muted); line-height: 1.6;
+  }
+  .info-box strong { color: var(--gold); }
+
+  @media (max-width: 600px) {
+    .item-row { grid-template-columns: 1fr auto auto; }
+    .delete-btn { display: none; }
+    .top-bar h1 { font-size: 15px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login-screen">
+  <div class="login-box">
+    <div class="login-logo">🦀</div>
+    <h1>Mal's Menu Admin</h1>
+    <p>Enter your password to manage the menu</p>
+    <input type="password" id="pw-input" placeholder="Password" onkeydown="if(event.key==='Enter')doLogin()">
+    <button class="btn-login" onclick="doLogin()">Sign In</button>
+    <div class="login-error" id="login-error">Incorrect password. Try again.</div>
+  </div>
+</div>
+
+<!-- ADMIN APP -->
+<div id="admin-app">
+  <div class="top-bar">
+    <div class="top-bar-left">
+      <div class="top-bar-logo">🦀</div>
+      <div>
+        <div class="top-bar h1" style="color:var(--gold);font-weight:700;font-size:17px;">Mal's Menu Admin</div>
+        <div class="top-bar-sub" id="last-saved-label">No changes yet</div>
+      </div>
+    </div>
+    <div class="top-bar-actions">
+      <button class="btn btn-outline btn-sm" onclick="resetToDefaults()">Reset to Defaults</button>
+      <button class="btn btn-gold btn-sm" onclick="saveMenu()">💾 Save Changes</button>
+    </div>
+  </div>
+
+  <div class="main">
+
+    <div class="save-banner" id="save-banner">
+      <span>⚠️ You have unsaved changes — remember to click Save!</span>
+      <button class="btn btn-gold btn-sm" onclick="saveMenu()">Save Now</button>
+    </div>
+
+    <div class="info-box">
+      <strong>How it works:</strong> Edit any item name, price, or toggle availability. When you click <strong>Save Changes</strong>, all your menus (digital menu, website, print menu) will automatically show the updated info when opened in the same browser. Changes are instant — no coding needed.
+    </div>
+
+    <div class="stats-row" id="stats-row"></div>
+
+    <div class="section-header">
+      <div>
+        <h2>Menu Categories</h2>
+        <p>Click any category to expand. Edit names and prices inline.</p>
+      </div>
+    </div>
+
+    <div id="categories-container"></div>
+
+    <div class="add-cat-section">
+      <h3>+ ADD NEW CATEGORY</h3>
+      <div class="add-cat-row">
+        <input class="add-cat-input" id="new-cat-emoji" placeholder="Emoji (e.g. 🍣)" maxlength="4" style="max-width:80px;">
+        <input class="add-cat-input" id="new-cat-name" placeholder="Category name (e.g. Sushi)">
+        <button class="btn btn-outline" onclick="addCategory()">Add Category</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ─── DEFAULT MENU DATA ────────────────────────────────────────────────────────
+const DEFAULT_MENU_DATA = {
+  version: 1,
+  categories: [
+    {
+      id: "seafood", name: "Seafood", emoji: "🦀",
+      items: [
+        { id: "snowcrab", name: "Snowcrab Seafood Broil", price: 45, priceNote: "", available: true },
+        { id: "shrimp-rice", name: "Shrimp over Rice", price: 15, priceNote: "", available: true },
+        { id: "salmon-rice", name: "Salmon over Rice", price: 17, priceNote: "", available: true }
+      ]
+    },
+    {
+      id: "steak", name: "Steak", emoji: "🥩",
+      items: [
+        { id: "cheesesteak", name: "Cheesesteak", price: 15, priceNote: "", available: true },
+        { id: "chicken-cheesesteak", name: "Chicken Cheesesteak", price: 14, priceNote: "", available: true }
+      ]
+    },
+    {
+      id: "tacos", name: "Tacos", emoji: "🌮",
+      items: [
+        { id: "salmon-tacos", name: "Salmon Tacos", price: 6, priceNote: "$6 each · 3 for $15", available: true },
+        { id: "shrimp-tacos", name: "Shrimp Tacos", price: 6, priceNote: "$6 each · 3 for $15", available: true }
+      ]
+    },
+    {
+      id: "fish", name: "Fish", emoji: "🐟",
+      items: [
+        { id: "fish-fries", name: "Fish & Fries", price: 20, priceNote: "", available: true },
+        { id: "shrimp-fries", name: "Shrimp & Fries", price: 20, priceNote: "", available: true },
+        { id: "fish-hoagie", name: "Fish Hoagie", price: 15, priceNote: "", available: true },
+        { id: "fried-fish-rice", name: "Fried Fish over Rice", price: 15, priceNote: "", available: true }
+      ]
+    },
+    {
+      id: "chicken", name: "Chicken", emoji: "🍗",
+      items: [
+        { id: "wings-fries", name: "Wings & Fries", price: 15, priceNote: "", available: true },
+        { id: "chicken-rice", name: "Chicken over Rice", price: 15, priceNote: "", available: true }
+      ]
+    },
+    {
+      id: "fries", name: "Fries", emoji: "🍟",
+      items: [
+        { id: "crab-fries", name: "Crab Fries", price: 15, priceNote: "", available: true },
+        { id: "cheese-fries", name: "Cheese Fries", price: 6, priceNote: "", available: true },
+        { id: "regular-fries", name: "Regular Fries", price: 5, priceNote: "", available: true }
+      ]
+    },
+    {
+      id: "sides", name: "Sides", emoji: "🥡",
+      items: [
+        { id: "rice", name: "Rice", price: 5, priceNote: "", available: true },
+        { id: "salmon-egg-roll", name: "Salmon Egg Roll", price: 13, priceNote: "", available: true },
+        { id: "crab-egg-roll", name: "Crab Egg Roll", price: 15, priceNote: "", available: true }
+      ]
+    },
+    {
+      id: "drinks", name: "Drinks", emoji: "🥤",
+      items: [
+        { id: "pineapple-iced-tea", name: "Pineapple Iced Tea", price: 3, priceNote: "", available: true },
+        { id: "soda", name: "Soda", price: 2, priceNote: "", available: true },
+        { id: "water", name: "Water", price: 2, priceNote: "", available: true }
+      ]
+    }
+  ]
+};
+
+// ─── STATE ────────────────────────────────────────────────────────────────────
+const ADMIN_PASSWORD = "mals2025";
+const STORAGE_KEY = "mals_menu_data";
+let menuData = JSON.parse(JSON.stringify(DEFAULT_MENU_DATA));
+let isDirty = false;
+
+// ─── LOGIN ────────────────────────────────────────────────────────────────────
+function doLogin() {
+  const pw = document.getElementById('pw-input').value;
+  if (pw === ADMIN_PASSWORD) {
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('admin-app').style.display = 'block';
+    loadData();
+    renderAll();
+  } else {
+    document.getElementById('login-error').style.display = 'block';
+    document.getElementById('pw-input').value = '';
+  }
+}
+
+// ─── DATA ─────────────────────────────────────────────────────────────────────
+function loadData() {
+  try {
+    const stored = localStorage.getItem(STORAGE_KEY);
+    if (stored) {
+      menuData = JSON.parse(stored);
+      updateLastSaved();
+    }
+  } catch(e) { menuData = JSON.parse(JSON.stringify(DEFAULT_MENU_DATA)); }
+}
+
+function saveMenu() {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(menuData));
+    isDirty = false;
+    document.getElementById('save-banner').classList.remove('show');
+    const now = new Date();
+    document.getElementById('last-saved-label').textContent =
+      'Last saved: ' + now.toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});
+    showToast('✅ Menu saved! All pages will show updated info.');
+    renderStats();
+  } catch(e) { showToast('❌ Save failed — please try again'); }
+}
+
+function updateLastSaved() {
+  document.getElementById('last-saved-label').textContent = 'Loaded saved menu';
+}
+
+function markDirty() {
+  isDirty = true;
+  document.getElementById('save-banner').classList.add('show');
+}
+
+function resetToDefaults() {
+  if (!confirm('Reset entire menu to defaults? This cannot be undone.')) return;
+  menuData = JSON.parse(JSON.stringify(DEFAULT_MENU_DATA));
+  localStorage.removeItem(STORAGE_KEY);
+  isDirty = false;
+  document.getElementById('save-banner').classList.remove('show');
+  renderAll();
+  showToast('Menu reset to defaults');
+}
+
+// ─── RENDER ───────────────────────────────────────────────────────────────────
+function renderAll() {
+  renderStats();
+  renderCategories();
+}
+
+function renderStats() {
+  const totalItems = menuData.categories.reduce((s, c) => s + c.items.length, 0);
+  const availItems = menuData.categories.reduce((s, c) => s + c.items.filter(i => i.available).length, 0);
+  const cats = menuData.categories.length;
+  const minPrice = Math.min(...menuData.categories.flatMap(c => c.items.map(i => i.price)));
+  const maxPrice = Math.max(...menuData.categories.flatMap(c => c.items.map(i => i.price)));
+  document.getElementById('stats-row').innerHTML = `
+    <div class="stat-card"><div class="stat-val">${cats}</div><div class="stat-label">Categories</div></div>
+    <div class="stat-card"><div class="stat-val">${totalItems}</div><div class="stat-label">Total Items</div></div>
+    <div class="stat-card"><div class="stat-val">${availItems}</div><div class="stat-label">Available</div></div>
+    <div class="stat-card"><div class="stat-val">$${minPrice}–$${maxPrice}</div><div class="stat-label">Price Range</div></div>
+  `;
+}
+
+function renderCategories() {
+  const container = document.getElementById('categories-container');
+  container.innerHTML = '';
+  menuData.categories.forEach((cat, catIdx) => {
+    const card = document.createElement('div');
+    card.className = 'cat-card';
+    card.dataset.catIdx = catIdx;
+
+    const availCount = cat.items.filter(i => i.available).length;
+    card.innerHTML = `
+      <div class="cat-header" onclick="toggleCat(${catIdx})">
+        <div class="cat-header-left">
+          <span class="cat-emoji">${cat.emoji}</span>
+          <span class="cat-name">${cat.name}</span>
+          <span class="cat-count">${availCount}/${cat.items.length} available</span>
+        </div>
+        <div style="display:flex;gap:10px;align-items:center;">
+          <button class="btn btn-danger btn-sm" onclick="event.stopPropagation();deleteCategory(${catIdx})" style="font-size:12px;padding:4px 10px;">Remove</button>
+          <span class="cat-chevron">▾</span>
+        </div>
+      </div>
+      <div class="cat-body">
+        ${cat.items.map((item, itemIdx) => renderItemRow(catIdx, itemIdx, item)).join('')}
+        <div class="add-item-row">
+          <input class="add-item-name" id="new-item-name-${catIdx}" placeholder="New item name…" onkeydown="if(event.key==='Enter')addItem(${catIdx})">
+          <input class="add-item-price" id="new-item-price-${catIdx}" placeholder="$0" type="number" min="0" step="0.5" onkeydown="if(event.key==='Enter')addItem(${catIdx})">
+          <button class="btn-add-item" onclick="addItem(${catIdx})">+ Add Item</button>
+        </div>
+      </div>
+    `;
+    container.appendChild(card);
+  });
+}
+
+function renderItemRow(catIdx, itemIdx, item) {
+  return `
+    <div class="item-row ${item.available ? '' : 'unavailable'}" id="row-${catIdx}-${itemIdx}">
+      <div class="item-name-group">
+        <input class="item-name-input" value="${escHtml(item.name)}"
+          oninput="updateField(${catIdx},${itemIdx},'name',this.value)"
+          placeholder="Item name">
+        <input class="item-note-input" value="${escHtml(item.priceNote||'')}"
+          oninput="updateField(${catIdx},${itemIdx},'priceNote',this.value)"
+          placeholder="Price note (e.g. $6 each · 3 for $15)">
+      </div>
+      <div class="price-wrap">
+        <span class="price-prefix">$</span>
+        <input class="price-input" type="number" value="${item.price}" min="0" step="0.5"
+          oninput="updateField(${catIdx},${itemIdx},'price',parseFloat(this.value)||0)">
+      </div>
+      <label class="avail-toggle" title="${item.available ? 'Available' : 'Hidden from menu'}">
+        <input type="checkbox" ${item.available ? 'checked' : ''}
+          onchange="toggleAvail(${catIdx},${itemIdx},this.checked)">
+        <span class="avail-slider"></span>
+      </label>
+      <button class="delete-btn" onclick="deleteItem(${catIdx},${itemIdx})" title="Delete item">×</button>
+    </div>
+  `;
+}
+
+// ─── INTERACTIONS ─────────────────────────────────────────────────────────────
+function toggleCat(catIdx) {
+  const card = document.querySelector(`.cat-card[data-cat-idx="${catIdx}"]`);
+  card.classList.toggle('collapsed');
+}
+
+function updateField(catIdx, itemIdx, field, val) {
+  menuData.categories[catIdx].items[itemIdx][field] = val;
+  markDirty();
+}
+
+function toggleAvail(catIdx, itemIdx, checked) {
+  menuData.categories[catIdx].items[itemIdx].available = checked;
+  const row = document.getElementById(`row-${catIdx}-${itemIdx}`);
+  row.classList.toggle('unavailable', !checked);
+  markDirty();
+  renderStats();
+  // update count in header
+  const cat = menuData.categories[catIdx];
+  const availCount = cat.items.filter(i => i.available).length;
+  const card = document.querySelector(`.cat-card[data-cat-idx="${catIdx}"]`);
+  card.querySelector('.cat-count').textContent = `${availCount}/${cat.items.length} available`;
+}
+
+function deleteItem(catIdx, itemIdx) {
+  const item = menuData.categories[catIdx].items[itemIdx];
+  if (!confirm(`Delete "${item.name}"?`)) return;
+  menuData.categories[catIdx].items.splice(itemIdx, 1);
+  markDirty();
+  renderAll();
+}
+
+function addItem(catIdx) {
+  const nameEl = document.getElementById(`new-item-name-${catIdx}`);
+  const priceEl = document.getElementById(`new-item-price-${catIdx}`);
+  const name = nameEl.value.trim();
+  const price = parseFloat(priceEl.value) || 0;
+  if (!name) { nameEl.focus(); return; }
+  const id = name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '') + '-' + Date.now();
+  menuData.categories[catIdx].items.push({ id, name, price, priceNote: '', available: true });
+  nameEl.value = '';
+  priceEl.value = '';
+  markDirty();
+  renderAll();
+  showToast(`"${name}" added!`);
+}
+
+function addCategory() {
+  const emoji = document.getElementById('new-cat-emoji').value.trim() || '🍽️';
+  const name = document.getElementById('new-cat-name').value.trim();
+  if (!name) { document.getElementById('new-cat-name').focus(); return; }
+  const id = name.toLowerCase().replace(/\s+/g, '-') + '-' + Date.now();
+  menuData.categories.push({ id, name, emoji, items: [] });
+  document.getElementById('new-cat-emoji').value = '';
+  document.getElementById('new-cat-name').value = '';
+  markDirty();
+  renderAll();
+  showToast(`Category "${name}" added!`);
+}
+
+function deleteCategory(catIdx) {
+  const cat = menuData.categories[catIdx];
+  if (!confirm(`Delete category "${cat.name}" and all ${cat.items.length} items?`)) return;
+  menuData.categories.splice(catIdx, 1);
+  markDirty();
+  renderAll();
+}
+
+// ─── UTILS ────────────────────────────────────────────────────────────────────
+function escHtml(str) {
+  return String(str||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+// Prevent accidental navigation away with unsaved changes
+window.addEventListener('beforeunload', e => {
+  if (isDirty) { e.preventDefault(); e.returnValue = ''; }
+});
+</script>
+</body>
+</html>
