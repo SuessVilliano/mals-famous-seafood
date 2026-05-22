@@ -1,0 +1,1026 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mal's Famous Seafood & Grill — Full AI Knowledge Base</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Montserrat:wght@400;500;600;700;800&display=swap');
+  :root {
+    --gold: #D4A017; --gold-lt: #F0C040; --black: #0A0A0A;
+    --card: #141414; --border: rgba(212,160,23,0.2); --white: #F5F0E8;
+    --muted: rgba(245,240,232,0.55); --green: #2ECC71; --red: #E74C3C;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:'Montserrat',sans-serif; background:var(--black); color:var(--white); line-height:1.7; }
+
+  /* HEADER */
+  .top-bar { background:#0D0B00; border-bottom:2px solid var(--gold); padding:28px 40px; display:flex; align-items:center; gap:20px; }
+  .top-bar h1 { font-family:'Playfair Display',serif; font-size:28px; color:var(--gold-lt); }
+  .top-bar span { font-size:12px; letter-spacing:3px; color:var(--muted); text-transform:uppercase; }
+  .badge { background:rgba(212,160,23,0.15); border:1px solid rgba(212,160,23,0.4); color:var(--gold); font-size:11px; font-weight:700; letter-spacing:2px; padding:4px 12px; border-radius:2px; text-transform:uppercase; margin-left:auto; }
+
+  /* LAYOUT */
+  .layout { display:flex; min-height:100vh; }
+  .sidebar { width:260px; flex-shrink:0; background:#0D0B00; border-right:1px solid var(--border); padding:24px 0; position:sticky; top:0; height:100vh; overflow-y:auto; }
+  .sidebar-section { padding:8px 20px 4px; font-size:10px; letter-spacing:3px; color:var(--gold); text-transform:uppercase; font-weight:700; margin-top:16px; }
+  .sidebar a { display:block; padding:8px 20px; font-size:12px; color:var(--muted); text-decoration:none; font-weight:600; letter-spacing:0.5px; transition:color 0.15s, background 0.15s; border-left:2px solid transparent; }
+  .sidebar a:hover { color:var(--white); background:rgba(212,160,23,0.06); border-left-color:var(--gold); }
+  .main { flex:1; padding:40px 48px 80px; max-width:960px; }
+
+  /* SECTIONS */
+  .kb-section { margin-bottom:64px; scroll-margin-top:24px; }
+  .section-header { display:flex; align-items:center; gap:14px; margin-bottom:24px; padding-bottom:14px; border-bottom:1px solid var(--border); }
+  .section-icon { font-size:28px; }
+  .section-header h2 { font-family:'Playfair Display',serif; font-size:24px; color:var(--gold); }
+  .section-label { font-size:10px; letter-spacing:3px; color:var(--muted); text-transform:uppercase; margin-bottom:6px; font-weight:700; }
+
+  /* CARDS */
+  .card { background:var(--card); border:1px solid var(--border); border-radius:4px; padding:20px 24px; margin-bottom:12px; }
+  .card:hover { border-color:rgba(212,160,23,0.4); }
+  .card-title { font-size:15px; font-weight:700; color:var(--gold-lt); margin-bottom:6px; }
+  .card-body { font-size:13px; color:var(--muted); line-height:1.8; }
+  .card-body strong { color:var(--white); }
+
+  /* QA PAIRS */
+  .qa { background:var(--card); border:1px solid var(--border); border-radius:4px; margin-bottom:10px; overflow:hidden; }
+  .qa-q { padding:14px 20px; font-size:13px; font-weight:700; color:var(--white); display:flex; align-items:flex-start; gap:10px; cursor:pointer; }
+  .qa-q::before { content:'Q'; background:var(--gold); color:#000; font-size:10px; font-weight:800; padding:2px 6px; border-radius:2px; flex-shrink:0; margin-top:1px; }
+  .qa-a { padding:0 20px 14px 20px; font-size:13px; color:var(--muted); line-height:1.8; display:flex; gap:10px; }
+  .qa-a::before { content:'A'; background:rgba(46,204,113,0.2); color:var(--green); font-size:10px; font-weight:800; padding:2px 6px; border-radius:2px; flex-shrink:0; margin-top:2px; }
+
+  /* MENU ITEMS */
+  .menu-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(280px,1fr)); gap:12px; }
+  .menu-item { background:var(--card); border:1px solid var(--border); border-radius:4px; padding:16px 18px; }
+  .menu-item-name { font-size:14px; font-weight:700; color:var(--white); margin-bottom:4px; }
+  .menu-item-desc { font-size:12px; color:var(--muted); line-height:1.6; }
+  .menu-item-tags { display:flex; gap:6px; flex-wrap:wrap; margin-top:8px; }
+  .tag { font-size:10px; font-weight:700; letter-spacing:1px; padding:2px 8px; border-radius:2px; text-transform:uppercase; }
+  .tag-popular { background:rgba(212,160,23,0.2); color:var(--gold); }
+  .tag-spicy { background:rgba(231,76,60,0.2); color:var(--red); }
+  .tag-seafood { background:rgba(52,152,219,0.2); color:#3498DB; }
+  .tag-grill { background:rgba(46,204,113,0.2); color:var(--green); }
+
+  /* SCRIPTS */
+  .script-block { background:#0D1A0D; border:1px solid rgba(46,204,113,0.25); border-radius:4px; padding:20px 24px; margin-bottom:16px; }
+  .script-role { font-size:10px; font-weight:800; letter-spacing:3px; text-transform:uppercase; color:var(--green); margin-bottom:8px; }
+  .script-text { font-size:13px; color:var(--white); line-height:1.9; font-style:italic; }
+  .script-note { font-size:11px; color:var(--muted); margin-top:8px; padding-top:8px; border-top:1px solid rgba(255,255,255,0.06); }
+
+  /* ESCALATION */
+  .escalation { background:#1A0D0D; border:1px solid rgba(231,76,60,0.3); border-radius:4px; padding:20px 24px; margin-bottom:12px; }
+  .escalation-trigger { font-size:13px; font-weight:700; color:var(--red); margin-bottom:6px; }
+  .escalation-action { font-size:12px; color:var(--muted); line-height:1.7; }
+
+  /* TABLE */
+  table { width:100%; border-collapse:collapse; margin-bottom:16px; font-size:13px; }
+  th { background:rgba(212,160,23,0.12); color:var(--gold); font-weight:700; letter-spacing:1px; text-transform:uppercase; font-size:11px; padding:10px 14px; text-align:left; border-bottom:1px solid var(--border); }
+  td { padding:10px 14px; border-bottom:1px solid rgba(255,255,255,0.04); color:var(--muted); vertical-align:top; }
+  tr:hover td { background:rgba(212,160,23,0.03); }
+  td strong { color:var(--white); }
+
+  /* COPY BUTTON */
+  .copy-box { background:#0A0A14; border:1px solid rgba(100,100,255,0.2); border-radius:4px; padding:16px 20px; margin-bottom:16px; position:relative; }
+  .copy-label { font-size:10px; letter-spacing:3px; color:rgba(150,150,255,0.7); text-transform:uppercase; font-weight:700; margin-bottom:8px; }
+  .copy-text { font-size:12px; color:var(--muted); line-height:1.8; white-space:pre-wrap; font-family:monospace; }
+  .copy-btn { position:absolute; top:12px; right:12px; background:rgba(100,100,255,0.2); border:1px solid rgba(100,100,255,0.3); color:rgba(200,200,255,0.8); font-size:11px; font-weight:700; letter-spacing:1px; padding:4px 12px; border-radius:2px; cursor:pointer; }
+  .copy-btn:hover { background:rgba(100,100,255,0.35); }
+
+  /* PILLS */
+  .pill-row { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:16px; }
+  .pill { background:rgba(212,160,23,0.1); border:1px solid rgba(212,160,23,0.25); color:var(--gold); font-size:11px; font-weight:700; padding:4px 12px; border-radius:12px; }
+
+  .divider { border:none; border-top:1px solid var(--border); margin:32px 0; }
+  h3 { font-size:16px; color:var(--white); font-weight:700; margin:20px 0 12px; }
+  h4 { font-size:13px; color:var(--gold); font-weight:700; letter-spacing:1px; text-transform:uppercase; margin:16px 0 8px; }
+  p { font-size:13px; color:var(--muted); margin-bottom:12px; line-height:1.8; }
+  ul, ol { padding-left:20px; margin-bottom:12px; }
+  li { font-size:13px; color:var(--muted); line-height:1.8; }
+  li strong { color:var(--white); }
+</style>
+</head>
+<body>
+
+<div class="top-bar">
+  <div>
+    <div class="section-label">AI Knowledge Base</div>
+    <h1>Mal's Famous Seafood &amp; Grill</h1>
+  </div>
+  <div class="badge">v1.0 · Complete</div>
+</div>
+
+<div class="layout">
+
+<!-- SIDEBAR -->
+<nav class="sidebar">
+  <div class="sidebar-section">Business</div>
+  <a href="#business">Business Overview</a>
+  <a href="#contact">Contact & Location</a>
+  <a href="#hours">Hours & Finding Us</a>
+  <a href="#brand">Brand Voice</a>
+
+  <div class="sidebar-section">Menu</div>
+  <a href="#seafood">Seafood</a>
+  <a href="#steak">Steak</a>
+  <a href="#tacos">Tacos</a>
+  <a href="#fish">Fish</a>
+  <a href="#chicken">Chicken</a>
+  <a href="#fries">Fries</a>
+  <a href="#sides">Sides</a>
+  <a href="#drinks">Drinks</a>
+  <a href="#combos">Suggested Combos</a>
+
+  <div class="sidebar-section">Ordering</div>
+  <a href="#how-to-order">How to Order</a>
+  <a href="#order-flow">Order Flow Script</a>
+  <a href="#platforms">Delivery Platforms</a>
+  <a href="#group-orders">Group Orders</a>
+
+  <div class="sidebar-section">Catering</div>
+  <a href="#catering-overview">Catering Overview</a>
+  <a href="#catering-flow">Catering Flow</a>
+  <a href="#catering-faq">Catering FAQ</a>
+
+  <div class="sidebar-section">Policies</div>
+  <a href="#payment">Payment Methods</a>
+  <a href="#allergens">Allergens & Dietary</a>
+  <a href="#refunds">Refunds & Cancellations</a>
+
+  <div class="sidebar-section">AI Scripts</div>
+  <a href="#voice-scripts">Voice AI Scripts</a>
+  <a href="#chat-scripts">Chat Scripts</a>
+  <a href="#sms-scripts">SMS Scripts</a>
+  <a href="#social-scripts">Social DM Scripts</a>
+
+  <div class="sidebar-section">Escalation</div>
+  <a href="#escalation">Escalation Rules</a>
+  <a href="#complaints">Complaint Handling</a>
+  <a href="#tickets">Ticket Queue</a>
+
+  <div class="sidebar-section">Full FAQ</div>
+  <a href="#faq-general">General FAQ</a>
+  <a href="#faq-menu">Menu FAQ</a>
+  <a href="#faq-catering">Catering FAQ</a>
+  <a href="#faq-orders">Order FAQ</a>
+</nav>
+
+<!-- MAIN -->
+<main class="main">
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- BUSINESS OVERVIEW -->
+<!-- ═══════════════════════════════════════════ -->
+<section class="kb-section" id="business">
+  <div class="section-header">
+    <span class="section-icon">🦀</span>
+    <h2>Business Overview</h2>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Who We Are</div>
+    <div class="card-body">
+      Mal's Famous Seafood &amp; Grill is a food truck based in <strong>New Castle, Delaware</strong>, owned and operated by <strong>Mal Jones</strong>. We serve fresh, bold, made-to-order seafood, grilled meats, tacos, and signature loaded fries. Everything is made fresh to order — no shortcuts, no frozen shortcuts, just real food with real flavor.
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Our Mission</div>
+    <div class="card-body">
+      To bring restaurant-quality seafood and grill food directly to the community through our food truck. Every plate is made with care, seasoned right, and served hot. We believe great food should be accessible — not just in a sit-down restaurant.
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">What Makes Us Different</div>
+    <div class="card-body">
+      <strong>Everything is made to order.</strong> We don't pre-cook and hold — when you order, we cook. That means you get food that's hot, fresh, and made specifically for you. Our signature items like the Snowcrab Seafood Broil, Crab Fries, and Salmon Egg Rolls are customer favorites that keep people coming back. Mal personally oversees quality on every order.
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- CONTACT & LOCATION -->
+<!-- ═══════════════════════════════════════════ -->
+<section class="kb-section" id="contact">
+  <div class="section-header">
+    <span class="section-icon">📍</span>
+    <h2>Contact &amp; Location</h2>
+  </div>
+
+  <table>
+    <tr><th>Info</th><th>Details</th></tr>
+    <tr><td><strong>Business Name</strong></td><td>Mal's Famous Seafood &amp; Grill</td></tr>
+    <tr><td><strong>Phone / Text</strong></td><td>(302) 384-2469</td></tr>
+    <tr><td><strong>Email</strong></td><td>273maljones@gmail.com</td></tr>
+    <tr><td><strong>Base Area</strong></td><td>New Castle, Delaware (food truck — location varies daily)</td></tr>
+    <tr><td><strong>Base Address</strong></td><td>1224 BeaverBrook Plaza, New Castle, DE 19720</td></tr>
+    <tr><td><strong>Website</strong></td><td>malsfamousseafood.com</td></tr>
+    <tr><td><strong>Instagram</strong></td><td>@MalsFamousSeafood</td></tr>
+    <tr><td><strong>TikTok</strong></td><td>@MalsFamousSeafood</td></tr>
+    <tr><td><strong>Facebook</strong></td><td>Mal's Famous Seafood &amp; Grill</td></tr>
+    <tr><td><strong>Owner</strong></td><td>Mal Jones</td></tr>
+    <tr><td><strong>GHL Location ID</strong></td><td>y5UtZ6XKTKjdp9sEcGZO</td></tr>
+  </table>
+</section>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- HOURS & FINDING US -->
+<!-- ═══════════════════════════════════════════ -->
+<section class="kb-section" id="hours">
+  <div class="section-header">
+    <span class="section-icon">🕐</span>
+    <h2>Hours &amp; Finding Us</h2>
+  </div>
+
+  <div class="card">
+    <div class="card-title">How Our Hours Work</div>
+    <div class="card-body">
+      We are a <strong>mobile food truck</strong>. Our location and hours change daily. We post our location and hours every day on <strong>Instagram and TikTok @MalsFamousSeafood</strong> before we open. The best way to never miss us is to follow both accounts and turn on post notifications.
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">How to Find Us Today</div>
+    <div class="card-body">
+      <strong>1.</strong> Follow @MalsFamousSeafood on Instagram or TikTok<br>
+      <strong>2.</strong> Check today's story or post for location and hours<br>
+      <strong>3.</strong> Text us at (302) 384-2469 and we'll tell you where we are<br>
+      <strong>4.</strong> Check our Google Business Profile for updates<br>
+      <strong>5.</strong> Order on DoorDash or Uber Eats when we're live on the apps
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Typical Operating Days</div>
+    <div class="card-body">
+      We generally operate <strong>Wednesday through Sunday</strong>, but this varies based on events, weather, and private catering bookings. Always check social media for the most current information. If we're not out on a given day, we'll post about it.
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">After-Hours Inquiries</div>
+    <div class="card-body">
+      If you reach out after we've closed, our AI assistant will collect your info and a team member will follow up. For urgent catering inquiries, text (302) 384-2469 and Mal responds to catering messages as quickly as possible, even after hours.
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- BRAND VOICE -->
+<!-- ═══════════════════════════════════════════ -->
+<section class="kb-section" id="brand">
+  <div class="section-header">
+    <span class="section-icon">🎯</span>
+    <h2>Brand Voice &amp; Tone</h2>
+  </div>
+  <div class="card">
+    <div class="card-body">
+      <strong>We are:</strong> Energetic, warm, confident, community-focused, proud of our food<br>
+      <strong>We are NOT:</strong> Stiff, corporate, overly formal, dismissive<br><br>
+      <strong>Always:</strong> Say "we" not "I" when speaking as the brand. Lead with enthusiasm for the food. Use the customer's first name when you have it. End every interaction by making sure they feel taken care of.<br><br>
+      <strong>Language:</strong> Casual but not sloppy. Enthusiastic but not annoying. Helpful but not pushy. A 🦀 emoji is on-brand occasionally — don't overdo it.
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- FULL MENU -->
+<!-- ═══════════════════════════════════════════ -->
+<section class="kb-section" id="seafood">
+  <div class="section-header">
+    <span class="section-icon">🦀</span>
+    <h2>Seafood</h2>
+  </div>
+  <div class="menu-grid">
+    <div class="menu-item">
+      <div class="menu-item-name">Snowcrab Seafood Broil</div>
+      <div class="menu-item-desc">Our signature dish. Fresh snow crab broiled with our house seasoning blend — bold, buttery, and unforgettable. This is the dish Mal's is built on. Served with sides.</div>
+      <div class="menu-item-tags"><span class="tag tag-popular">⭐ Most Popular</span><span class="tag tag-seafood">Seafood</span></div>
+    </div>
+    <div class="menu-item">
+      <div class="menu-item-name">Shrimp over Rice</div>
+      <div class="menu-item-desc">Seasoned shrimp cooked to perfection and served over a bed of fluffy white rice. A hearty, satisfying meal that's a customer go-to.</div>
+      <div class="menu-item-tags"><span class="tag tag-popular">Popular</span><span class="tag tag-seafood">Seafood</span></div>
+    </div>
+    <div class="menu-item">
+      <div class="menu-item-name">Salmon over Rice</div>
+      <div class="menu-item-desc">A flavorful salmon fillet cooked fresh and served over white rice. Bold seasoning, clean flavors, filling and satisfying.</div>
+      <div class="menu-item-tags"><span class="tag tag-seafood">Seafood</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="kb-section" id="steak">
+  <div class="section-header">
+    <span class="section-icon">🥩</span>
+    <h2>Steak</h2>
+  </div>
+  <div class="menu-grid">
+    <div class="menu-item">
+      <div class="menu-item-name">Cheesesteak</div>
+      <div class="menu-item-desc">A classic Philly-style cheesesteak made with seasoned beef, sautéed peppers and onions, and melted cheese on a fresh hoagie roll. Delaware done right.</div>
+      <div class="menu-item-tags"><span class="tag tag-grill">Grill</span><span class="tag tag-popular">Popular</span></div>
+    </div>
+    <div class="menu-item">
+      <div class="menu-item-name">Chicken Cheesesteak</div>
+      <div class="menu-item-desc">All the flavors of a classic cheesesteak made with tender seasoned chicken, peppers, onions, and melted cheese on a hoagie roll. Great option for non-beef eaters.</div>
+      <div class="menu-item-tags"><span class="tag tag-grill">Grill</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="kb-section" id="tacos">
+  <div class="section-header">
+    <span class="section-icon">🌮</span>
+    <h2>Tacos</h2>
+  </div>
+  <div class="menu-grid">
+    <div class="menu-item">
+      <div class="menu-item-name">Salmon Tacos</div>
+      <div class="menu-item-desc">Seasoned salmon in a warm tortilla with fresh toppings. A bold, flavorful spin on tacos — the seafood twist that people love.</div>
+      <div class="menu-item-tags"><span class="tag tag-seafood">Seafood</span><span class="tag tag-popular">Popular</span></div>
+    </div>
+    <div class="menu-item">
+      <div class="menu-item-name">Shrimp Tacos</div>
+      <div class="menu-item-desc">Crispy or seasoned shrimp in warm tortillas with fresh toppings. Light, flavorful, and satisfying. A great option for a lighter meal.</div>
+      <div class="menu-item-tags"><span class="tag tag-seafood">Seafood</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="kb-section" id="fish">
+  <div class="section-header">
+    <span class="section-icon">🐟</span>
+    <h2>Fish</h2>
+  </div>
+  <div class="menu-grid">
+    <div class="menu-item">
+      <div class="menu-item-name">Fish &amp; Fries</div>
+      <div class="menu-item-desc">Golden fried fish fillet served with a generous portion of crispy seasoned fries. A classic done right — fresh fried fish, not frozen.</div>
+      <div class="menu-item-tags"><span class="tag tag-popular">Popular</span></div>
+    </div>
+    <div class="menu-item">
+      <div class="menu-item-name">Shrimp &amp; Fries</div>
+      <div class="menu-item-desc">Crispy fried shrimp served with seasoned fries. A seafood lover's spin on the classic combo — great for those who want shrimp but also want fries.</div>
+      <div class="menu-item-tags"><span class="tag tag-seafood">Seafood</span></div>
+    </div>
+    <div class="menu-item">
+      <div class="menu-item-name">Fish Hoagie</div>
+      <div class="menu-item-desc">A loaded fried fish sandwich on a toasted hoagie roll. Crispy fish fillet with your choice of toppings. A fan favorite for those who want something filling and flavorful.</div>
+      <div class="menu-item-tags"><span class="tag tag-popular">Popular</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="kb-section" id="chicken">
+  <div class="section-header">
+    <span class="section-icon">🍗</span>
+    <h2>Chicken</h2>
+  </div>
+  <div class="menu-grid">
+    <div class="menu-item">
+      <div class="menu-item-name">Wings &amp; Fries</div>
+      <div class="menu-item-desc">Crispy chicken wings cooked to order and served with seasoned fries. Ask about available sauces/flavors on the day. A crowd-pleaser for every age.</div>
+      <div class="menu-item-tags"><span class="tag tag-grill">Grill</span><span class="tag tag-popular">Popular</span></div>
+    </div>
+    <div class="menu-item">
+      <div class="menu-item-name">Chicken over Rice</div>
+      <div class="menu-item-desc">Seasoned grilled or sautéed chicken served over fluffy white rice. A hearty, no-fuss meal with big flavor. A solid option for those who want something filling.</div>
+      <div class="menu-item-tags"><span class="tag tag-grill">Grill</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="kb-section" id="fries">
+  <div class="section-header">
+    <span class="section-icon">🍟</span>
+    <h2>Fries</h2>
+  </div>
+  <div class="menu-grid">
+    <div class="menu-item">
+      <div class="menu-item-name">Crab Fries</div>
+      <div class="menu-item-desc">Our most talked-about side. Seasoned crispy fries topped with real crab meat. The combination of the seasoned fries and fresh crab is what people can't stop talking about. A must-try.</div>
+      <div class="menu-item-tags"><span class="tag tag-popular">⭐ Fan Favorite</span><span class="tag tag-seafood">Seafood</span></div>
+    </div>
+    <div class="menu-item">
+      <div class="menu-item-name">Cheese Fries</div>
+      <div class="menu-item-desc">Crispy seasoned fries smothered in melted cheese. Classic comfort food done well. A popular add-on or standalone side.</div>
+      <div class="menu-item-tags"><span class="tag tag-popular">Popular</span></div>
+    </div>
+    <div class="menu-item">
+      <div class="menu-item-name">Regular Fries</div>
+      <div class="menu-item-desc">Classic crispy salted fries. Simple, perfectly seasoned, and always fresh. The foundation that makes our loaded fries possible.</div>
+      <div class="menu-item-tags"></div>
+    </div>
+  </div>
+</section>
+
+<section class="kb-section" id="sides">
+  <div class="section-header">
+    <span class="section-icon">🥡</span>
+    <h2>Sides</h2>
+  </div>
+  <div class="menu-grid">
+    <div class="menu-item">
+      <div class="menu-item-name">Salmon Egg Roll</div>
+      <div class="menu-item-desc">A unique, crowd-stopping item — seasoned salmon rolled and fried to a crispy golden finish. Customers who try these always come back for more. One of our most unique offerings.</div>
+      <div class="menu-item-tags"><span class="tag tag-popular">⭐ Unique Item</span><span class="tag tag-seafood">Seafood</span></div>
+    </div>
+    <div class="menu-item">
+      <div class="menu-item-name">Crab Egg Roll</div>
+      <div class="menu-item-desc">Crab meat seasoned and rolled in a crispy egg roll wrapper. Another unique, standout item that separates us from every other food truck. Bold flavor in every bite.</div>
+      <div class="menu-item-tags"><span class="tag tag-popular">⭐ Unique Item</span><span class="tag tag-seafood">Seafood</span></div>
+    </div>
+    <div class="menu-item">
+      <div class="menu-item-name">Rice</div>
+      <div class="menu-item-desc">Fluffy white rice, perfectly cooked. A clean, simple side that pairs with any of our seafood or chicken dishes. Great add-on to any meal.</div>
+      <div class="menu-item-tags"></div>
+    </div>
+  </div>
+</section>
+
+<section class="kb-section" id="drinks">
+  <div class="section-header">
+    <span class="section-icon">🥤</span>
+    <h2>Drinks</h2>
+  </div>
+  <div class="menu-grid">
+    <div class="menu-item"><div class="menu-item-name">Pineapple Juice</div><div class="menu-item-desc">Sweet, refreshing pineapple juice. Pairs perfectly with seafood dishes.</div></div>
+    <div class="menu-item"><div class="menu-item-name">Iced Tea</div><div class="menu-item-desc">Classic iced tea, cold and refreshing.</div></div>
+    <div class="menu-item"><div class="menu-item-name">Soda</div><div class="menu-item-desc">Ask about available soda options on the day.</div></div>
+    <div class="menu-item"><div class="menu-item-name">Water</div><div class="menu-item-desc">Bottled water.</div></div>
+  </div>
+</section>
+
+<section class="kb-section" id="combos">
+  <div class="section-header">
+    <span class="section-icon">💡</span>
+    <h2>Suggested Combos &amp; Upsells</h2>
+  </div>
+  <p>Use these when customers ask for recommendations or when upselling during orders:</p>
+  <table>
+    <tr><th>If They Order</th><th>Suggest Adding</th><th>Why</th></tr>
+    <tr><td>Snowcrab Seafood Broil</td><td>Crab Fries + Pineapple Juice</td><td>The full Mal's experience — most popular combo</td></tr>
+    <tr><td>Shrimp over Rice</td><td>Salmon Egg Roll</td><td>Seafood lovers can't resist the egg rolls</td></tr>
+    <tr><td>Fish &amp; Fries</td><td>Cheese Fries upgrade → Crab Fries</td><td>Upgrade the fries for the full experience</td></tr>
+    <tr><td>Wings &amp; Fries</td><td>Cheese Fries or Crab Fries</td><td>Load those fries up</td></tr>
+    <tr><td>Cheesesteak</td><td>Regular or Cheese Fries + Soda</td><td>Classic combo</td></tr>
+    <tr><td>Salmon Tacos</td><td>Crab Egg Roll</td><td>Seafood + seafood — always a hit</td></tr>
+    <tr><td>Any meal</td><td>Salmon or Crab Egg Rolls</td><td>"Have you tried our egg rolls? They're one of a kind."</td></tr>
+  </table>
+</section>
+
+<hr class="divider">
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- ORDERING -->
+<!-- ═══════════════════════════════════════════ -->
+<section class="kb-section" id="how-to-order">
+  <div class="section-header">
+    <span class="section-icon">📲</span>
+    <h2>How to Order</h2>
+  </div>
+  <table>
+    <tr><th>Method</th><th>How</th><th>Best For</th></tr>
+    <tr><td><strong>At the Truck</strong></td><td>Walk up and order in person at our window</td><td>Immediate orders when you can see the truck</td></tr>
+    <tr><td><strong>Text / SMS</strong></td><td>Text (302) 384-2469 with your order and pickup time</td><td>Pre-ordering ahead of arrival</td></tr>
+    <tr><td><strong>Chat / DM</strong></td><td>Message us on the website chat, Instagram, or Facebook</td><td>Any time, any channel</td></tr>
+    <tr><td><strong>Call</strong></td><td>Call (302) 384-2469 — our AI answers and takes your order</td><td>Customers who prefer speaking</td></tr>
+    <tr><td><strong>DoorDash</strong></td><td>Search "Mal's Famous Seafood &amp; Grill" on DoorDash</td><td>Delivery to your door</td></tr>
+    <tr><td><strong>Uber Eats</strong></td><td>Search "Mal's Famous Seafood &amp; Grill" on Uber Eats</td><td>Delivery to your door</td></tr>
+  </table>
+  <div class="card">
+    <div class="card-title">Important Note on Online Ordering</div>
+    <div class="card-body">DoorDash and Uber Eats availability depends on whether we are currently operating. If you don't see us on the apps, we may not be out that day. Follow our Instagram/TikTok to confirm we're open before ordering on delivery apps.</div>
+  </div>
+</section>
+
+<section class="kb-section" id="order-flow">
+  <div class="section-header">
+    <span class="section-icon">📋</span>
+    <h2>Order Flow Script</h2>
+  </div>
+
+  <div class="script-block">
+    <div class="script-role">Step 1 — Confirm Intent</div>
+    <div class="script-text">"Awesome, let's get that order in! What would you like today?"</div>
+  </div>
+  <div class="script-block">
+    <div class="script-role">Step 2 — Capture Items + Upsell</div>
+    <div class="script-text">"Got it — [repeat order]. Anything else? Have you tried our Crab Fries or Salmon Egg Rolls? They're a fan favorite 🦀"</div>
+  </div>
+  <div class="script-block">
+    <div class="script-role">Step 3 — Collect Info</div>
+    <div class="script-text">"Perfect! Can I get your name and best phone number so we can confirm your order?"</div>
+  </div>
+  <div class="script-block">
+    <div class="script-role">Step 4 — Pickup Time</div>
+    <div class="script-text">"What time are you thinking for pickup? We'll make sure everything is fresh and ready for you."</div>
+  </div>
+  <div class="script-block">
+    <div class="script-role">Step 5 — Confirm &amp; Close</div>
+    <div class="script-text">"You're all set, [Name]! Here's your order:<br>[Items] · Pickup: [Time]<br>We'll send a confirmation to [phone]. Can't wait to serve you — see you soon! 🦀"</div>
+    <div class="script-note">ACTION: Create/update contact in GHL → Add tag "order-placed" → Trigger Order Confirmation Workflow</div>
+  </div>
+</section>
+
+<section class="kb-section" id="group-orders">
+  <div class="section-header">
+    <span class="section-icon">👥</span>
+    <h2>Group Orders</h2>
+  </div>
+  <div class="card">
+    <div class="card-body">
+      For <strong>groups of 10 or more</strong>, we ask for at least <strong>30–60 minutes advance notice</strong> so we can prep and ensure everyone gets their food hot and fresh. Text or call us at (302) 384-2469 to place a large group order. For groups over 25, please treat this as a <strong>catering inquiry</strong> and book a discovery call.
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- CATERING -->
+<!-- ═══════════════════════════════════════════ -->
+<section class="kb-section" id="catering-overview">
+  <div class="section-header">
+    <span class="section-icon">🎉</span>
+    <h2>Catering Overview</h2>
+  </div>
+  <div class="card">
+    <div class="card-title">We Cater All Types of Events</div>
+    <div class="card-body">
+      Birthday parties · Graduation parties · Corporate events · Office lunches · Weddings / receptions · Block parties · Private pop-ups · Community events · Holiday parties · Employee appreciation events
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">How Our Catering Works</div>
+    <div class="card-body">
+      <strong>1. Inquiry</strong> — Customer reaches out via DM, text, website form, or call<br>
+      <strong>2. Discovery Call</strong> — 30-minute call with Mal to discuss event details, guest count, menu, and pricing<br>
+      <strong>3. Proposal</strong> — Custom quote sent within 24 hours of discovery call<br>
+      <strong>4. Booking</strong> — Deposit required to secure the date (amount based on event size)<br>
+      <strong>5. Event Day</strong> — We arrive, set up, cook fresh, and serve your guests<br>
+      <strong>6. Follow-Up</strong> — Post-event review request and offer for future bookings
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">Minimum for Catering</div>
+    <div class="card-body">
+      We can accommodate events of all sizes. For very small groups (under 15), we recommend placing a large group order instead of booking a formal catering event. For 15+ guests, a catering booking with a discovery call is the best path. Pricing is customized per event.
+    </div>
+  </div>
+</section>
+
+<section class="kb-section" id="catering-flow">
+  <div class="section-header">
+    <span class="section-icon">📞</span>
+    <h2>Catering Intake Flow</h2>
+  </div>
+
+  <div class="script-block">
+    <div class="script-role">Step 1 — Show Excitement</div>
+    <div class="script-text">"That's amazing — we LOVE doing events! 🎉 Tell me a little about it — what type of event are you planning?"</div>
+  </div>
+  <div class="script-block">
+    <div class="script-role">Step 2 — Guest Count</div>
+    <div class="script-text">"How many guests are you expecting?"</div>
+  </div>
+  <div class="script-block">
+    <div class="script-role">Step 3 — Date</div>
+    <div class="script-text">"What date are you thinking? And is there flexibility if that date isn't available?"</div>
+  </div>
+  <div class="script-block">
+    <div class="script-role">Step 4 — Location</div>
+    <div class="script-text">"Where will the event be held? We want to make sure we can get the truck there."</div>
+  </div>
+  <div class="script-block">
+    <div class="script-role">Step 5 — Budget (Optional)</div>
+    <div class="script-text">"Do you have a budget in mind? No pressure — just helps Mal put together the right proposal for you."</div>
+  </div>
+  <div class="script-block">
+    <div class="script-role">Step 6 — Contact Info</div>
+    <div class="script-text">"Perfect! Last thing — your name, best phone number, and email so Mal can reach out to confirm and send over details."</div>
+  </div>
+  <div class="script-block">
+    <div class="script-role">Step 7 — Book &amp; Confirm</div>
+    <div class="script-text">"You're all set! I'm sending your info to Mal right now. He'll reach out within the hour to go over menu options, pricing, and lock in your date. We can't wait to make your event unforgettable! 🦀"</div>
+    <div class="script-note">ACTION: Create/update GHL contact → Add tag "catering-inquiry" → Populate custom fields → Trigger Catering Workflow → Book Catering Discovery Call</div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- POLICIES -->
+<!-- ═══════════════════════════════════════════ -->
+<section class="kb-section" id="payment">
+  <div class="section-header">
+    <span class="section-icon">💳</span>
+    <h2>Payment Methods</h2>
+  </div>
+  <div class="pill-row">
+    <span class="pill">💳 Credit / Debit Cards</span>
+    <span class="pill">💵 Cash</span>
+    <span class="pill">📱 Apple Pay</span>
+    <span class="pill">💚 Cash App</span>
+    <span class="pill">💙 Zelle</span>
+    <span class="pill">🔵 PayPal</span>
+  </div>
+  <div class="card">
+    <div class="card-body">We accept all major forms of payment at the truck. For catering deposits, we accept bank transfer, Cash App, Zelle, or card. We do NOT require cash-only for any transactions.</div>
+  </div>
+</section>
+
+<section class="kb-section" id="allergens">
+  <div class="section-header">
+    <span class="section-icon">⚠️</span>
+    <h2>Allergens &amp; Dietary Information</h2>
+  </div>
+  <div class="card">
+    <div class="card-title">Allergen Notice</div>
+    <div class="card-body">
+      Our food is prepared in a food truck kitchen where <strong>shellfish, gluten, dairy, eggs, and soy</strong> are all present. Cross-contamination is possible. If you have a severe allergy, please call us directly at (302) 384-2469 before ordering so we can discuss accommodations.
+    </div>
+  </div>
+  <table>
+    <tr><th>Menu Item</th><th>Contains</th><th>May Contain</th></tr>
+    <tr><td>Snowcrab Seafood Broil</td><td>Shellfish (crab)</td><td>Butter, seasoning blends</td></tr>
+    <tr><td>Shrimp over Rice</td><td>Shellfish (shrimp), gluten-free base</td><td>Seasoning, soy</td></tr>
+    <tr><td>Salmon over Rice</td><td>Fish</td><td>Seasoning</td></tr>
+    <tr><td>Cheesesteak</td><td>Gluten (hoagie roll), dairy (cheese), beef</td><td>Peppers, onions, soy</td></tr>
+    <tr><td>Chicken Cheesesteak</td><td>Gluten (hoagie roll), dairy (cheese), chicken</td><td>Peppers, onions</td></tr>
+    <tr><td>Salmon / Shrimp Tacos</td><td>Fish/Shellfish, gluten (tortilla)</td><td>Dairy (if cheese added)</td></tr>
+    <tr><td>Fish &amp; Fries / Shrimp &amp; Fries</td><td>Fish/Shellfish, gluten (breading)</td><td>Soy oil</td></tr>
+    <tr><td>Fish Hoagie</td><td>Fish, gluten (roll)</td><td>Dairy, soy</td></tr>
+    <tr><td>Wings &amp; Fries</td><td>Chicken, gluten</td><td>Dairy (if sauce), soy</td></tr>
+    <tr><td>Crab Fries</td><td>Shellfish (crab), gluten</td><td>Dairy, soy</td></tr>
+    <tr><td>Egg Rolls (Salmon/Crab)</td><td>Fish/Shellfish, gluten (wrapper), eggs</td><td>Soy, sesame</td></tr>
+    <tr><td>Regular Fries / Cheese Fries</td><td>Gluten possible, dairy (cheese)</td><td>Soy oil</td></tr>
+    <tr><td>Rice</td><td>None (plain white rice)</td><td>Cross-contamination</td></tr>
+  </table>
+  <div class="card">
+    <div class="card-title">Vegetarian / Vegan Options</div>
+    <div class="card-body">
+      Our menu is primarily meat and seafood-based. The most vegetarian-friendly options are <strong>Regular Fries, Cheese Fries, and Rice</strong>. We don't currently have dedicated vegan menu items but are always working on expanding. For dietary accommodations, please ask us directly.
+    </div>
+  </div>
+</section>
+
+<section class="kb-section" id="refunds">
+  <div class="section-header">
+    <span class="section-icon">🔄</span>
+    <h2>Refunds &amp; Cancellations</h2>
+  </div>
+  <table>
+    <tr><th>Situation</th><th>Policy</th></tr>
+    <tr><td>Order cancellation (before prep)</td><td>Full refund or credit — no problem, just let us know ASAP</td></tr>
+    <tr><td>Order cancellation (during prep)</td><td>Credit toward future order</td></tr>
+    <tr><td>Wrong item received</td><td>We remake it immediately, no charge</td></tr>
+    <tr><td>Quality issue (cold food, undercooked)</td><td>Remake or full refund — we stand behind our food 100%</td></tr>
+    <tr><td>Catering cancellation (72+ hours notice)</td><td>Deposit refunded minus any food already purchased</td></tr>
+    <tr><td>Catering cancellation (less than 72 hours)</td><td>Deposit non-refundable due to food prep commitment</td></tr>
+    <tr><td>DoorDash / Uber Eats orders</td><td>Contact the platform directly; we can also assist — call (302) 384-2469</td></tr>
+  </table>
+  <div class="card">
+    <div class="card-body"><strong>Our Promise:</strong> We will always make it right. If something isn't right with your food, tell us. Mal stands behind every plate we serve. No one leaves unhappy — that's the Mal's promise.</div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- AI SCRIPTS -->
+<!-- ═══════════════════════════════════════════ -->
+<section class="kb-section" id="voice-scripts">
+  <div class="section-header">
+    <span class="section-icon">📞</span>
+    <h2>Voice AI Scripts</h2>
+  </div>
+
+  <h3>Inbound Call — Business Hours</h3>
+  <div class="script-block">
+    <div class="script-role">AI Greeting</div>
+    <div class="script-text">"Thank you for calling Mal's Famous Seafood and Grill! This is Mal's assistant — how can I help you today?"</div>
+  </div>
+  <div class="script-block">
+    <div class="script-role">If They Want to Order</div>
+    <div class="script-text">"Awesome! I'd love to help you place that order. What would you like from the menu today? I can also text you our full menu if that's helpful."</div>
+  </div>
+  <div class="script-block">
+    <div class="script-role">If They Ask for Location</div>
+    <div class="script-text">"Great question! We're a food truck so our location changes daily. The best way to find us is to follow us on Instagram or TikTok — @MalsFamousSeafood — where we post our location every day before we open. Would you like me to text you the link?"</div>
+  </div>
+  <div class="script-block">
+    <div class="script-role">If They Ask for Hours</div>
+    <div class="script-text">"Our hours vary depending on where we're set up that day. Follow @MalsFamousSeafood on Instagram or TikTok for daily updates — or I can text you. What's the best number to reach you?"</div>
+  </div>
+  <div class="script-block">
+    <div class="script-role">If They Ask for Catering</div>
+    <div class="script-text">"Absolutely! We love catering events. Let me collect a few details so Mal can follow up personally. Can you tell me a little about your event? What type of event, roughly how many people, and what date are you thinking?"</div>
+  </div>
+  <div class="script-block">
+    <div class="script-role">If They Want to Speak to Mal / A Person</div>
+    <div class="script-text">"Of course! Let me get someone on the line for you. Please hold for just a moment — and if for some reason we can't get to you right now, we'll call you back within [15 minutes / 1 hour]. What's the best number to reach you?"</div>
+  </div>
+  <div class="script-block">
+    <div class="script-role">Ending a Call — Standard Close</div>
+    <div class="script-text">"Is there anything else I can help you with today? ... Perfect! Thank you for calling Mal's Famous Seafood and Grill. We can't wait to see you soon! 🦀"</div>
+  </div>
+
+  <h3>After-Hours Voicemail</h3>
+  <div class="script-block">
+    <div class="script-role">After-Hours Greeting</div>
+    <div class="script-text">"Hey! You've reached Mal's Famous Seafood and Grill. We're not available right now — but we'll get back to you as soon as possible. Leave your name, your number, and what you're calling about, and we'll reach out within [24 hours / same day for catering]. For urgent catering inquiries, text us at (302) 384-2469 and Mal will get back to you fast. Thanks for calling — we appreciate you!"</div>
+  </div>
+  <div class="script-block">
+    <div class="script-role">After-Hours AI Auto-Response (SMS)</div>
+    <div class="script-text">"Hey! This is Mal's Famous Seafood &amp; Grill 🦀 We missed your call but we'll be in touch! Is there something we can help you with right now? Text us here and we'll get back to you asap."</div>
+    <div class="script-note">ACTION: Create contact → Add tag "missed-call" → Trigger Missed Call Text-Back Workflow</div>
+  </div>
+</section>
+
+<section class="kb-section" id="chat-scripts">
+  <div class="section-header">
+    <span class="section-icon">💬</span>
+    <h2>Chat Widget Scripts</h2>
+  </div>
+  <div class="script-block">
+    <div class="script-role">First-Time Visitor Opening</div>
+    <div class="script-text">"Hey! Welcome to Mal's Famous Seafood &amp; Grill 🦀 I'm here to help — whether you want to check out the menu, place an order, or ask about catering. What can I do for you today?"</div>
+  </div>
+  <div class="script-block">
+    <div class="script-role">Return Visitor Opening</div>
+    <div class="script-text">"Hey, welcome back! Great to see you again 🦀 What can we do for you today?"</div>
+  </div>
+  <div class="script-block">
+    <div class="script-role">Menu Page Opening</div>
+    <div class="script-text">"Checking out the menu? Great taste! 🦀 Can I help you decide what to order, or would you like to place an order right here?"</div>
+  </div>
+  <div class="script-block">
+    <div class="script-role">No Response for 2+ Minutes</div>
+    <div class="script-text">"Still there? No rush — just wanted to let you know I'm here if you need anything! You can also text us at (302) 384-2469 anytime 🦀"</div>
+  </div>
+  <div class="script-block">
+    <div class="script-role">Before Closing Chat</div>
+    <div class="script-text">"Before you go — can I get your name and number so we can follow up or send you our daily location updates? Promise we won't spam you 😄"</div>
+  </div>
+</section>
+
+<section class="kb-section" id="sms-scripts">
+  <div class="section-header">
+    <span class="section-icon">📱</span>
+    <h2>SMS Scripts</h2>
+  </div>
+  <div class="script-block">
+    <div class="script-role">First Inbound SMS</div>
+    <div class="script-text">"Hey! Thanks for texting Mal's Famous Seafood &amp; Grill 🦀 How can we help you today?"</div>
+  </div>
+  <div class="script-block">
+    <div class="script-role">Order Confirmed</div>
+    <div class="script-text">"✅ Order confirmed, [Name]! We're prepping your food fresh right now. We'll text you when it's ready for pickup. — Mal's Famous Seafood &amp; Grill 🦀"</div>
+  </div>
+  <div class="script-block">
+    <div class="script-role">Order Ready</div>
+    <div class="script-text">"🔥 Your order is ready, [Name]! Come on over and grab your food — it's hot and fresh. See you soon! — Mal's 🦀"</div>
+  </div>
+  <div class="script-block">
+    <div class="script-role">Review Request (Post-Order)</div>
+    <div class="script-text">"Hey [Name]! Hope you enjoyed your meal today 🦀 Would you mind leaving us a quick Google review? It takes 30 seconds and means everything to us: [GOOGLE REVIEW LINK] — Mal's Fam"</div>
+  </div>
+  <div class="script-block">
+    <div class="script-role">Win-Back (60+ Day Inactive)</div>
+    <div class="script-text">"Hey [Name]! We miss you at Mal's Famous Seafood &amp; Grill 🦀 Come back and try something new — check out our latest menu: [MENU LINK]"</div>
+  </div>
+  <div class="script-block">
+    <div class="script-role">Catering Follow-Up</div>
+    <div class="script-text">"Hey [Name]! Just checking in on your catering inquiry 🎉 Ready to lock in your date? Book a quick call with Mal here: [CALENDAR LINK]"</div>
+  </div>
+</section>
+
+<section class="kb-section" id="social-scripts">
+  <div class="section-header">
+    <span class="section-icon">📸</span>
+    <h2>Social DM Scripts</h2>
+  </div>
+  <div class="script-block">
+    <div class="script-role">Instagram / Facebook DM — First Message</div>
+    <div class="script-text">"Hey! Thanks for the message 🦀 This is Mal's Famous Seafood &amp; Grill. How can we help you today — menu, orders, catering, or something else?"</div>
+  </div>
+  <div class="script-block">
+    <div class="script-role">TikTok DM — First Message</div>
+    <div class="script-text">"Heyy! Thanks for sliding in 🦀 What can we do for you — menu questions, placing an order, or booking catering?"</div>
+  </div>
+  <div class="script-block">
+    <div class="script-role">Comment Reply — Asking About Food</div>
+    <div class="script-text">"🦀 Everything is made fresh to order! DM us or visit malsfamousseafood.com to place an order."</div>
+  </div>
+  <div class="script-block">
+    <div class="script-role">Comment Reply — Asking About Location</div>
+    <div class="script-text">"📍 We post our daily location on our story — follow us so you never miss us! 🦀"</div>
+  </div>
+  <div class="script-block">
+    <div class="script-role">Comment Reply — Catering Inquiry</div>
+    <div class="script-text">"🎉 We'd love to cater your event! DM us or text (302) 384-2469 to get started."</div>
+  </div>
+  <div class="script-block">
+    <div class="script-role">Comment Reply — Compliment</div>
+    <div class="script-text">"Thank you so much!! That means everything to us 🦀❤️ See you next time!"</div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- ESCALATION -->
+<!-- ═══════════════════════════════════════════ -->
+<section class="kb-section" id="escalation">
+  <div class="section-header">
+    <span class="section-icon">🚨</span>
+    <h2>Escalation Rules</h2>
+  </div>
+  <p>The AI always tries to resolve first. Escalate to management only when the situations below occur:</p>
+
+  <div class="escalation">
+    <div class="escalation-trigger">🔴 Customer asks for Mal / owner / manager by name</div>
+    <div class="escalation-action">Immediately say: "Of course! Let me connect you with Mal directly. One moment please!" → Transfer to human + internal alert to Mal's phone</div>
+  </div>
+  <div class="escalation">
+    <div class="escalation-trigger">🔴 Customer reports food safety issue, illness, or injury</div>
+    <div class="escalation-action">Say: "I'm so sorry to hear that — this is very important to us. Let me connect you with our management team right away." → Transfer immediately + URGENT alert → Do NOT attempt to resolve independently</div>
+  </div>
+  <div class="escalation">
+    <div class="escalation-trigger">🔴 Customer uses aggressive, threatening, or profane language (after 1 de-escalation attempt)</div>
+    <div class="escalation-action">De-escalate once: "I completely understand your frustration and I want to make this right. Let me get someone who can help you directly." → Transfer + alert</div>
+  </div>
+  <div class="escalation">
+    <div class="escalation-trigger">🔴 Refund request over $30</div>
+    <div class="escalation-action">Collect details, empathize, then: "For refunds of this size I want to make sure our management handles this personally." → Transfer + alert with refund amount and reason</div>
+  </div>
+  <div class="escalation">
+    <div class="escalation-trigger">🔴 Catering event for 50+ guests needing custom quote</div>
+    <div class="escalation-action">Collect full details, then: "For an event this size, Mal handles the quote personally to make sure everything is perfect." → Book discovery call or direct transfer</div>
+  </div>
+  <div class="escalation">
+    <div class="escalation-trigger">🔴 Any legal threat or mention of lawsuit/attorney</div>
+    <div class="escalation-action">Do NOT engage further on the legal matter. Say: "I understand — let me connect you with our management immediately." → Transfer → URGENT flag</div>
+  </div>
+  <div class="escalation">
+    <div class="escalation-trigger">🟡 Issue unresolved after 2 AI attempts</div>
+    <div class="escalation-action">Say: "I want to make sure you get the best help — let me bring in our team directly." → Transfer + tag "escalated-to-human"</div>
+  </div>
+
+  <h3>Escalation Transfer Message (use every time)</h3>
+  <div class="script-block">
+    <div class="script-role">Standard Escalation Transfer</div>
+    <div class="script-text">"I want to make sure you get the best help possible — let me connect you with our management team right now. Someone will be with you shortly. Your patience means a lot to us! 🙏"</div>
+    <div class="script-note">ACTION: Assign conversation to Mal → Send internal SMS to (302) 384-2469 → Add tag "escalated-to-human" → Move to Urgent queue</div>
+  </div>
+</section>
+
+<section class="kb-section" id="complaints">
+  <div class="section-header">
+    <span class="section-icon">🤝</span>
+    <h2>Complaint Handling</h2>
+  </div>
+  <div class="script-block">
+    <div class="script-role">Step 1 — Acknowledge Immediately (NEVER be defensive)</div>
+    <div class="script-text">"I'm really sorry to hear that — that is absolutely not the experience we want you to have. Thank you for letting us know."</div>
+  </div>
+  <div class="script-block">
+    <div class="script-role">Step 2 — Show Genuine Empathy</div>
+    <div class="script-text">"I completely understand how frustrating that is, and I want to make this right for you."</div>
+  </div>
+  <div class="script-block">
+    <div class="script-role">Step 3 — Collect Details</div>
+    <div class="script-text">"Can you tell me more about what happened? And can I get your name and best number so our team can follow up personally?"</div>
+  </div>
+  <div class="script-block">
+    <div class="script-role">Step 4a — Minor Issue (cold food, wrong item, missing item)</div>
+    <div class="script-text">"I'm going to flag this for our team right now. We'd love to make it up to you — either by remaking your order or applying a credit to your next visit. What would work best for you?"</div>
+  </div>
+  <div class="script-block">
+    <div class="script-role">Step 4b — Serious Issue (illness, safety) → Escalate</div>
+    <div class="script-text">"This is really important to us and I want to make sure our management handles this personally and urgently. Let me connect you with Mal right now."</div>
+    <div class="script-note">ESCALATE IMMEDIATELY — Tag "urgent-complaint" — Alert Mal</div>
+  </div>
+  <div class="script-block">
+    <div class="script-role">Step 5 — Close Complaint</div>
+    <div class="script-text">"Thank you for your patience, [Name]. Someone from our team will reach out within [15 min / 1 hour] to make this right. We really value you and we're committed to earning your trust back. 🙏"</div>
+  </div>
+</section>
+
+<section class="kb-section" id="tickets">
+  <div class="section-header">
+    <span class="section-icon">🎫</span>
+    <h2>Ticket Queue Priority</h2>
+  </div>
+  <table>
+    <tr><th>Queue</th><th>Trigger</th><th>SLA</th><th>Assigned To</th></tr>
+    <tr><td>🔴 <strong>Urgent / Escalated</strong></td><td>Tag: escalated-to-human, urgent-complaint</td><td><strong>15 minutes</strong></td><td>Mal (owner)</td></tr>
+    <tr><td>🟠 <strong>Active Orders</strong></td><td>Tag: order-placed</td><td><strong>5 minutes</strong></td><td>Staff / AI</td></tr>
+    <tr><td>🟡 <strong>Catering Leads</strong></td><td>Tag: catering-inquiry</td><td><strong>1 hour</strong></td><td>Mal (owner)</td></tr>
+    <tr><td>🟢 <strong>Review Follow-Up</strong></td><td>Tag: order-complete</td><td><strong>Automated</strong></td><td>AI (automated)</td></tr>
+    <tr><td>🔵 <strong>General Inquiries</strong></td><td>Tag: new-lead</td><td><strong>2 hours</strong></td><td>AI → Staff</td></tr>
+    <tr><td>⚪ <strong>Win-Back</strong></td><td>Tag: win-back</td><td><strong>Same day</strong></td><td>AI (automated)</td></tr>
+  </table>
+</section>
+
+<hr class="divider">
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- FULL FAQ -->
+<!-- ═══════════════════════════════════════════ -->
+<section class="kb-section" id="faq-general">
+  <div class="section-header">
+    <span class="section-icon">❓</span>
+    <h2>General FAQ</h2>
+  </div>
+
+  <div class="qa"><div class="qa-q">Where are you located?</div><div class="qa-a">We're a food truck based out of New Castle, Delaware! Our location changes daily — follow us on Instagram and TikTok @MalsFamousSeafood for today's location and hours. We always post before we open.</div></div>
+  <div class="qa"><div class="qa-q">What are your hours?</div><div class="qa-a">Our hours vary by day and location. Follow @MalsFamousSeafood on Instagram and TikTok for daily updates. You can also text (302) 384-2469 and we'll let you know if we're open today.</div></div>
+  <div class="qa"><div class="qa-q">Are you open today?</div><div class="qa-a">Check our Instagram or TikTok story @MalsFamousSeafood — we post every day we're open before we start. You can also text (302) 384-2469 and we'll confirm.</div></div>
+  <div class="qa"><div class="qa-q">Do you have a brick-and-mortar location?</div><div class="qa-a">We're a food truck right now — which means we bring the food to YOU! We operate in and around the New Castle, Delaware area. Follow us to track our location daily.</div></div>
+  <div class="qa"><div class="qa-q">Do you take credit cards?</div><div class="qa-a">Yes! We accept all major credit and debit cards, cash, Apple Pay, Cash App, and Zelle.</div></div>
+  <div class="qa"><div class="qa-q">Is the food fresh?</div><div class="qa-a">100% — everything at Mal's Famous Seafood &amp; Grill is made to order. We don't pre-cook and hold. When you order, we cook. That's what makes us different.</div></div>
+  <div class="qa"><div class="qa-q">Do you have a loyalty program?</div><div class="qa-a">We're working on it and it's coming soon! Follow @MalsFamousSeafood to be the first to know when it launches.</div></div>
+  <div class="qa"><div class="qa-q">Can I follow you to know when you're near me?</div><div class="qa-a">Absolutely — that's the best way! Follow @MalsFamousSeafood on Instagram and TikTok. You can also text "UPDATES" to (302) 384-2469 to get daily text updates.</div></div>
+  <div class="qa"><div class="qa-q">Do you do pop-up events?</div><div class="qa-a">Yes! We do pop-ups at community events, markets, and private events. If you'd like us at your event or venue, reach out — text (302) 384-2469 or DM us.</div></div>
+</section>
+
+<section class="kb-section" id="faq-menu">
+  <div class="section-header">
+    <span class="section-icon">🦀</span>
+    <h2>Menu FAQ</h2>
+  </div>
+
+  <div class="qa"><div class="qa-q">What's the most popular item?</div><div class="qa-a">The Snowcrab Seafood Broil is our signature — it's what we're known for. The Crab Fries are a very close second, and the Salmon and Crab Egg Rolls are unique items people go crazy for. Honestly, everything is made fresh so you can't go wrong!</div></div>
+  <div class="qa"><div class="qa-q">What do you recommend for someone ordering for the first time?</div><div class="qa-a">Start with the Snowcrab Seafood Broil — that's the full Mal's experience. Add the Crab Fries on the side and a Pineapple Juice. If you want to try something unique, the Salmon Egg Rolls are a must. You'll be hooked after your first order!</div></div>
+  <div class="qa"><div class="qa-q">Do you have anything vegetarian?</div><div class="qa-a">Our menu is focused on seafood and grill. The best vegetarian-friendly options are Regular Fries, Cheese Fries, and Rice. We're always working on expanding — stay tuned!</div></div>
+  <div class="qa"><div class="qa-q">Are your egg rolls good? What's in them?</div><div class="qa-a">They are incredible — one of our most unique items. The Salmon Egg Roll has seasoned salmon in a crispy fried wrapper, and the Crab Egg Roll has real crab meat. You will not find these at any other food truck. They're that good.</div></div>
+  <div class="qa"><div class="qa-q">What kind of fish do you use?</div><div class="qa-a">We use fresh fish sourced for quality. For specific details on today's fish, text us at (302) 384-2469 as it can vary based on what's freshest that day.</div></div>
+  <div class="qa"><div class="qa-q">Can I customize my order?</div><div class="qa-a">Absolutely! We're happy to accommodate special requests. Tell us when you order and we'll do our best. For allergies or specific dietary needs, please call us directly at (302) 384-2469.</div></div>
+  <div class="qa"><div class="qa-q">Are your fries seasoned?</div><div class="qa-a">Yes! Our fries are seasoned and crispy. The Regular Fries are salted and well-seasoned. The Crab Fries and Cheese Fries take it to the next level.</div></div>
+  <div class="qa"><div class="qa-q">Do you have prices listed?</div><div class="qa-a">Pricing is posted at the truck and on our delivery platforms (DoorDash / Uber Eats). Text us at (302) 384-2469 for current pricing on any item.</div></div>
+  <div class="qa"><div class="qa-q">Do you have kids' menu options?</div><div class="qa-a">While we don't have a dedicated kids' menu, items like Wings &amp; Fries, Chicken over Rice, Regular Fries, and Cheese Fries are great for kids. Ask us and we'll help you find something everyone will enjoy!</div></div>
+  <div class="qa"><div class="qa-q">Do you have spicy food?</div><div class="qa-a">We can season your food with more heat on request! Just let us know when you order and we'll kick it up. Most of our food is flavorful and seasoned but not hot by default.</div></div>
+</section>
+
+<section class="kb-section" id="faq-catering">
+  <div class="section-header">
+    <span class="section-icon">🎉</span>
+    <h2>Catering FAQ</h2>
+  </div>
+
+  <div class="qa"><div class="qa-q">Do you cater events?</div><div class="qa-a">Yes! We love catering events — birthdays, graduations, corporate events, weddings, block parties, and more. Text us at (302) 384-2469 or DM us to get started with a catering inquiry.</div></div>
+  <div class="qa"><div class="qa-q">How far in advance do I need to book catering?</div><div class="qa-a">We recommend booking at least 2–4 weeks in advance for larger events. For smaller events (under 30 guests), 1–2 weeks is usually fine. Reach out as early as possible — our calendar fills up, especially on weekends.</div></div>
+  <div class="qa"><div class="qa-q">What's included in catering?</div><div class="qa-a">Catering includes food prep and service at your event location. We bring the truck (or set up stations), cook fresh on-site, and serve your guests. Setup and breakdown are included. Custom menus are available.</div></div>
+  <div class="qa"><div class="qa-q">Do you have catering packages?</div><div class="qa-a">We build custom catering proposals based on your event. After a quick 30-minute discovery call with Mal, you'll receive a full proposal with menu options and pricing tailored to your guest count and budget.</div></div>
+  <div class="qa"><div class="qa-q">How much does catering cost?</div><div class="qa-a">Catering pricing is custom based on guest count, menu selections, and event logistics. Book a 30-minute discovery call with Mal and you'll get a full proposal within 24 hours. Text (302) 384-2469 to get started.</div></div>
+  <div class="qa"><div class="qa-q">Do you require a deposit for catering?</div><div class="qa-a">Yes — a deposit is required to secure your event date. The deposit amount is determined during the proposal process based on event size. The deposit confirms your booking and covers initial food purchasing.</div></div>
+  <div class="qa"><div class="qa-q">Can you travel outside of New Castle for catering?</div><div class="qa-a">Yes! We serve the greater Delaware area and can travel to nearby areas in Maryland and Pennsylvania as well. Travel fees may apply depending on distance — we'll cover this in your discovery call.</div></div>
+  <div class="qa"><div class="qa-q">What if I need to cancel my catering event?</div><div class="qa-a">We understand things change. Cancellations with 72+ hours notice: deposit refunded minus any food already purchased. Less than 72 hours: deposit is non-refundable due to the food commitment. Please reach out as soon as possible if plans change.</div></div>
+</section>
+
+<section class="kb-section" id="faq-orders">
+  <div class="section-header">
+    <span class="section-icon">📦</span>
+    <h2>Orders &amp; Delivery FAQ</h2>
+  </div>
+
+  <div class="qa"><div class="qa-q">Can I order online?</div><div class="qa-a">Yes! Order through DoorDash or Uber Eats when we're live. You can also text (302) 384-2469 or use the chat on our website to place an order for pickup.</div></div>
+  <div class="qa"><div class="qa-q">Do you deliver?</div><div class="qa-a">Delivery is available through DoorDash and Uber Eats when we're operating. For direct orders, we do pickup at the truck. Catering events are on-site service at your venue.</div></div>
+  <div class="qa"><div class="qa-q">How long does an order take?</div><div class="qa-a">Since everything is made to order, standard orders take approximately 10–20 minutes depending on how busy we are. We'll always let you know an estimated time when you order.</div></div>
+  <div class="qa"><div class="qa-q">Can I pre-order?</div><div class="qa-a">Yes! Text us at (302) 384-2469 with your order and desired pickup time and we'll have it ready when you arrive. Great for lunch rushes!</div></div>
+  <div class="qa"><div class="qa-q">My DoorDash order was wrong — what do I do?</div><div class="qa-a">Sorry about that! Contact DoorDash Support first as they handle delivery orders directly. You can also text us at (302) 384-2469 and we'll do our best to help resolve it.</div></div>
+  <div class="qa"><div class="qa-q">Can I place a large group order?</div><div class="qa-a">Absolutely! For groups of 10+, please give us at least 30–60 minutes advance notice. Text (302) 384-2469 or use the chat. For 25+ people, we recommend a catering booking for the best experience.</div></div>
+  <div class="qa"><div class="qa-q">What if my food is cold or not right?</div><div class="qa-a">We're sorry — that's not our standard! Contact us immediately at (302) 384-2469 or via chat and we'll make it right. We stand behind every plate, no exceptions.</div></div>
+  <div class="qa"><div class="qa-q">Can I get a refund?</div><div class="qa-a">If something isn't right with your order, we'll always make it right — remake, credit, or refund depending on the situation. Contact us at (302) 384-2469 and we'll take care of you.</div></div>
+</section>
+
+</main>
+</div>
+
+<script>
+  // Smooth scroll for sidebar links
+  document.querySelectorAll('.sidebar a').forEach(a => {
+    a.addEventListener('click', e => {
+      e.preventDefault();
+      const target = document.querySelector(a.getAttribute('href'));
+      if (target) target.scrollIntoView({ behavior: 'smooth' });
+    });
+  });
+  // Copy button functionality
+  document.querySelectorAll('.copy-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const text = btn.previousElementSibling.textContent;
+      navigator.clipboard.writeText(text).then(() => {
+        btn.textContent = '✓ Copied!';
+        setTimeout(() => btn.textContent = 'Copy', 2000);
+      });
+    });
+  });
+</script>
+</body>
+</html>
