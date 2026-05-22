@@ -1,0 +1,9 @@
+{
+  "rewrites": [
+    {"source": "/menu", "destination": "/menu.html"},
+    {"source": "/admin", "destination": "/admin.html"},
+    {"source": "/print-menu", "destination": "/print-menu.html"},
+    {"source": "/knowledge-base", "destination": "/knowledge-base.html"}
+  ],
+  "headers": [{"source": "/(.*)", "headers": [{"key": "Cache-Control", "value": "no-cache"}]}]
+}
