@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mal's Admin â€” Menu Manager</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Georgia', serif; background: #121212; color: #f0f0f0; }
+.header { background: #1e1e1e; border-bottom: 2px solid #d4af37; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; }
+.header-title { font-size: 1.5rem; font-weight: 700; color: #d4af37; letter-spacing: 2px; }
+.header-sub { color: #808080; font-size: 0.9rem; }
+.container { max-width: 1200px; margin: 2rem auto; padding: 0 1rem; }
+.tabs { display: flex; gap: 0.5rem; margin-bottom: 2rem; border-bottom: 1px solid rgba(212, 175, 55, 0.3); }
+.tab { padding: 0.75rem 1.5rem; background: transparent; border: none; color: #808080; cursor: pointer; font-size: 0.9rem; letter-spacing: 1px; text-transform: uppercase; border-bottom: 2px solid transparent; transition: all 0.3s; }
+.tab.active { color: #d4af37; border-bottom-color: #d4af37; }
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+.card { background: #1e1e1e; border: 1px solid rgba(212, 175, 55, 0.2); padding: 2rem; margin-bottom: 2rem; }
+.card-title { font-size: 1.2rem; font-weight: 700; color: #d4af37; margin-bottom: 1.5rem; letter-spacing: 2px; }
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+.form-group { display: flex; flex-direction: column; gap: 0.5rem; }
+.label { font-size: 0.8rem; letter-spacing: 1px; text-transform: uppercase; color: #d4af37; }
+input, textarea, select { background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(212, 175, 55, 0.3); color: #f0f0f0; padding: 0.75rem 1rem; font-size: 1rem; width: 100%; outline: none; }
+input:focus, textarea:focus, select:focus { border-color: #d4af37; }
+.textarea-lg { min-height: 120px; resize: vertical; }
+.form-full { grid-column: 1 / -1; }
+.btn { padding: 0.75rem 1.5rem; border: none; cursor: pointer; font-size: 0.9rem; letter-spacing: 1px; text-transform: uppercase; transition: all 0.3s; }
+.btn-primary { background: #d4af37; color: #121212; }
+.btn-primary:hover { background: #b8962e; }
+.btn-secondary { background: transparent; border: 1px solid #d4af37; color: #d4af37; }
+.btn-danger { background: #8b0000; color: #f0f0f0; }
+.btn-danger:hover { background: #a50000; }
+.table { width: 100%; border-collapse: collapse; }
+.table th { padding: 1rem; text-align: left; font-size: 0.8rem; letter-spacing: 2px; text-transform: uppercase; color: #d4af37; border-bottom: 1px solid rgba(212, 175, 55, 0.3); }
+.table td { padding: 1rem; border-bottom: 1px solid rgba(255, 255, 255, 0.05); color: #d0d0d0; }
+.table tr:hover td { background: rgba(212, 175, 55, 0.05); }
+.badge { padding: 0.25rem 0.75rem; font-size: 0.75rem; letter-spacing: 1px; text-transform: uppercase; }
+.badge-active { background: rgba(0, 128, 0, 0.2); color: #4caf50; }
+.badge-inactive { background: rgba(128, 0, 0, 0.2); color: #f44336; }
+.actions { display: flex; gap: 0.5rem; }
+.modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.8); z-index: 1000; align-items: center; justify-content: center; }
+.modal-overlay.active { display: flex; }
+.modal { background: #1e1e1e; padding: 2rem; width: 90%; max-width: 600px; max-height: 90vh; overflow-y: auto; }
+.modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
+.modal-title { font-size: 1.2rem; font-weight: 700; color: #d4af37; }
+.close-btn { background: none; border: none; color: #f0f0f0; font-size: 1.5rem; cursor: pointer; }
+.stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 2rem; }
+.stat-card { background: #1e1e1e; border: 1px solid rgba(212, 175, 55, 0.2); padding: 1.5rem; text-align: center; }
+.stat-value { font-size: 2rem; font-weight: 700; color: #d4af37; }
+.stat-label { font-size: 0.8rem; letter-spacing: 1px; text-transform: uppercase; color: #808080; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div>
+    <div class="header-title">MAL ADMIN PANEL</div>
+    <div class="header-sub">Menu Management System</div>
+  </div>
+  <div style="display: flex; align-items: center; gap: 1rem;">
+    <a href="mals-website.html" class="btn btn-secondary" style="text-decoration: none;">View Site</a>
+  </div>
+</div>
+
+<div class="container">
+
+<div class="stats-grid">
+  <div class="stat-card">
+    <div class="stat-value" id="stat-items">0</div>
+    <div class="stat-label">Total Items</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-value" id="stat-active">0</div>
+    <div class="stat-label">Active Items</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-value" id="stat-cats">0</div>
+    <div class="stat-label">Categories</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-value" id="stat-feat">0</div>
+    <div class="stat-label">Featured</div>
+  </div>
+</div>
+
+<div class="tabs">
+  <button class="tab active" onclick="switchTab('menu')">Menu Items</button>
+  <button class="tab" onclick="switchTab('add')">Add New Item</button>
+  <button class="tab" onclick="switchTab('import')">Import/Export</button>
+</div>
+
+<div id="tab-menu" class="tab-panel active">
+  <div class="card">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+      <div class="card-title" style="margin-bottom: 0;">MENU ITEMS</div>
+      <div style="display: flex; gap: 0.5rem; align-items: center;">
+        <input type="text" id="search-input" placeholder="Search menu items..." style="width: 200px; padding: 0.5rem 1rem;" oninput="filterMenu()">
+        <select id="cat-filter" onchange="filterMenu()" style="width: 150px; padding: 0.5rem;">
+          <option value="">All Categories</option>
+        </select>
+        <button class="btn btn-primary" onclick="switchTab('add')">+ Add Item</button>
+      </div>
+    </div>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Item</th><th>Category</th><th>Price</th><th>Status</th><th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="menu-table-body">
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div id="tab-add" class="tab-panel">
+  <div class="card">
+    <div class="card-title">ADD ½ EDIT MENU ITEM</div>
+    <form id="menu-form" onsubmit="saveItem(event)">
+      <input type="hidden" id="edit-id" value="">
+      <div class="form-grid">
+        <div class="form-group">
+          <label class="label">Item Name *</label>
+          <input type="text" id="item-name" required>
+        </div>
+        <div class="form-group">
+          <label class="label">Category *</label>
+          <select id="item-category" required>
+            <option value="">-- Select Category --</option>
+            <option value="starters">Starters</option>
+            <option value="seafood">Seafood</option>
+            <option value="meat">Mea & Poultry</option>
+            <option value="sides">Sides</option>
+            <option value="desserts">Desserts</option>
+            <option value="drinks">Drinks</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="label">Price ($) *</label>
+          <input type="number" id="item-price" step="0.01" min="0" required>
+        </div>
+        <div class="form-group">
+          <label class="label">Image URL</label>
+          <input type="url" id="item-image" placeholder="https://...">
+        </div>
+        <div class="form-group form-full">
+          <label class="label">Description</label>
+          <textarea id="item-desc" class="textarea-lg" placeholder="Describe the dish..."></textarea>
+        </div>
+        <div class="form-group">
+          <label class="label">Allergens</label>
+          <input type="text" id="item-allergens" placeholder="e.g. gloten, dairy">
+        </div>
+        <div class="form-group">
+          <label class="label">Status</label>
+          <select id="item-status">
+            <option value="active">Active</option>
+            <option value="inactive">Inactive</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="label">Featured</label>
+          <select id="item-feat">
+            <option value="false">Not Featured</option>
+            <option value="true">Featured</option>
+          </select>
+        </div>
+        <div class="form-group form-full">
+          <label class="label">Special Notes</label>
+          <textarea id="item-notes" class="textarea-lg" placeholder="Any special preparation notes..."></textarea>
+        </div>
+      </div>
+      <div style="display: flex; gap: 1rem; margin-top: 1.5rem;">
+        <button type="submit" class="btn btn-primary"><span id="save-label">Save Item</span></button>
+        <button type="button" class="btn btn-secondary" onclick="resetForm()">Cancel</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div id="tab-import" class="tab-panel">
+  <div class="card">
+    <div class="card-title">EXPORT MENU</div>
+    <p>Export your menu data as JSON to share between devices or keep as a backup.</p>
+    <br>
+    <button class="btn btn-primary" onclick="exportMenu()">Export JSON</button>
+  </div>
+  <div class="card">
+    <div class="card-title">IMPORT MENU</div>
+    <p>Import menu data from a JSON file. This will merge with your current data.</p>
+    <br>
+    <input type="file" id="import-file" accept=".json" style="margin-bottom: 1rem;">
+    <br>
+    <button class="btn btn-primary" onclick="importMenu()">Import JSON</button>
+  </div>
+</div>
+
+</div>
+
+<div id="edit-modal" class="modal-overlay">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">T\59T%Q4ð½‘¥Øø(€€€€€€ñ‰ÕÑÑ½¸±…ÍÌô‰±½Í”µ‰Ñ¸ˆ½¹±¥¬ô‰±½Í•5½‘…° ¤ˆø™Ñ¥µ•Ììð½‰ÕÑÑ½¸ø(€€€€ð½‘¥Øø(€€€€ñ‘¥Ø¥ô‰µ½‘…°µ½¹Ñ•¹Ðˆøð½‘¥Øø(€€ð½‘¥Øø(ð½‘¥Øø((ñÍÉ¥ÁÐø()±•Ðµ•¹Õ%Ñ•µÌ€ô)M=8¹Á…ÉÍ”¡±½…±MÑ½É…”¹•Ñ%Ñ•´ µ…±Í5•¹Ôœ¤ñð€mtœ¤ì)±•Ð•‘¥Ñ¥¹%€ô¹Õ±°ì()™Õ¹Ñ¥½¸Í…Ù•Q½MÑ½É…” ¤ì(€±½…±MÑ½É…”¹Í•Ñ%Ñ•´ µ…±Í5•¹Ôœ°)M=8¹ÍÑÉ¥¹¥™ä¡µ•¹Õ%Ñ•µÌ¤¤ì)ô()™Õ¹Ñ¥½¸ÕÁ‘…Ñ•MÑ…ÑÌ ¤ì(€‘½Õµ•¹Ð¹•Ñ±•µ•¹Ñ	å% ÍÑ…Ðµ¥Ñ•µÌœ¤¹Ñ•áÑ½¹Ñ•¹Ð€ôµ•¹Õ%Ñ•µÌ¹±•¹Ñ ì(€‘½Õµ•¹Ð¹•Ñ±•µ•¹Ñ	å% ÍÑ…Ðµ…Ñ¥Ù”œ¤¹Ñ•áÑ½¹Ñ•¹Ð€ôµ•¹Õ%Ñ•µÌ¹™¥±Ñ•È¡¤€ôø¤¹ÍÑ…ÑÕÌ€ôôô€…Ñ¥Ù”œ¤¹±•¹Ñ ì(€½¹ÍÐ…ÑÌ€ôl¸¸¹¹•ÜM•Ð¡µ•¹Õ%Ñ•µÌ¹µ…À¡¤€ôø¤¹…Ñ•½Éä¤¥tì(€‘½Õµ•¹Ð¹•Ñ±•µ•¹Ñ	å% ÍÑ…Ðµ…ÑÌœ¤¹Ñ•áÑ½¹Ñ•¹Ð€ô…ÑÌ¹±•¹Ñ ì(€‘½Õµ•¹Ð¹•Ñ±•µ•¹Ñ	å% ÍÑ…Ðµ™•…Ðœ¤¹Ñ•áÑ½¹Ñ•¹Ð€ôµ•¹Õ%Ñ•µÌ¹™¥±Ñ•È¡¤€ôø¤¹™•…ÑÕÉ•¤¹±•¹Ñ ì)ô()™Õ¹Ñ¥½¸É•¹‘•É5•¹ÕQ…‰±” ¤ì(€½¹ÍÐ‰½‘ä€ô‘½Õµ•¹Ð¹•Ñ±•µ•¹Ñ	å% µ•¹ÔµÑ…‰±”µ‰½‘äœ¤ì(€½¹ÍÐÍ•…É €ô‘½Õµ•¹Ð¹•Ñ±•µ•¹Ñ	å% Í•…É µ¥¹ÁÕÐœ¤¹Ù…±Õ”¹Ñ½1½Ý•É…Í” ¤ì(€½¹ÍÐ…Ñ¥±Ñ•È€ô‘½Õµ•¹Ð¹•Ñ±•µ•¹Ñ	å% …Ðµ™¥±Ñ•Èœ¤¹Ù…±Õ”ì(€€(€½¹ÍÐ™¥±Ñ•É•€ôµ•¹Õ%Ñ•µÌ¹™¥±Ñ•È¡¥Ñ•´€ôøì(€€€½¹ÍÐµ…Ñ¡•ÍM•…É €ô¥Ñ•´¹¹…µ”¹Ñ½1½Ý•É…Í” ¤¹¥¹±Õ‘•Ì¡Í•…É ¤ì(€€€½¹ÍÐµ…Ñ¡•Í…Ð€ô€……Ñ¥±Ñ•Èñð¥Ñ•´¹…Ñ•½Éä€ôôô…Ñ¥±Ñ•Èì(€€€É•ÑÕÉ¸µ…Ñ¡•ÍM•…É €˜˜µ…Ñ¡•Í…Ðì(€ô¤ì(€€(€¥˜€¡™¥±Ñ•É•¹±•¹Ñ €ôôô€À¤ì(€€€‰½‘ä¹¥¹¹•É!Q50€ô€œñÑÈøñÑ½±ÍÁ…¸ôˆÔˆÍÑå±”ô‰Ñ•áÐµ…±¥¸è•¹Ñ•Èì½±½Èè€ŒØÀØÀØÀìÁ…‘‘¥¹œè€ÉÉ•´ìˆù9¼¥Ñ•µÌ™½Õ¹¸ð½Ñøð½ÑÈøœì(€€€É•ÑÕÉ¸ì(€ô((€‰½‘ä¹¥¹¹•É!Q50€ô™¥±Ñ•É•¹µ…À¡¥Ñ•´€ôø€(€€€€ñÑÈø(€€€€€€ñÑøñÍÑÉ½¹œø‘í¥Ñ•´¹¹…µ•ôð½ÍÑÉ½¹œøñ‰ÈøñÍµ…±°ÍÑå±”ô‰½±½Èè€ŒØÀØÀØÀˆø‘í¥Ñ•´¹‘•ÍÉ¥ÁÑ¥½¸¹ÍÕ‰ÍÑÉ¥¹œ À°ÔÀ¥ô‘í¥Ñ•´¹‘•ÍÉ¥ÁÑ¥½¸¹±•¹Ñ €ø€ÔÀ€ü€œ¸¸¸œ€è€œôð½Íµ…±°øð½Ñø(€€€€€€ñÑø‘í¥Ñ•´¹…Ñ•½Éåôð½Ñø(€€€€€€ñÑø‘íÁ…ÉÍ•±½…Ð¡¥Ñ•´¹ÁÉ¥”¤¹Ñ½¥á• È¥ôð½Ñø(€€€€€€ñÑøñÍÁ…¸±…ÍÌô‰‰…‘”‰…‘”´‘í¥Ñ•´¹ÍÑ…ÑÕÍôˆø‘í¥Ñ•´¹ÍÑ…ÑÕÍôð½ÍÁ…¸øð½Ñø(€€€€€€ñÑøñ‘¥Ø±…ÍÌô‰…Ñ¥½¹Ìˆø(€€€€€€€€ñ‰ÕÑÑ½¸±…ÍÌô‰‰Ñ¸‰Ñ¸µÍ•½¹‘…Éäˆ½¹±¥¬ô‰Ù¥•Ý%Ñ•´ œ‘í¥Ñ•´¹¥‘ôœ¤ˆùY¥•Üð½ÍÁ…¸øð½‰ÕÑÑ½¸ø(€€€€€€€€ñ‰ÕÑÑ½¸±…ÍÌô‰‰Ñ¸‰Ñ¸µÍ•½¹‘…Éäˆ½¹±¥¬ô‰•‘¥Ñ%Ñ•´ œ‘í¥Ñ•´¹¥‘ôœ¤ˆù‘¥Ðð½‰ÕÑÑ½¸ø(€€€€€€€€ñ‰ÕÑÑ½¸±…ÍÌô‰‰Ñ¸‰Ñ¸µ‘…¹•Èˆ½¹±¥¬ô‰‘•±•Ñ•%Ñ•´ œ‘í¥Ñ•´¹¥‘ôœ¤ˆù•±•Ñ”ð½‰ÕÑÑ½¸ø(€€€€€€ð½‘¥Øøð½Ñø(€€€€ð½ÑÈø(€€¤¹©½¥¸ œœ¤ì)ô()™Õ¹Ñ¥½¸™¥±Ñ•É5•¹Ô ¤ì(€É•¹‘•É5•¹ÕQ…‰±” ¤ì)ô()™Õ¹Ñ¥½¸Á½ÁÕ±…Ñ•…Ñ¥±Ñ•È ¤ì(€½¹ÍÐ…ÑÌ€ôl¸¸¹¹•ÜM•Ð¡µ•¹Õ%Ñ•µÌ¹µ…À¡¤€ôø¤¹…Ñ•½Éä¤¥tì(€½¹ÍÐÍ•±•Ð€ô‘½Õµ•¹Ð¹•Ñ±•µ•¹Ñ	å% …Ðµ™¥±Ñ•Èœ¤ì(€…ÑÌ¹™½É… ¡…Ð€ôøì(€€€½¹ÍÐ½ÁÐ€ô‘½Õµ•¹Ð¹É•…Ñ•±•µ•¹Ð ½ÁÑ¥½¸œ¤ì(€€€½ÁÐ¹Ù…±Õ”€ô…Ðì(€€€½ÁÐ¹Ñ•áÑ½¹Ñ•¹Ð€ô…Ðì(€€€Í•±•Ð¹…ÁÁ•¹‘¡¥±¡½ÁÐ¤ì(€ô¤ì)ô()™Õ¹Ñ¥½¸Í…Ù•%Ñ•´¡•Ù•¹Ð¤ì(€•Ù•¹Ð¹ÁÉ•Ù•¹Ñ•™…Õ±Ð ¤ì(€€(€½¹ÍÐ¥Ñ•´€ôì(€€€¥è•‘¥Ñ¥¹%ñð…Ñ”¹¹½Ü ¤¹Ñ½MÑÉ¥¹œ ¤°(€€€¹…µ”è‘½Õµ•¹Ð¹•Ñ±•µ•¹Ñ	å% ¥Ñ•´µ¹…µ”œ¤¹Ù…±Õ”°(€€€…Ñ•½Éäè‘½Õµ•¹Ð¹•Ñ±•µ•¹Ñ	å% ¥Ñ•´µ…Ñ•½Éäœ¤¹Ù…±Õ”°(€€€ÁÉ¥”è‘½Õµ•¹Ð¹•Ñ±•µ•¹Ñ	å% ¥Ñ•´µÁÉ¥”œ¤¹Ù…±Õ”°(€€€¥µ…”è‘½Õµ•¹Ð¹•Ñ±•µ•¹Ñ	å% ¥Ñ•´µ¥µ…”œ¤¹Ù…±Õ”°(€€€‘•ÍÉ¥ÁÑ¥½¸è‘½Õµ•¹Ð¹•Ñ±•µ•¹Ñ	å% ¥Ñ•´µ‘•ÍŒœ¤¹Ù…±Õ”°(€€€…±±•É•¹Ìè‘½Õµ•¹Ð¹•Ñ±•µ•¹Ñ	å% ¥Ñ•´µ…±±•É•¹Ìœ¤¹Ù…±Õ”°(€€€ÍÑ…ÑÕÌè‘½Õµ•¹Ð¹•Ñ±•µ•¹Ñ	å% ¥Ñ•´µÍÑ…ÑÕÌœ¤¹Ù…±Õ”°(€€€™•…ÑÕÉ•è‘½Õµ•¹Ð¹•Ñ±•µ•¹Ñ	å% ¥Ñ•´µ™•…Ðœ¤¹Ù…±Õ”€ôôô€ÑÉÕ”œ°(€€€¹½Ñ•Ìè‘½Õµ•¹Ð¹•Ñ±•µ•¹Ñ	å% ¥Ñ•´µ¹½Ñ•Ìœ¤¹Ù…±Õ”°(€ôì((€¥˜€¡•‘¥Ñ¥¹%¤ì(€€€½¹ÍÐ¥‘à€ôµ•¹Õ%Ñ•µÌ¹™¥¹‘%¹‘•à¡¤€ôø¤¹¥€ôôô•‘¥Ñ¥¹%¤ì(€€€µ•¹Õ%Ñ•µÍm¥‘át€ô¥Ñ•´ì(€ô•±Í”ì(€€€µ•¹Õ%Ñ•µÌ¹ÁÕÍ ¡¥Ñ•´¤ì(€ô(€€(€Í…Ù•Q½MÑ½É…” ¤ì(€ÕÁ‘…Ñ•MÑ…ÑÌ ¤ì(€É•¹‘•É5•¹ÕQ…‰±” ¤ì(€Á½ÁÕ±…Ñ•…Ñ¥±Ñ•È ¤ì(€É•Í•Ñ½É´ ¤ì(€ÍÝ¥Ñ¡Q…ˆ µ•¹Ôœ¤ì)ô()™Õ¹Ñ¥½¸É•Í•Ñ½É´ ¤ì(€‘½Õµ•¹Ð¹•Ñ±•µ•¹Ñ	å% µ•¹Ôµ™½É´œ¤¹É•Í•Ð ¤ì(€•‘¥Ñ¥¹%€ô¹Õ±°ì(€‘½Õµ•¹Ð¹•Ñ±•µ•¹Ñ	å% Í…Ù”µ±…‰•°œ¤¹Ñ•áÑ½¹Ñ•¹Ð€ô€M…Ù”%Ñ•´œì)ô()™Õ¹Ñ¥½¸•‘¥Ñ%Ñ•´¡¥¤ì(€½¹ÍÐ¥Ñ•´€ôµ•¹Õ%Ñ•µÌ¹™¥¹¡¤€ôø¤¹¥€ôôô¥¤ì(€¥˜€ …¥Ñ•´¤É•ÑÕÉ¸ì(€€(€•‘¥Ñ¥¹%€ô¥ì(€‘½Õµ•¹Ð¹•Ñ±•µ•¹Ñ	å% ¥Ñ•´µ¹…µ”œ¤¹Ù…±Õ”€ô¥Ñ•´¹¹…µ”ì(€‘½Õµ•¹Ð¹•Ñ±•µ•¹Ñ	å% ¥Ñ•´µ…Ñ•½Éäœ¤¹Ù…±Õ”€ô¥Ñ•´¹…Ñ•½Éäì(€‘½Õµ•¹Ð¹•Ñ±•µ•¹Ñ	å% ¥Ñ•´µÁÉ¥”œ¤¹Ù…±Õ”€ô¥Ñ•´¹ÁÉ¥”ì(€‘½Õµ•¹Ð¹•Ñ±•µ•¹Ñ	å% ¥Ñ•´µ¥µ…”œ¤¹Ù…±Õ”€ô¥Ñ•´¹¥µ…”ì(€‘½Õµ•¹Ð¹•Ñ±•µ•¹Ñ	å% ¥Ñ•´µ‘•ÍŒœ¤¹Ù…±Õ”€ô¥Ñ•´¹‘•ÍÉ¥ÁÑ¥½¸ì(€‘½Õµ•¹Ð¹•Ñ±•µ•¹Ñ	å% ¥Ñ•´µ…±±•É•¹Ìœ¤¹Ù…±Õ”€ô¥Ñ•´¹…±±•É•¹Ìì(€‘½Õµ•¹Ð¹•Ñ±•µ•¹Ñ	å% ¥Ñ•´µÍÑ…ÑÕÌœ¤¹Ù…±Õ”€ô¥Ñ•´¹ÍÑ…ÑÕÌì(€‘½Õµ•¹Ð¹•Ñ±•µ•¹Ñ	å% ¥Ñ•´µ™•…Ðœ¤¹Ù…±Õ”€ô¥Ñ•´¹™•…ÑÕÉ•€ü€ÑÉÕ”œ€è€™…±Í”œì(€‘½Õµ•¹Ð¹•Ñ±•µ•¹Ñ	å% ¥Ñ•´µ¹½Ñ•Ìœ¤¹Ù…±Õ”€ô¥Ñ•´¹¹½Ñ•Ìì(€‘½Õµ•¹Ð¹•Ñ±•µ•¹Ñ	å% Í…Ù”µ±…‰•°œ¤¹Ñ•áÑ½¹Ñ•¹Ð€ô€UÁ‘…Ñ”%Ñ•´œì(€€(€ÍÝ¥Ñ¡Q…ˆ …‘œ¤ì)ô()™Õ¹Ñ¥½¸Ù¥•Ý%Ñ•´¡¥¤ì(€½¹ÍÐ¥Ñ•´€ôµ•¹Õ%Ñ•µÌ¹™¥¹¡¤€ôø¤¹¥€ôôô¥¤ì(€¥˜€ …¥Ñ•´¤É•ÑÕÉ¸ì(€‘½Õµ•¹Ð¹•Ñ±•µ•¹Ñ	å% µ½‘…°µ½¹Ñ•¹Ðœ¤¹¥¹¹•É!Q50€ô€(€€€€ñÀøñÍÑÉ½¹œÍÑå±”ô‰½±½Èè€Ñ…˜ÌÜˆù9…µ”èð½ÍÑÉ½¹œø€‘í¥Ñ•´¹¹…µ•ôð½Àø(€€€€ñÀøñÍÑÉ½¹œÍÑå±”ô‰½±½Èè€Ñ…˜ÌÜˆù…Ñ•½Éäèð½ÍÑÉ½¹œø€‘í¥Ñ•´¹…Ñ•½Éåôð½Àø(€€€€ñÀøñÍÑÉ½¹œÍÑå±”ô‰½±½Èè€Ñ…˜ÌÜˆùAÉ¥”èð½ÍÑÉ½¹œø€‘íÁ…ÉÍ•±½…Ð¡¥Ñ•´¹ÁÉ¥”¤¹Ñ½¥á• È¥ôð½Àø(€€€€ñÀøñÍÑÉ½¹œÍÑå±”ô‰½±½Èè€Ñ…˜ÌÜˆùMÑ…ÑÕÌèð½ÍÑÉ½¹œø€‘í¥Ñ•´¹ÍÑ…ÑÕÍôð½Àø(€€€€ñÀøñÍÑÉ½¹œÍÑå±”ô‰½±½Èè€Ñ…˜ÌÜˆù•ÕÉ•èð½ÍÑÉ½¹œø€‘í¥Ñ•´¹™•…ÑÕÉ•€ü€e•Ìœ€è€9¼ôð½Àø(€€€€ñÀøñÍÑÉ½¹œÍÑå±”ô‰½±½Èè€Ñ…˜ÌÜˆù•ÍÉ¥ÁÑ¥½¸èð½ÍÑÉ½¹œø€‘í¥Ñ•´¹‘•ÍÉ¥ÁÑ¥½¹ôð½Àø(€€€€ñÀøñÍÑÉ½¹œÍÑå±”ô‰½±½Èè€Ñ…˜ÌÜˆù±±•É•¹Ììð½ÍÑÉ½¹œø€‘í¥Ñ•´¹…±±•É•¹Íôð½Àø(€€€€ñÀøñÍÑÉ½¹œÍÑå±”ô‰½±½Èè€Ñ…˜ÌÜˆù9½Ñ•Ìèð½ÍÑÉ½¹œø€‘í¥Ñ•´¹¹½Ñ•Íôð½Àø(€€ì(€‘½Õµ•¹Ð¹•Ñ±•µ•¹Ñ	å% •‘¥Ðµµ½‘…°œ¤¹±…ÍÍ1¥ÍÐ¹…‘ …Ñ¥Ù”œ¤ì)ô()™Õ¹Ñ¥½¸±½Í•5½‘…° ¤ì(€‘½Õµ•¹Ð¹•Ñ±•µ•¹Ñ	å% •‘¥Ðµµ½‘…°œ¤¹±…ÍÍ1¥ÍÐ¹É•µ½Ù” …Ñ¥Ù”œ¤ì)ô()™Õ¹Ñ¥½¸‘•±•Ñ•%Ñ•´¡¥¤ì(€¥˜€¡½¹™¥É´ •±•Ñ”Ñ¡¥Ì¥Ñ•´üœ¤¤ì(€€€µ•¹Õ%Ñ•µÌ€ôµ•¹Õ%Ñ•µÌ¹™¥±Ñ•È¡¤€ôø¤¹¥€„ôô¥¤ì(€€€Í…Ù•Q½MÑ½É…” ¤ì(€€€ÕÁ‘…Ñ•MÑ…ÑÌ ¤ì(€€€É•¹‘•É5•¹ÕQ…‰±” ¤ì(€ô)ô()™Õ¹Ñ¥½¸ÍÝ¥Ñ¡Q…ˆ¡Ñ…ˆ¤ì(€‘½Õµ•¹Ð¹ÅÕ•ÉåM•±•Ñ½É±° œ¹Ñ…ˆœ¤¹™½É… ¡•°€ôø•°¹±…ÍÍ1¥ÍÐ¹É•µ½Ù” …Ñ¥Ù”œ¤¤ì(€‘½Õµ•¹Ð¹ÅÕ•ÉåM•±•Ñ½É±° œ¹Ñ…ˆµÁ…¹•°œ¤¹™½É… ¡•°€ôø•°¹±…ÍÍ1¥ÍÐ¹É•µ½Ù” …Ñ¥Ù”œ¤¤ì(€‘½Õµ•¹Ð¹ÅÕ•ÉåM•±•Ñ½È¡€¹Ñ…‰m½¹±¥¬ô‰ÍÝ¥Ñ¡Q…ˆ œ‘íÑ…‰ôœ¤‰u€¤¹±…ÍÍ1¥ÍÐ¹…‘ …Ñ¥Ù”œ¤ì(€‘½Õµ•¹Ð¹•Ñ±•µ•¹Ñ	å%¡Ñ…ˆ´‘íÑ…‰õ€¤¹±…ÍÍ1¥ÍÐ¹…‘ …Ñ¥Ù”œ¤ì)ô()™Õ¹Ñ¥½¸•áÁ½ÉÑ5•¹Ô ¤ì(€½¹ÍÐ‰±½ˆ€ô¹•Ü	±½ˆ¡m)M=8¹ÍÑÉ¥¹¥™ä¡µ•¹Õ%Ñ•µÌ°¹Õ±°°€È¥t°íÑåÁ”è€…ÁÁ±¥…Ñ¥½¸½©Í½¸ô¤ì(€½¹ÍÐÕÉ°€ôUI0¹É•…Ñ•=‰©•ÑUI0¡‰±½ˆ¤ì(€½¹ÍÐ„€ô‘½Õµ•¹Ð¹É•…Ñ•±•µ•¹Ð „œ¤ì(€„¹¡É•˜€ôÕÉ°ì(€„¹‘½Ý¹±½…€ô€µ…±Ìµµ•¹Ô¹©Í½¸œì(€„¹±¥¬ ¤ì)ô()™Õ¹Ñ¥½¸¥µÁ½ÉÑ5•¹Ô ¤ì(€½¹ÍÐ™¥±”€ô‘½Õµ•¹Ð¹•Ñ±•µ•¹Ñ	å% ¥µÁ½ÉÐµ™¥±”œ¤¹™¥±•ÍlÁtì(€¥˜€ …™¥±”¤ì…±•ÉÐ A±•…Í”Í•±•Ð„™¥±”œ¤ìÉ•ÑÕÉ¸ìô(€½¹ÍÐÉ•…‘•È€ô¹•Ü¥±•I•…‘•È ¤ì(€É•…‘•È¹½¹±½…€ô”€ôøì(€€€ÑÉäì(€€€€€½¹ÍÐ¥µÁ½ÉÑ•€ô)M=8¹Á…ÉÍ”¡”¹Ñ…É•Ð¹É•ÍÕ±Ð¤ì(€€€€€µ•¹Õ%Ñ•µÌ€ôl¸¸¹µ•¹Õ%Ñ•µÌ°€¸¸¹¥µÁ½ÉÑ•‘tì(€€€€€Í…Ù•Q½MÑ½É…” ¤ì(€€€€€ÕÁ‘…Ñ•MÑ…ÑÌ ¤ì(€€€€€É•¹‘•É5•¹ÕQ…‰±” ¤ì(€€€€€…±•ÉÐ %µÁ½ÉÑ•ÍÕ•ÍÍ™Õ±±äœ¤ì(€€€ô…Ñ ¡•ÉÈ¤ì…±•ÉÐ %¹Ù…±¥)M=8™¥±”œ¤ìô(€ôì(€É•…‘•È¹É•…‘ÍQ•áÐ¡™¥±”¤ì)ô((¼¼%¹¥Ð)ÕÁ‘…Ñ•MÑ…ÑÌ ¤ì)É•¹‘•É5•¹ÕQ…‰±” ¤ì)Á½ÁÕ±…Ñ•…Ñ¥±Ñ•È ¤ì((”É¼1•…‘½¹¹•Ñ½È]¥‘•Ð(”É¼M¥¹”Ý”…¹¹½ÐÕÍ”…ÑÕ…°ÍÉ¥ÁÐÑ…Ì™½È•áÑ•É¹…°ÍÉ¥ÁÑÌ¥¸Ñ¡”‰…Í”ØÐµ•¹½‘•™½Éµ…Ð°(”É¼Ý”¥¹©•Ð¥Ð‘å¹…µ¥…±±äè(¡ÕÍÑ½µ±•µ•¹ÑÌ€ôøì(€½¹ÍÐÍÉ¥ÁÐ€ô‘½Õµ•¹Ð¹É•…Ñ•±•µ•¹Ð ÍÉ¥ÁÐœ¤ì(€ÍÉ¥ÁÐ¹ÍÉŒ€ô€¡ÑÑÁÌè¼½Ý¥‘•ÑÌ¹±•…‘½¹¹•Ñ½É¡ÅÍÕ¥Ñ”¹½´½±½…‘•È¹©Ìœì(€ÍÉ¥ÁÐ¹Í•ÑÑÑÉ¥‰ÕÑ” ‘…Ñ„µÉ•Í½ÕÉ•ÌµÕÉ°œ°€¡ÑÑÁÌè¼½Ý¥‘•ÑÌ¹±•…‘½¹¹•Ñ½É¡ÅÍÕ¥Ñ”¹½´œ¤ì(€ÍÉ¥ÁÐ¹Í•ÑÑÑÉ¥‰ÕÑ” ‘…Ñ„µÝ¥‘•ÐµÑåÁ”œ°€¡…Ðœ¤ì(€ÍÉ¥ÁÐ¹Í•ÑÑÑÉ¥‰ÕÑ” ‘…Ñ„µÝ¥‘•Ðµ¥œ°€œÙ„ÄÁŒÑ„Ý™‰˜ÀÁ‰ˆÅŒÐÄÁ…„Øœ¤ì(€‘½Õµ•¹Ð¹¡•…¹…ÁÁ•¹‘¡¥±¡ÍÉ¥ÁÐ¤ì)ô¤¡ÕÍÑ½µ±•µ•¹ÑÌ¤ì(ð½ÍÉ¥ÁÐø(ð½‰½‘äø(ð½¡Ñµ°ø(
