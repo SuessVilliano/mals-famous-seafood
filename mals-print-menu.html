@@ -4,8 +4,77 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Mal's Famous Seafood &amp; Grill – Print Menu</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Montserrat:wght@400;600;700;800&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --gold:    #D4A017;
+    --gold-lt: #F0C040;
+    --gold-dk: #A07810;
+    --black:   #0A0A0A;
+    --black-2: #141414;
+    --black-3: #1E1E1E;
+    --white:   #F5F0E8;
+    --divider: rgba(212,160,23,0.35);
+  }
+
+  html, body { width: 100%; background: #222; display: flex; justify-content: center; align-items: flex-start; padding: 32px 16px; font-family: 'Montserrat', sans-serif; }
+
+  .page { width: 900px; background: var(--black); color: var(--white); position: relative; overflow: hidden; border: 3px solid var(--gold); }
+  .page::before { content:''; position: absolute; width: 160px; height: 160px; border: 3px solid var(--gold); opacity: 0.3; top: 12px; left: 12px; border-right: none; border-bottom: none; }
+  .page::after { content:''; position: absolute; width: 160px; height: 160px; border: 3px solid var(--gold); opacity: 0.3; bottom: 12px; right: 12px; border-left: none; border-top: none; }
+
+  .header { background: var(--black-2); text-align: center; padding: 56px 40px 36px; position: relative; border-bottom: 2px solid var(--gold); }
+  .header-sub { margin-top: 16px; font-size: 12px; letter-spacing: 4px; color: rgba(245,240,232,0.5); text-transform: uppercase; }
+
+  .body { padding: 40px 50px 60px; display: grid; grid-template-columns: 1fr 1fr; gap: 0 50px; position: relative; z-index: 1; }
+  .cat { margin-bottom: 36px; }
+  .cat-title { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+  .cat-icon { font-size: 22px; }
+  .cat-title h2 { font-family: 'Playfair Display', serif; font-size: 22px; color: var(--gold); letter-spacing: 2px; text-transform: uppercase; border-bottom: 1px solid var(--divider); padding-bottom: 6px; flex: 1; }
+  .item { display: flex; justify-content: space-between; align-items: baseline; padding: 5px 0; border-bottom: 1px dotted rgba(212,160,23,0.15); gap: 8px; }
+  .item:last-child { border-bottom: none; }
+  .item-name { font-size: 14px; font-weight: 600; color: var(--white); }
+  .item-desc { font-size: 11px; color: rgba(245,240,232,0.45); margin-top: 2px; }
+  .item-price { font-size: 14px; font-weight: 700; color: var(--gold); white-space: nowrap; min-width: 48px; text-align: right; }
+  .item-left { flex: 1; }
+  .sub-item { padding: 3px 0 3px 16px; display: flex; justify-content: space-between; border-bottom: 1px dotted rgba(212,160,23,0.08); }
+  .full-width { grid-column: 1 / -1; }
+  .drinks-grid { display: flex; flex-wrap: wrap; gap: 8px 20px; }
+  .drinks-grid .item { border-bottom: none; min-width: 140px; }
+  .footer { background: var(--black-2); border-top: 2px solid var(--gold); text-align: center; padding: 22px 40px; position: relative; z-index: 1; }
+  .footer p { font-size: 11px; letter-spacing: 3px; color: rgba(245,240,232,0.4); text-transform: uppercase; }
+  .footer .social { font-size: 13px; color: var(--gold); font-weight: 700; margin-top: 6px; }
+  .footer .price-note { font-size: 11px; color: rgba(212,160,23,0.6); margin-top: 8px; }
+  .bg-lines { position: absolute; inset: 0; background-image: repeating-linear-gradient(0deg,transparent,transparent 39px,rgba(212,160,23,0.03) 39px,rgba(212,160,23,0.03) 40px); pointer-events: none; z-index: 0; }
+  .header { position: relative; z-index: 1; }
+  .brand-badge { width: 100%; max-width: 520px; display: block; margin: 0 auto; filter: drop-shadow(0 0 28px rgba(212,160,23,0.3)); }
+  @media print { html, body { background: none; padding: 0; } .page { width: 100%; border: none; } }
+</style>
 </head>
 <body>
-<!-- See full file in repository -->
+<div class="page">
+  <div class="bg-lines"></div>
+  <div class="header">
+    <h1 style="font-family:'Playfair Display',Serif;font-size:72px;font-weight:900;line-height:1;color:#F0C040;text-shadow:0 0 60px rgba(212,160,23,0.4);letter-spacing:2px">Mal's Famous<span style="display:block;font-size:42px;color:#F5F0E8;letter-spacing:8px;text-shadow:none;margin-top:6px">SEAFOOD &amp; GRILL</span></h1>
+    <div class="header-sub">Food Truck &nbsp;·&nbsp; Fresh &amp; Flavorful &nbsp;·&nbsp; Made to Order</div>
+  </div>
+  <div class="body" id="print-menu-body"></div>
+  <div class="footer">
+    <div class="social">@MalsFamousSeafood</div>
+    <p>Follow us for daily location updates &nbsp;·&nbsp; Catering available — ask about your event</p>
+    <div class="price-note">* Prices subject to change &nbsp;·&nbsp; Items may vary by location</div>
+  </div>
+</div>
+<script>
+const DEFAULT_MENU_DATA = {categories:[{id:"seafood",name:"Seafood",emoji:"🦀",items:[{id:"snowcrab",name:"Snowcrab Seafood Broil",price:45,priceNote:"",available:true},{id:"shrimp-rice",name:"Shrimp over Rice",price:15,priceNote:"",available:true},{id:"salmon-rice",name:"Salmon over Rice",price:17,priceNote:"",available:true}]},{id:"steak",name:"Steak",emoji:"🥩",items:[{id:"cheesesteak",name:"Cheesesteak",price:15,priceNote:"",available:true},{id:"chicken-cheesesteak",name:"Chicken Cheesesteak",price:14,priceNote:"",available:true}]},{id:"tacos",name:"Tacos",emoji:"🌮",items:[{id:"salmon-tacos",name:"Salmon Tacos",price:6,priceNote:"$6 each · 3 for $15",available:true},{id:"shrimp-tacos",name:"Shrimp Tacos",price:6,priceNote:"$6 each · 3 for $15",available:true}]},{id:"fish",name:"Fish",emoji:"🐟",items:[{id:"fish-fries",name:"Fish & Fries",price:20,priceNote:"",available:true},{id:"shrimp-fries",name:"Shrimp & Fries",price:20,priceNote:"",available:true},{id:"fish-hoagie",name:"Fish Hoagie",price:15,priceNote:"",available:true},{id:"fried-fish-rice",name:"Fried Fish over Rice",price:15,priceNote:"",available:true}]},{id:"chicken",name:"Chicken",emoji:"🍗",items:[{id:"wings-fries",name:"Wings & Fries",price:15,priceNote:"",available:true},{id:"chicken-rice",name:"Chicken over Rice",price:15,priceNote:"",available:true}]},{id:"fries",name:"Fries",emoji:"🍟",items:[{id:"crab-fries",name:"Crab Fries",price:15,priceNote:"",available:true},{id:"cheese-fries",name:"Cheese Fries",price:6,priceNote:"",available:true},{id:"regular-fries",name:"Regular Fries",price:5,priceNote:"",available:true}]},{id:"sides",name:"Sides",emoji:"🥡",items:[{id:"rice",name:"Rice",price:5,priceNote:"",available:true},{id:"salmon-egg-roll",name:"Salmon Egg Roll",price:13,priceNote:"",available:true},{id:"crab-egg-roll",name:"Crab Egg Roll",price:15,priceNote:"",available:true}]},{id:"drinks",name:"Drinks",emoji:"🥤",items:[{id:"pineapple-iced-tea",name:"Pineapple Iced Tea",price:3,priceNote:"",available:true},{id:"soda",name:"Soda",price:2,priceNote:"",available:true},{id:"water",name:"Water",price:2,pric�Note:"",available:true}]}]};
+const SHORT_DESC={snowcrab:"Snow crab broiled to perfection",cheesesteak:"Classic Philly-style","chicken-cheesesteak":"Tender chicken, melted cheese","fish-fries":"Golden fried fish with fries","shrimp-fries":"Crispy shrimp with seasoned fries","fish-hoagie":"Loaded fish on a toasted roll","fried-fish-rice":"Golden fried fish over rice","wings-fries":"Crispy wings your way","crab-fries":"Seasoned fries topped with crab"};
+function getMenuData(){try{const s=localStorage.getItem('mals_menu_data');if(s)return JSON.parse(s)}catch(e){}return DEFAULT_MENU_DATA;}
+function fmtPrice(item){if(item.priceNote)return item.priceNote;return '$'+(Number.isInteger(item.price)?item.price:item.price.toFixed(2));}
+function renderPrintMenu(){const data=getMenuData();const body=document.getElementById('print-menu-body');let html='';data.categories.forEach(cat=>{const items=cat.items.filter(i=>i.available);if(!items.length)return;const isFW=cat.id==='sides'||cat.id==='drinks';html+=`<div class="cat${isFW?' full-width':''}"><div class="cat-title"><span class="cat-icon">${cat.emojh}</span><h2>${cat.name}</h2></div>`;if(cat.id==='sides'){const er=items.filter(i=>i.id.includes('egg-roll'));const ot=items.filter(i=>!i.id.includes('egg-roll'));html+=`<div style="display:grid;grid-template-columns:1fr 1fr;gap:0 50px"><div>`;if(er.length){html+=`<div class="item"><div class="item-left"><div class="item-name">Egg Rolls</div></div></div>`;er.forEach(i=>{html+=`<div class="sub-item"><div class="item-name">${i.name}</div><div class="item-price">${fmtPrice(i)}</div></div>`;});}html+=`</div><div>`;ot.forEach(i=>{html+=`<div class="item"><div class="item-left"><div class="item-name">${i.name}</div></div><div class="item-price">${fmtPrice(i)}</div></div>`;});html+=`</div></div>`;}else if(cat.id==='drinks'){html+=`<div class="drinks-grid">`;items.forEach(i=>{html+=`<div class="item"><div class="item-left"><div class="item-name">${i.name}</div></div><div class="item-price">${fmtPrice(i)}</div></div>`;});html+=`</div>`;}else{items.forEach(i=>{const d=SHORT_DESC[i.id]||'';html+=`<div class="item"><div class="item-left"><div class="item-name">${i.name}</div>${d?`<div class="item-desc">${d}</div>`:''}</div><div class="item-price">${fmtPrice(i)}</div></div>`;});}html+=`</div>`;});body.innerHTML=html;}
+renderPrintMenu();
+</script>
 </body>
 </html>
