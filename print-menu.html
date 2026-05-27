@@ -24,14 +24,45 @@
     width: 100%;
     background: #222;
     display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    padding: 32px 16px;
+    flex-direction: column;
+    align-items: center;
+    padding: 24px 16px 60px;
     font-family: 'Montserrat', sans-serif;
   }
 
+  /* ─────── On-screen toolbar (hidden when printing) ─────── */
+  .toolbar {
+    width: 900px;
+    max-width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 18px;
+    padding: 14px 18px;
+    background: var(--black-2);
+    border: 1px solid var(--divider);
+    border-radius: 8px;
+    color: var(--white);
+    font-size: 13px;
+  }
+  .toolbar-group { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .toolbar-label { font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: rgba(245,240,232,0.55); font-weight: 700; }
+  .btn {
+    appearance: none; border: 1px solid var(--gold); background: transparent;
+    color: var(--gold); font-family: inherit; font-size: 12px; font-weight: 700;
+    letter-spacing: 1.5px; text-transform: uppercase; padding: 8px 14px;
+    border-radius: 4px; cursor: pointer; transition: all .15s ease;
+  }
+  .btn:hover { background: var(--gold); color: var(--black); }
+  .btn.is-active { background: var(--gold); color: var(--black); }
+  .btn-primary { background: var(--gold); color: var(--black); }
+  .btn-primary:hover { background: var(--gold-lt); border-color: var(--gold-lt); }
+
+  /* ─────── The printable page ─────── */
   .page {
     width: 900px;
+    max-width: 100%;
     background: var(--black);
     color: var(--white);
     position: relative;
@@ -52,25 +83,20 @@
   .header {
     background: var(--black-2);
     text-align: center;
-    padding: 56px 40px 36px;
+    padding: 48px 40px 32px;
     position: relative;
     border-bottom: 2px solid var(--gold);
   }
 
   .body {
-    padding: 40px 50px 60px;
+    padding: 36px 50px 30px;
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 0 50px;
   }
 
-  .cat { margin-bottom: 36px; }
-  .cat-title {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 14px;
-  }
+  .cat { margin-bottom: 32px; }
+  .cat-title { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
   .cat-icon { font-size: 22px; line-height: 1; }
   .cat-title h2 {
     font-family: 'Playfair Display', serif;
@@ -83,26 +109,14 @@
     flex: 1;
   }
 
-  .item {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    padding: 5px 0;
-    border-bottom: 1px dotted rgba(212,160,23,0.15);
-    gap: 8px;
-  }
+  .item { display: flex; justify-content: space-between; align-items: baseline; padding: 5px 0; border-bottom: 1px dotted rgba(212,160,23,0.15); gap: 8px; }
   .item:last-child { border-bottom: none; }
   .item-name { font-size: 14px; font-weight: 600; color: var(--white); letter-spacing: 0.5px; }
   .item-desc { font-size: 11px; color: rgba(245,240,232,0.45); margin-top: 2px; font-weight: 400; }
   .item-price { font-size: 14px; font-weight: 700; color: var(--gold); white-space: nowrap; min-width: 48px; text-align: right; }
   .item-left { flex: 1; }
 
-  .sub-item {
-    padding: 3px 0 3px 16px;
-    display: flex;
-    justify-content: space-between;
-    border-bottom: 1px dotted rgba(212,160,23,0.08);
-  }
+  .sub-item { padding: 3px 0 3px 16px; display: flex; justify-content: space-between; border-bottom: 1px dotted rgba(212,160,23,0.08); }
   .sub-item:last-child { border-bottom: none; }
   .sub-item .item-name { font-size: 13px; color: rgba(245,240,232,0.8); }
   .sub-item .item-price { font-size: 13px; }
@@ -113,36 +127,117 @@
   .drinks-grid { display: flex; flex-wrap: wrap; gap: 8px 20px; }
   .drinks-grid .item { border-bottom: none; min-width: 140px; }
 
+  /* ─────── Contact / QR strip ─────── */
+  .contact-strip {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 28px;
+    align-items: center;
+    margin: 0 50px 30px;
+    padding: 22px;
+    background: var(--black-2);
+    border: 1px solid var(--divider);
+    border-radius: 6px;
+    position: relative;
+    z-index: 1;
+  }
+  .qr-box {
+    background: var(--white);
+    padding: 10px;
+    border-radius: 4px;
+    width: 140px; height: 140px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .qr-box img { width: 100%; height: 100%; display: block; }
+  .qr-caption {
+    text-align: center;
+    font-size: 9px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-top: 6px;
+    font-weight: 700;
+  }
+  .qr-side { display: flex; flex-direction: column; align-items: center; }
+  .contact-info { display: flex; flex-direction: column; gap: 8px; }
+  .contact-info h3 {
+    font-family: 'Playfair Display', serif;
+    color: var(--gold);
+    font-size: 18px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .contact-row { display: flex; align-items: center; gap: 10px; font-size: 14px; }
+  .contact-row .ic { font-size: 16px; width: 22px; text-align: center; }
+  .contact-row .lbl { font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: rgba(245,240,232,0.55); font-weight: 700; width: 70px; }
+  .contact-row .val { color: var(--white); font-weight: 600; }
+  .contact-row .val.gold { color: var(--gold); }
+
   .footer {
     background: var(--black-2);
     border-top: 2px solid var(--gold);
     text-align: center;
-    padding: 22px 40px;
+    padding: 18px 40px;
   }
   .footer p { font-size: 11px; letter-spacing: 3px; color: rgba(245,240,232,0.4); text-transform: uppercase; }
-  .footer .social { font-size: 13px; color: var(--gold); font-weight: 700; letter-spacing: 2px; margin-top: 6px; }
-  .footer .price-note { font-size: 11px; color: rgba(212,160,23,0.6); margin-top: 8px; letter-spacing: 1px; }
+  .footer .tagline { font-size: 13px; color: var(--gold); font-weight: 700; letter-spacing: 4px; text-transform: uppercase; }
+  .footer .price-note { font-size: 10px; color: rgba(212,160,23,0.55); margin-top: 6px; letter-spacing: 1px; }
 
   .bg-lines {
     position: absolute; inset: 0;
     background-image: repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(212,160,23,0.03) 39px, rgba(212,160,23,0.03) 40px);
     pointer-events: none; z-index: 0;
   }
-  .body, .header, .footer { position: relative; z-index: 1; }
+  .body, .header, .footer, .contact-strip { position: relative; z-index: 1; }
 
   .brand-badge { width: 100%; max-width: 520px; display: block; margin: 0 auto; filter: drop-shadow(0 0 28px rgba(212,160,23,0.3)); }
 
+  /* Logo toggle: show one, hide the other */
+  .logo[data-style="claws"]   { display: none; }
+  .header.show-claws .logo[data-style="claws"]  { display: block; }
+  .header.show-claws .logo[data-style="simple"] { display: none; }
+
+  .header-sub { margin-top: 16px; font-size: 12px; letter-spacing: 4px; color: rgba(245,240,232,0.5); text-transform: uppercase; }
+
+  /* ─────── Print rules ─────── */
   @media print {
+    @page { size: letter; margin: 0.4in; }
     html, body { background: none; padding: 0; }
-    .page { width: 100%; border: none; }
+    .toolbar { display: none !important; }
+    .page { width: 100%; max-width: 100%; border: none; }
+    .page::before, .page::after { display: none; }
+  }
+
+  @media (max-width: 760px) {
+    .body { grid-template-columns: 1fr; padding: 28px 24px; }
+    .contact-strip { grid-template-columns: 1fr; margin: 0 24px 24px; text-align: center; }
+    .qr-side { margin: 0 auto; }
+    .contact-row { justify-content: center; flex-wrap: wrap; }
   }
 </style>
 </head>
 <body>
+
+<!-- ON-SCREEN TOOLBAR (does not print) -->
+<div class="toolbar" role="toolbar">
+  <div class="toolbar-group">
+    <span class="toolbar-label">Logo style:</span>
+    <button class="btn is-active" id="btn-logo-simple" onclick="setLogo('simple')">Simple Badge</button>
+    <button class="btn" id="btn-logo-claws" onclick="setLogo('claws')">With Lobster Claws</button>
+  </div>
+  <div class="toolbar-group">
+    <button class="btn btn-primary" onclick="window.print()">🖨 Print / Save as PDF</button>
+  </div>
+</div>
+
 <div class="page">
   <div class="bg-lines"></div>
-  <div class="header">
-    <svg class="brand-badge" viewBox="0 0 540 290" xmlns="http://www.w3.org/2000/svg">
+
+  <div class="header" id="header">
+
+    <!-- ─────── LOGO 1: SIMPLE CIRCULAR BADGE ─────── -->
+    <svg class="brand-badge logo" data-style="simple" viewBox="0 0 540 290" xmlns="http://www.w3.org/2000/svg">
       <defs>
         <clipPath id="bp-clip"><circle cx="270" cy="145" r="128"/></clipPath>
         <linearGradient id="bp-gold" x1="0%" y1="0%" x2="0%" y2="100%">
@@ -170,14 +265,120 @@
       <line x1="153" y1="176" x2="387" y2="176" stroke="#D4A017" stroke-width="2" opacity="0.9"/>
       <text x="270" y="166" text-anchor="middle" font-family="'Arial Black','Impact',sans-serif" font-weight="800" font-size="17" fill="url(#bp-gold)" letter-spacing="4">–SEAFOOD · &amp; · GRILL–</text>
     </svg>
-    <div style="margin-top:16px;font-size:12px;letter-spacing:4px;color:rgba(245,240,232,0.5);text-transform:uppercase;">Food Truck &nbsp;·&nbsp; Fresh &amp; Flavorful &nbsp;·&nbsp; Made to Order</div>
+
+    <!-- ─────── LOGO 2: FULL HERO BADGE WITH LOBSTER CLAWS ─────── -->
+    <svg class="brand-badge logo" data-style="claws" viewBox="0 0 540 290" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <clipPath id="bh-clip"><circle cx="270" cy="145" r="128"/></clipPath>
+        <linearGradient id="bh-gold" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stop-color="#F8E070"/>
+          <stop offset="40%" stop-color="#D4A017"/>
+          <stop offset="100%" stop-color="#9A7010"/>
+        </linearGradient>
+      </defs>
+      <circle cx="270" cy="145" r="128" fill="#060400"/>
+      <g clip-path="url(#bh-clip)">
+        <line x1="142" y1="17"  x2="398" y2="17"  stroke="#D4A017" stroke-width="1.7" opacity="0.38"/>
+        <line x1="142" y1="33"  x2="398" y2="33"  stroke="#D4A017" stroke-width="1.7" opacity="0.38"/>
+        <line x1="142" y1="49"  x2="398" y2="49"  stroke="#D4A017" stroke-width="1.7" opacity="0.38"/>
+        <line x1="142" y1="65"  x2="398" y2="65"  stroke="#D4A017" stroke-width="1.7" opacity="0.38"/>
+        <line x1="142" y1="81"  x2="398" y2="81"  stroke="#D4A017" stroke-width="1.7" opacity="0.38"/>
+        <line x1="142" y1="97"  x2="398" y2="97"  stroke="#D4A017" stroke-width="1.7" opacity="0.38"/>
+        <line x1="142" y1="113" x2="398" y2="113" stroke="#D4A017" stroke-width="1.7" opacity="0.38"/>
+        <line x1="142" y1="129" x2="398" y2="129" stroke="#D4A017" stroke-width="1.7" opacity="0.38"/>
+        <line x1="142" y1="145" x2="398" y2="145" stroke="#D4A017" stroke-width="1.7" opacity="0.38"/>
+        <line x1="142" y1="161" x2="398" y2="161" stroke="#D4A017" stroke-width="1.7" opacity="0.38"/>
+        <line x1="142" y1="177" x2="398" y2="177" stroke="#D4A017" stroke-width="1.7" opacity="0.38"/>
+        <line x1="142" y1="193" x2="398" y2="193" stroke="#D4A017" stroke-width="1.7" opacity="0.38"/>
+        <line x1="142" y1="209" x2="398" y2="209" stroke="#D4A017" stroke-width="1.7" opacity="0.38"/>
+        <line x1="142" y1="225" x2="398" y2="225" stroke="#D4A017" stroke-width="1.7" opacity="0.38"/>
+        <line x1="142" y1="241" x2="398" y2="241" stroke="#D4A017" stroke-width="1.7" opacity="0.38"/>
+        <line x1="142" y1="257" x2="398" y2="257" stroke="#D4A017" stroke-width="1.7" opacity="0.38"/>
+        <line x1="142" y1="273" x2="398" y2="273" stroke="#D4A017" stroke-width="1.7" opacity="0.38"/>
+      </g>
+      <circle cx="270" cy="145" r="128" fill="none" stroke="url(#bh-gold)" stroke-width="5"/>
+      <circle cx="270" cy="145" r="120" fill="none" stroke="url(#bh-gold)" stroke-width="1.2" opacity="0.5"/>
+      <text x="270" y="131" text-anchor="middle" font-family="'Arial Black','Impact',sans-serif" font-weight="900" font-size="50" fill="url(#bh-gold)" letter-spacing="1.5">MAL'S FAMOUS</text>
+      <line x1="153" y1="142" x2="387" y2="142" stroke="#D4A017" stroke-width="2" opacity="0.9"/>
+      <line x1="153" y1="176" x2="387" y2="176" stroke="#D4A017" stroke-width="2" opacity="0.9"/>
+      <text x="270" y="166" text-anchor="middle" font-family="'Arial Black','Impact',sans-serif" font-weight="800" font-size="17" fill="url(#bh-gold)" letter-spacing="4">–SEAFOOD · &amp; · GRILL–</text>
+      <g transform="translate(98,145)" fill="none" stroke="url(#bh-gold)" stroke-linecap="round" stroke-linejoin="round">
+        <ellipse cx="0" cy="-6" rx="15" ry="19" fill="rgba(212,160,23,0.07)" stroke-width="1.6"/>
+        <path d="M-9,-22 C-22,-38 -30,-50 -22,-58 C-14,-65 -6,-56 -4,-46 C-13,-48 -15,-40 -9,-31" stroke-width="1.6"/>
+        <path d="M9,-22 C18,-34 21,-44 15,-50 C9,-55 4,-48 6,-40 C13,-42 13,-35 9,-28" stroke-width="1.6"/>
+        <path d="M-4,-24 C-8,-40 -6,-56 -3,-70" stroke-width="1.1"/>
+        <path d="M4,-24 C7,-38 6,-52 3,-66" stroke-width="1.1"/>
+        <path d="M-13,-4 C-23,1 -27,9 -25,17" stroke-width="1.3"/>
+        <path d="M-14,3 C-25,9 -27,19 -24,27" stroke-width="1.3"/>
+        <path d="M13,-4 C23,1 27,9 25,17" stroke-width="1.3"/>
+        <path d="M14,3 C25,9 27,19 24,27" stroke-width="1.3"/>
+        <path d="M-9,13 C-15,27 -17,41 -11,51" stroke-width="1.4"/>
+        <path d="M0,15 C-2,31 0,47 4,56" stroke-width="1.4"/>
+        <path d="M9,13 C15,27 17,41 11,51" stroke-width="1.4"/>
+        <path d="M-7,51 C-14,63 -15,74 -9,80" stroke-width="1.2"/>
+        <path d="M2,55 C0,69 4,79 8,83" stroke-width="1.2"/>
+        <path d="M11,51 C17,63 15,73 9,79" stroke-width="1.2"/>
+      </g>
+      <g transform="translate(442,145) scale(-1,1)" fill="none" stroke="url(#bh-gold)" stroke-linecap="round" stroke-linejoin="round">
+        <ellipse cx="0" cy="-6" rx="15" ry="19" fill="rgba(212,160,23,0.07)" stroke-width="1.6"/>
+        <path d="M-9,-22 C-22,-38 -30,-50 -22,-58 C-14,-65 -6,-56 -4,-46 C-13,-48 -15,-40 -9,-31" stroke-width="1.6"/>
+        <path d="M9,-22 C18,-34 21,-44 15,-50 C9,-55 4,-48 6,-40 C13,-42 13,-35 9,-28" stroke-width="1.6"/>
+        <path d="M-4,-24 C-8,-40 -6,-56 -3,-70" stroke-width="1.1"/>
+        <path d="M4,-24 C7,-38 6,-52 3,-66" stroke-width="1.1"/>
+        <path d="M-13,-4 C-23,1 -27,9 -25,17" stroke-width="1.3"/>
+        <path d="M-14,3 C-25,9 -27,19 -24,27" stroke-width="1.3"/>
+        <path d="M13,-4 C23,1 27,9 25,17" stroke-width="1.3"/>
+        <path d="M14,3 C25,9 27,19 24,27" stroke-width="1.3"/>
+        <path d="M-9,13 C-15,27 -17,41 -11,51" stroke-width="1.4"/>
+        <path d="M0,15 C-2,31 0,47 4,56" stroke-width="1.4"/>
+        <path d="M9,13 C15,27 17,41 11,51" stroke-width="1.4"/>
+        <path d="M-7,51 C-14,63 -15,74 -9,80" stroke-width="1.2"/>
+        <path d="M2,55 C0,69 4,79 8,83" stroke-width="1.2"/>
+        <path d="M11,51 C17,63 15,73 9,79" stroke-width="1.2"/>
+      </g>
+    </svg>
+
+    <div class="header-sub">Food Truck &nbsp;·&nbsp; Fresh &amp; Flavorful &nbsp;·&nbsp; Made to Order</div>
   </div>
 
   <div class="body" id="print-menu-body"></div>
 
+  <!-- CONTACT + QR -->
+  <div class="contact-strip">
+    <div class="qr-side">
+      <div class="qr-box">
+        <img alt="Scan to view Mal's menu and order online" src="qr-menu.png">
+      </div>
+      <div class="qr-caption">Scan to order</div>
+    </div>
+    <div class="contact-info">
+      <h3>Order · Catering · Updates</h3>
+      <div class="contact-row">
+        <span class="ic">📞</span>
+        <span class="lbl">Text/Call</span>
+        <span class="val gold">(302) 384-2469</span>
+      </div>
+      <div class="contact-row">
+        <span class="ic">🌐</span>
+        <span class="lbl">Website</span>
+        <span class="val">malsfamousseafoodgrill.com</span>
+      </div>
+      <div class="contact-row">
+        <span class="ic">📱</span>
+        <span class="lbl">Social</span>
+        <span class="val">@MalsFamousSeafood</span>
+      </div>
+      <div class="contact-row">
+        <span class="ic">📍</span>
+        <span class="lbl">Find Us</span>
+        <span class="val">Follow socials for daily location updates</span>
+      </div>
+    </div>
+  </div>
+
   <div class="footer">
-    <div class="social">@MalsFamousSeafood</div>
-    <p>Follow us for daily location updates &nbsp;·&nbsp; Catering available — ask about your event</p>
+    <div class="tagline">Fresh · Bold · Made to Order</div>
+    <p>Catering available — text us about your event</p>
     <div class="price-note">* Prices subject to change &nbsp;·&nbsp; Items may vary by location</div>
   </div>
 </div>
@@ -280,7 +481,28 @@ function renderPrintMenu() {
   });
   body.innerHTML = html;
 }
+
+function setLogo(style) {
+  const header = document.getElementById('header');
+  const btnSimple = document.getElementById('btn-logo-simple');
+  const btnClaws  = document.getElementById('btn-logo-claws');
+  if (style === 'claws') {
+    header.classList.add('show-claws');
+    btnClaws.classList.add('is-active');
+    btnSimple.classList.remove('is-active');
+  } else {
+    header.classList.remove('show-claws');
+    btnSimple.classList.add('is-active');
+    btnClaws.classList.remove('is-active');
+  }
+  try { localStorage.setItem('mals_print_logo_style', style); } catch(e) {}
+}
+
 renderPrintMenu();
-<\/script>
+try {
+  const saved = localStorage.getItem('mals_print_logo_style');
+  if (saved === 'claws') setLogo('claws');
+} catch(e) {}
+</script>
 </body>
 </html>
