@@ -58,6 +58,8 @@
   .btn.is-active { background: var(--gold); color: var(--black); }
   .btn-primary { background: var(--gold); color: var(--black); }
   .btn-primary:hover { background: var(--gold-lt); border-color: var(--gold-lt); }
+  a.btn { text-decoration: none; display: inline-flex; align-items: center; }
+  .toolbar-tip { width: 900px; max-width: 100%; margin: -10px 0 18px; padding: 0 4px; font-size: 11px; color: rgba(245,240,232,0.5); letter-spacing: 0.5px; }
 
   /* ─────── The printable page ─────── */
   .page {
@@ -265,9 +267,13 @@
     <button class="btn" id="btn-logo-claws" onclick="setLogo('claws')">With Lobster Claws</button>
   </div>
   <div class="toolbar-group">
-    <button class="btn btn-primary" onclick="window.print()">🖨 Print / Save as PDF</button>
+    <a class="btn btn-primary" id="dl-pdf" href="flyer-simple.pdf" download>📥 PDF (1 page)</a>
+    <a class="btn" id="dl-png" href="flyer-simple.png" download>📥 PNG</a>
+    <a class="btn" id="dl-jpg" href="flyer-simple.jpg" download>📥 JPG</a>
+    <button class="btn" onclick="window.print()">🖨 Browser Print</button>
   </div>
 </div>
+<div class="toolbar-tip">PDF prints one page · PNG/JPG for print shops, social, or the food truck wrap · Switch logo style first, then download</div>
 
 <div class="page">
   <div class="bg-lines"></div>
@@ -533,6 +539,9 @@ function setLogo(style) {
     btnSimple.classList.add('is-active');
     btnClaws.classList.remove('is-active');
   }
+  document.getElementById('dl-pdf').href = 'flyer-' + style + '.pdf';
+  document.getElementById('dl-png').href = 'flyer-' + style + '.png';
+  document.getElementById('dl-jpg').href = 'flyer-' + style + '.jpg';
   try { localStorage.setItem('mals_print_logo_style', style); } catch(e) {}
 }
 
