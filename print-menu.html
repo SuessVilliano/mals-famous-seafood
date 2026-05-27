@@ -200,13 +200,51 @@
 
   .header-sub { margin-top: 16px; font-size: 12px; letter-spacing: 4px; color: rgba(245,240,232,0.5); text-transform: uppercase; }
 
-  /* ─────── Print rules ─────── */
+  /* ─────── Print rules — shrink everything to fit on one Letter page ─────── */
   @media print {
-    @page { size: letter; margin: 0.4in; }
-    html, body { background: none; padding: 0; }
+    @page { size: letter portrait; margin: 0.3in; }
+    html, body { background: none !important; padding: 0; margin: 0; -webkit-print-color-adjust: exact; print-color-adjust: exact; color-adjust: exact; }
     .toolbar { display: none !important; }
     .page { width: 100%; max-width: 100%; border: none; }
     .page::before, .page::after { display: none; }
+    .bg-lines { display: none; }
+
+    .header { padding: 14px 30px 10px !important; }
+    .brand-badge { max-width: 240px !important; filter: none !important; }
+    .header-sub { margin-top: 4px !important; font-size: 8px !important; letter-spacing: 3px !important; }
+
+    /* Force 2-column even if printable width is under 760px (mobile media query) */
+    .body { padding: 12px 28px 6px !important; gap: 0 26px !important; grid-template-columns: 1fr 1fr !important; }
+    .contact-strip { grid-template-columns: auto 1fr !important; text-align: left !important; }
+    .qr-side { margin: 0 !important; }
+    .contact-row { justify-content: flex-start !important; flex-wrap: nowrap !important; }
+    .cat { margin-bottom: 12px !important; break-inside: avoid; }
+    .cat-title { margin-bottom: 6px !important; gap: 8px !important; }
+    .cat-title h2 { font-size: 14px !important; letter-spacing: 1.5px !important; padding-bottom: 3px !important; }
+    .cat-icon { font-size: 14px !important; }
+    .item { padding: 2px 0 !important; }
+    .item-name { font-size: 11px !important; letter-spacing: 0.3px !important; }
+    .item-desc { font-size: 8.5px !important; margin-top: 1px !important; line-height: 1.2 !important; }
+    .item-price { font-size: 11px !important; min-width: 36px !important; }
+    .sub-item { padding: 2px 0 2px 12px !important; }
+    .sub-item .item-name, .sub-item .item-price { font-size: 10px !important; }
+    .full-width .cat-title h2 { font-size: 13px !important; }
+    .drinks-grid { gap: 4px 16px !important; }
+    .drinks-grid .item { min-width: 110px !important; }
+
+    .contact-strip { margin: 0 30px 10px !important; padding: 12px !important; gap: 16px !important; }
+    .qr-box { width: 92px !important; height: 92px !important; padding: 5px !important; }
+    .qr-caption { font-size: 7px !important; letter-spacing: 1px !important; margin-top: 4px !important; }
+    .contact-info { gap: 4px !important; }
+    .contact-info h3 { font-size: 12px !important; letter-spacing: 1.5px !important; margin-bottom: 2px !important; }
+    .contact-row { font-size: 10px !important; gap: 8px !important; }
+    .contact-row .ic { font-size: 11px !important; width: 16px !important; }
+    .contact-row .lbl { font-size: 8px !important; letter-spacing: 1px !important; width: 50px !important; }
+
+    .footer { padding: 10px 30px !important; }
+    .footer .tagline { font-size: 11px !important; letter-spacing: 3px !important; }
+    .footer p { font-size: 9px !important; letter-spacing: 2px !important; }
+    .footer .price-note { font-size: 8px !important; margin-top: 3px !important; }
   }
 
   @media (max-width: 760px) {
