@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Mal's Famous — Back Wrap C: Menu Focus</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Montserrat:wght@400;600;700;800;900&display=swap');
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html, body { width:100%; height:100%; background:#222; }
+  body { display:flex; align-items:center; justify-content:center; }
+
+  .wrap {
+    width: 2000px; height: 1200px;
+    position: relative;
+    background: #0A0A0A;
+    color: #F5F0E8;
+    font-family: 'Montserrat', sans-serif;
+    overflow: hidden;
+    display: grid;
+    grid-template-rows: 200px 1fr 130px;
+  }
+  .bg-lines {
+    position: absolute; inset:0;
+    background-image: repeating-linear-gradient(0deg, transparent, transparent 49px, rgba(212,160,23,0.04) 49px, rgba(212,160,23,0.04) 50px);
+    pointer-events: none;
+  }
+  .corner {
+    position: absolute;
+    width: 120px; height: 120px;
+    border: 5px solid #D4A017;
+    opacity: 0.4;
+  }
+  .c-tl { top: 24px; left: 24px; border-right:none; border-bottom:none; }
+  .c-tr { top: 24px; right: 24px; border-left:none; border-bottom:none; }
+  .c-bl { bottom: 24px; left: 24px; border-right:none; border-top:none; }
+  .c-br { bottom: 24px; right: 24px; border-left:none; border-top:none; }
+
+  /* HEADER */
+  .header {
+    background: linear-gradient(180deg, #161616 0%, #0A0A0A 100%);
+    border-bottom: 4px solid #D4A017;
+    display: flex; align-items: center; justify-content: center; gap: 40px;
+    padding: 0 60px;
+    position: relative;
+    z-index: 1;
+  }
+  .header-logo { height: 170px; flex-shrink: 0; }
+  .header-title { display:flex; flex-direction:column; align-items:flex-start; }
+  .header-title h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 90px; font-weight: 900;
+    color: #F0C040;
+    line-height: 0.95;
+    letter-spacing: 1px;
+    text-shadow: 0 0 30px rgba(212,160,23,0.45);
+  }
+  .header-title h1 span {
+    display: block; font-family: 'Montserrat', sans-serif;
+    font-size: 32px; font-weight: 700;
+    color: #F5F0E8; letter-spacing: 11px;
+    margin-top: 6px;
+  }
+  .header-title .tag {
+    font-size: 14px; letter-spacing: 5px;
+    color: rgba(212,160,23,0.7);
+    text-transform: uppercase;
+    margin-top: 14px;
+    font-weight: 700;
+  }
+
+  /* MENU BODY */
+  .body {
+    display: grid;
+    grid-template-columns: 1fr 280px;
+    gap: 24px;
+    padding: 24px 60px;
+    position: relative;
+    z-index: 1;
+    min-height: 0;
+  }
+  .menu-area {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 22px 30px;
+    align-content: start;
+  }
+  .cat { display: flex; flex-direction: column; }
+  .cat-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 26px; font-weight: 900;
+    color: #D4A017; letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 4px 0 8px;
+    border-bottom: 2px solid rgba(212,160,23,0.45);
+    margin-bottom: 8px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .cat .row {
+    display: flex; justify-content: space-between; align-items: baseline;
+    font-size: 17px;
+    padding: 5px 0;
+    border-bottom: 1px dotted rgba(212,160,23,0.18);
+    gap: 8px;
+  }
+  .cat .row:last-of-type { border-bottom: none; }
+  .cat .row .nm { color: #F5F0E8; font-weight: 600; }
+  .cat .row .pr { color: #F0C040; font-weight: 800; white-space: nowrap; font-family: 'Playfair Display', serif; font-size: 22px; }
+  .cat .sub-note { font-size: 12px; color: rgba(245,240,232,0.55); margin-top: 2px; letter-spacing: 1px; font-style: italic; }
+
+  /* Right accent column */
+  .accent-col {
+    display: grid;
+    grid-template-rows: 1fr 1fr 1fr;
+    gap: 18px;
+  }
+  .accent-photo {
+    border: 3px solid #D4A017;
+    border-radius: 8px;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 6px 24px rgba(0,0,0,0.55);
+  }
+  .accent-photo img { width:100%; height:100%; object-fit:cover; display:block; }
+  .accent-photo .label {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    background: linear-gradient(0deg, rgba(10,10,10,0.95), rgba(10,10,10,0));
+    padding: 30px 12px 10px;
+    display: flex; justify-content: space-between; align-items: baseline;
+  }
+  .accent-photo .label .nm {
+    font-size: 14px; font-weight: 800;
+    color: #F5F0E8; letter-spacing: 1.5px;
+    text-transform: uppercase;
+  }
+  .accent-photo .label .pr {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px; font-weight: 900;
+    color: #F0C040;
+  }
+
+  /* FOOTER */
+  .footer {
+    background: linear-gradient(0deg, #161616, #0A0A0A);
+    border-top: 4px solid #D4A017;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 32px;
+    padding: 14px 60px;
+    align-items: center;
+    position: relative;
+    z-index: 1;
+  }
+  .qr-box {
+    background: #F5F0E8;
+    padding: 6px;
+    border-radius: 6px;
+    width: 100px; height: 100px;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .qr-box img { width:100%; height:100%; }
+  .footer-contact {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 8px 32px;
+    text-align: center;
+  }
+  .ci { display: flex; flex-direction:column; }
+  .ci-label { font-size: 11px; letter-spacing: 3px; color: rgba(212,160,23,0.75); text-transform: uppercase; font-weight: 700; }
+  .ci-val { font-size: 28px; font-weight: 800; color: #F5F0E8; font-family: 'Playfair Display', serif; letter-spacing: 0.5px; line-height: 1.2; }
+  .ci-val.gold { color: #F0C040; }
+  .scan-cta { text-align: right; }
+  .scan-cta .big { font-family: 'Playfair Display', serif; font-size: 30px; color: #F0C040; font-weight: 900; letter-spacing: 3px; line-height: 1; text-transform: uppercase; }
+  .scan-cta .sm { font-size: 11px; letter-spacing: 3px; color: rgba(245,240,232,0.6); text-transform: uppercase; margin-top: 6px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="bg-lines"></div>
+  <div class="corner c-tl"></div><div class="corner c-tr"></div>
+  <div class="corner c-bl"></div><div class="corner c-br"></div>
+
+  <!-- HEADER -->
+  <div class="header">
+    <svg class="header-logo" viewBox="0 0 540 290" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <clipPath id="bh-clip-c"><circle cx="270" cy="145" r="128"/></clipPath>
+        <linearGradient id="bh-gold-c" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stop-color="#F8E070"/>
+          <stop offset="40%" stop-color="#D4A017"/>
+          <stop offset="100%" stop-color="#9A7010"/>
+        </linearGradient>
+      </defs>
+      <circle cx="270" cy="145" r="128" fill="#060400"/>
+      <g clip-path="url(#bh-clip-c)">
+        <line x1="142" y1="33" x2="398" y2="33" stroke="#D4A017" stroke-width="1.7" opacity="0.38"/>
+        <line x1="142" y1="65" x2="398" y2="65" stroke="#D4A017" stroke-width="1.7" opacity="0.38"/>
+        <line x1="142" y1="97" x2="398" y2="97" stroke="#D4A017" stroke-width="1.7" opacity="0.38"/>
+        <line x1="142" y1="129" x2="398" y2="129" stroke="#D4A017" stroke-width="1.7" opacity="0.38"/>
+        <line x1="142" y1="161" x2="398" y2="161" stroke="#D4A017" stroke-width="1.7" opacity="0.38"/>
+        <line x1="142" y1="193" x2="398" y2="193" stroke="#D4A017" stroke-width="1.7" opacity="0.38"/>
+        <line x1="142" y1="225" x2="398" y2="225" stroke="#D4A017" stroke-width="1.7" opacity="0.38"/>
+        <line x1="142" y1="257" x2="398" y2="257" stroke="#D4A017" stroke-width="1.7" opacity="0.38"/>
+      </g>
+      <circle cx="270" cy="145" r="128" fill="none" stroke="url(#bh-gold-c)" stroke-width="5"/>
+      <circle cx="270" cy="145" r="120" fill="none" stroke="url(#bh-gold-c)" stroke-width="1.2" opacity="0.5"/>
+      <text x="270" y="131" text-anchor="middle" font-family="'Arial Black','Impact',sans-serif" font-weight="900" font-size="50" fill="url(#bh-gold-c)" letter-spacing="1.5">MAL'S FAMOUS</text>
+      <line x1="153" y1="142" x2="387" y2="142" stroke="#D4A017" stroke-width="2"/>
+      <line x1="153" y1="176" x2="387" y2="176" stroke="#D4A017" stroke-width="2"/>
+      <text x="270" y="166" text-anchor="middle" font-family="'Arial Black','Impact',sans-serif" font-weight="800" font-size="17" fill="url(#bh-gold-c)" letter-spacing="4">–SEAFOOD · &amp; · GRILL–</text>
+    </svg>
+    <div class="header-title">
+      <h1>Our Menu<span>SEAFOOD &amp; GRILL</span></h1>
+      <div class="tag">Fresh · Bold · Made to Order</div>
+    </div>
+  </div>
+
+  <!-- BODY -->
+  <div class="body">
+    <div class="menu-area">
+      <div class="cat">
+        <div class="cat-name">🦀 Seafood</div>
+        <div class="row"><span class="nm">Snowcrab Broil</span><span class="pr">$45</span></div>
+        <div class="row"><span class="nm">Shrimp / Rice</span><span class="pr">$15</span></div>
+        <div class="row"><span class="nm">Salmon / Rice</span><span class="pr">$17</span></div>
+      </div>
+      <div class="cat">
+        <div class="cat-name">🥩 Steak</div>
+        <div class="row"><span class="nm">Cheesesteak</span><span class="pr">$15</span></div>
+        <div class="row"><span class="nm">Chicken Steak</span><span class="pr">$14</span></div>
+      </div>
+      <div class="cat">
+        <div class="cat-name">🐟 Fish</div>
+        <div class="row"><span class="nm">Fish &amp; Fries</span><span class="pr">$20</span></div>
+        <div class="row"><span class="nm">Shrimp &amp; Fries</span><span class="pr">$20</span></div>
+        <div class="row"><span class="nm">Fish Hoagie</span><span class="pr">$15</span></div>
+        <div class="row"><span class="nm">Fried Fish / Rice</span><span class="pr">$15</span></div>
+      </div>
+      <div class="cat">
+        <div class="cat-name">🌮 Tacos</div>
+        <div class="row"><span class="nm">Salmon Tacos</span><span class="pr">$6</span></div>
+        <div class="row"><span class="nm">Shrimp Tacos</span><span class="pr">$6</span></div>
+        <div class="sub-note">3 tacos for $15</div>
+      </div>
+      <div class="cat">
+        <div class="cat-name">🍗 Chicken</div>
+        <div class="row"><span class="nm">Wings &amp; Fries</span><span class="pr">$15</span></div>
+        <div class="row"><span class="nm">Chicken / Rice</span><span class="pr">$15</span></div>
+      </div>
+      <div class="cat">
+        <div class="cat-name">🍟 Fries</div>
+        <div class="row"><span class="nm">Crab Fries</span><span class="pr">$15</span></div>
+        <div class="row"><span class="nm">Cheese Fries</span><span class="pr">$6</span></div>
+        <div class="row"><span class="nm">Regular Fries</span><span class="pr">$5</span></div>
+      </div>
+      <div class="cat">
+        <div class="cat-name">🥡 Sides</div>
+        <div class="row"><span class="nm">Rice</span><span class="pr">$5</span></div>
+        <div class="row"><span class="nm">Salmon Egg Roll</span><span class="pr">$13</span></div>
+        <div class="row"><span class="nm">Crab Egg Roll</span><span class="pr">$15</span></div>
+      </div>
+      <div class="cat">
+        <div class="cat-name">🥤 Drinks</div>
+        <div class="row"><span class="nm">Pineapple Iced Tea</span><span class="pr">$3</span></div>
+        <div class="row"><span class="nm">Soda</span><span class="pr">$2</span></div>
+        <div class="row"><span class="nm">Water</span><span class="pr">$2</span></div>
+      </div>
+    </div>
+
+    <!-- Right column: 3 accent photos -->
+    <div class="accent-col">
+      <div class="accent-photo">
+        <img src="../images/snowcrab-broil.jpg" alt="">
+        <div class="label"><span class="nm">Snowcrab Broil</span><span class="pr">$45</span></div>
+      </div>
+      <div class="accent-photo">
+        <img src="../images/crab-fries.jpg" alt="">
+        <div class="label"><span class="nm">Crab Fries</span><span class="pr">$15</span></div>
+      </div>
+      <div class="accent-photo">
+        <img src="../images/cheesesteak.jpg" alt="">
+        <div class="label"><span class="nm">Cheesesteak</span><span class="pr">$15</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <div class="qr-box"><img src="../qr-menu.png" alt="Scan to order"></div>
+    <div class="footer-contact">
+      <div class="ci"><span class="ci-label">📞 Text or Call</span><span class="ci-val gold">(302) 384-2469</span></div>
+      <div class="ci"><span class="ci-label">🌐 Website</span><span class="ci-val">malsfamousseafoodgrill.com</span></div>
+      <div class="ci"><span class="ci-label">📱 Social</span><span class="ci-val">@MalsFamousSeafood</span></div>
+    </div>
+    <div class="scan-cta">
+      <div class="big">SCAN TO<br>ORDER</div>
+      <div class="sm">Catering Available</div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

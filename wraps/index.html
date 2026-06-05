@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mal's Famous — Back Wrap Options</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Montserrat:wght@400;600;700;800&display=swap');
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family: 'Montserrat', sans-serif; background:#0A0A0A; color:#F5F0E8; padding:40px 20px 80px; }
+  .container { max-width: 1200px; margin: 0 auto; }
+  header { text-align:center; margin-bottom: 48px; }
+  header .eyebrow { font-size: 11px; letter-spacing: 5px; color: #D4A017; text-transform: uppercase; font-weight: 700; }
+  header h1 { font-family: 'Playfair Display', serif; font-size: clamp(32px, 5vw, 52px); color: #F0C040; margin-top: 8px; }
+  header h1 span { color: #F5F0E8; }
+  header p { color: rgba(245,240,232,0.6); margin-top: 12px; font-size: 14px; letter-spacing: 1px; }
+  header .note { background: rgba(212,160,23,0.1); border: 1px solid rgba(212,160,23,0.35); padding: 14px 22px; margin: 24px auto 0; max-width: 720px; border-radius: 4px; font-size: 13px; color: rgba(245,240,232,0.75); letter-spacing: 0.5px; }
+  header .note strong { color: #F0C040; }
+  .options { display: grid; grid-template-columns: 1fr; gap: 56px; }
+  .opt {
+    background: #141414;
+    border: 1px solid rgba(212,160,23,0.3);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .opt-head {
+    padding: 22px 28px;
+    border-bottom: 1px solid rgba(212,160,23,0.3);
+    display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap;
+  }
+  .opt-head h2 { font-family: 'Playfair Display', serif; font-size: 26px; color: #F0C040; }
+  .opt-head h2 .tag { font-size: 12px; letter-spacing: 3px; color: rgba(245,240,232,0.55); display:block; text-transform:uppercase; font-family: 'Montserrat', sans-serif; font-weight:700; margin-bottom:4px; }
+  .opt-desc { padding: 18px 28px 6px; color: rgba(245,240,232,0.7); font-size: 14px; line-height: 1.6; }
+  .opt-preview {
+    background: #0A0A0A;
+    padding: 24px;
+    display: flex; justify-content: center;
+  }
+  .opt-preview img { max-width: 100%; border: 2px solid rgba(212,160,23,0.3); border-radius: 4px; box-shadow: 0 10px 40px rgba(0,0,0,0.6); }
+  .opt-actions {
+    display: flex; gap: 10px; flex-wrap: wrap; padding: 18px 28px 24px;
+  }
+  .btn {
+    background: transparent; border: 1px solid #D4A017; color: #D4A017;
+    font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 12px;
+    letter-spacing: 2px; text-transform: uppercase; padding: 10px 18px;
+    border-radius: 3px; text-decoration: none; transition: all 0.15s ease;
+    display: inline-flex; align-items: center;
+  }
+  .btn:hover { background: #D4A017; color: #0A0A0A; }
+  .btn.primary { background: #D4A017; color: #0A0A0A; }
+  .btn.primary:hover { background: #F0C040; border-color: #F0C040; }
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <div class="eyebrow">Food Truck Wrap Design</div>
+    <h1>Back Panel — <span>3 Options</span></h1>
+    <p>10' wide × 6' tall · for the back side of the trailer (non-opening side)</p>
+    <div class="note"><strong>For your print shop:</strong> Download the PDF for vector-clean print, or the PNG (6000×3600 px = 50 DPI at full 10'×6') for raster. JPG is for quick review/sharing.</div>
+  </header>
+
+  <div class="options">
+    <div class="opt">
+      <div class="opt-head"><h2><span class="tag">Option A</span>Full Menu + Photos + Prices</h2></div>
+      <div class="opt-desc">Logo banner on top, six big food photos with names and prices on the left, full menu organized by category on the right, contact bar with QR at bottom. Most informative — people can read the whole menu walking by.</div>
+      <div class="opt-preview"><a href="back-A-full-menu.html" target="_blank"><img src="back-A-full-menu.jpg" alt="Option A preview"></a></div>
+      <div class="opt-actions">
+        <a class="btn primary" href="back-A-full-menu.pdf" download>📥 Download PDF</a>
+        <a class="btn" href="back-A-full-menu.png" download>📥 PNG (high-res)</a>
+        <a class="btn" href="back-A-full-menu.jpg" download>📥 JPG</a>
+        <a class="btn" href="back-A-full-menu.html" target="_blank">🔍 Open full size</a>
+      </div>
+    </div>
+
+    <div class="opt">
+      <div class="opt-head"><h2><span class="tag">Option B</span>Photo Collage + Branding</h2></div>
+      <div class="opt-desc">Full-bleed background of all six food photos, big Mal's logo with lobster claws centered, tagline + flavor badges. Eye-catching from far away — no item list, photos are the hero. Best if you want maximum visual impact.</div>
+      <div class="opt-preview"><a href="back-B-collage.html" target="_blank"><img src="back-B-collage.jpg" alt="Option B preview"></a></div>
+      <div class="opt-actions">
+        <a class="btn primary" href="back-B-collage.pdf" download>📥 Download PDF</a>
+        <a class="btn" href="back-B-collage.png" download>📥 PNG (high-res)</a>
+        <a class="btn" href="back-B-collage.jpg" download>📥 JPG</a>
+        <a class="btn" href="back-B-collage.html" target="_blank">🔍 Open full size</a>
+      </div>
+    </div>
+
+    <div class="opt">
+      <div class="opt-head"><h2><span class="tag">Option C</span>Menu-Focused, Photos as Accents</h2></div>
+      <div class="opt-desc">Large logo + "Our Menu" header, prices in clean typography across 4 columns, three accent photos on the right (Snowcrab Broil, Crab Fries, Cheesesteak). Easiest to read from 10–20 feet, prices are the star.</div>
+      <div class="opt-preview"><a href="back-C-menu-focus.html" target="_blank"><img src="back-C-menu-focus.jpg" alt="Option C preview"></a></div>
+      <div class="opt-actions">
+        <a class="btn primary" href="back-C-menu-focus.pdf" download>📥 Download PDF</a>
+        <a class="btn" href="back-C-menu-focus.png" download>📥 PNG (high-res)</a>
+        <a class="btn" href="back-C-menu-focus.jpg" download>📥 JPG</a>
+        <a class="btn" href="back-C-menu-focus.html" target="_blank">🔍 Open full size</a>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
