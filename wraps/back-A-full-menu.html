@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Mal's Famous — Back Wrap A: Full Menu + Photos</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Montserrat:wght@400;600;700;800;900&display=swap');
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html, body { width:100%; height:100%; background:#222; }
+  body { display:flex; align-items:center; justify-content:center; }
+
+  /* 10ft x 6ft panel — 5:3 aspect ratio. We design at 2000x1200 for crisp render. */
+  .wrap {
+    width: 2000px; height: 1200px;
+    position: relative;
+    background: #0A0A0A;
+    color: #F5F0E8;
+    font-family: 'Montserrat', sans-serif;
+    overflow: hidden;
+    display: grid;
+    grid-template-rows: 130px 1fr 130px;
+  }
+
+  /* Subtle horizontal lines for texture */
+  .bg-lines {
+    position: absolute; inset:0;
+    background-image: repeating-linear-gradient(0deg, transparent, transparent 49px, rgba(212,160,23,0.04) 49px, rgba(212,160,23,0.04) 50px);
+    pointer-events: none;
+  }
+  /* Gold corner brackets */
+  .corner {
+    position: absolute;
+    width: 110px; height: 110px;
+    border: 5px solid #D4A017;
+    opacity: 0.45;
+  }
+  .c-tl { top: 24px; left: 24px; border-right:none; border-bottom:none; }
+  .c-tr { top: 24px; right: 24px; border-left:none; border-bottom:none; }
+  .c-bl { bottom: 24px; left: 24px; border-right:none; border-top:none; }
+  .c-br { bottom: 24px; right: 24px; border-left:none; border-top:none; }
+
+  /* TOP BANNER */
+  .top {
+    background: linear-gradient(180deg, #141414, #0A0A0A);
+    border-bottom: 3px solid #D4A017;
+    display: flex; align-items: center; justify-content: center; gap: 32px;
+    padding: 0 60px;
+    position: relative;
+  }
+  .top-logo { height: 100px; }
+  .top h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 64px; font-weight: 900;
+    color: #F0C040;
+    line-height: 1;
+    letter-spacing: 1px;
+    text-shadow: 0 0 30px rgba(212,160,23,0.4);
+  }
+  .top h1 span {
+    display: block; font-family: 'Montserrat', sans-serif;
+    font-size: 22px; font-weight: 700;
+    color: #F5F0E8; letter-spacing: 8px;
+    margin-top: 4px;
+  }
+  .top-tagline {
+    font-size: 13px; letter-spacing: 4px;
+    color: rgba(245,240,232,0.55);
+    text-transform: uppercase;
+    margin-left: 28px;
+    border-left: 1px solid rgba(212,160,23,0.4);
+    padding-left: 28px;
+  }
+
+  /* MIDDLE: photos left, menu right */
+  .middle {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+    padding: 28px 60px;
+    position: relative;
+    z-index: 1;
+    min-height: 0;
+  }
+  .photos {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    gap: 14px;
+  }
+  .photo-card {
+    background: #141414;
+    border: 2px solid rgba(212,160,23,0.35);
+    border-radius: 6px;
+    overflow: hidden;
+    display: flex; flex-direction: column;
+    box-shadow: 0 4px 18px rgba(0,0,0,0.5);
+  }
+  .photo-card img { width:100%; flex:1; object-fit: cover; display:block; min-height:0; }
+  .photo-meta {
+    background: linear-gradient(180deg, #181818, #0F0F0F);
+    border-top: 2px solid #D4A017;
+    padding: 8px 10px;
+    display: flex; justify-content: space-between; align-items: baseline;
+    gap: 6px;
+  }
+  .photo-name {
+    font-size: 14px; font-weight: 700;
+    color: #F5F0E8; letter-spacing: 0.4px;
+    line-height: 1.1;
+    text-transform: uppercase;
+  }
+  .photo-price {
+    font-size: 18px; font-weight: 800;
+    color: #F0C040; white-space: nowrap;
+    font-family: 'Playfair Display', serif;
+  }
+
+  /* MENU SIDE */
+  .menu-side {
+    background: #101010;
+    border: 2px solid rgba(212,160,23,0.35);
+    border-radius: 6px;
+    padding: 18px 26px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4px 28px;
+    align-content: start;
+  }
+  .menu-heading {
+    grid-column: 1 / -1;
+    text-align: center;
+    margin-bottom: 6px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid #D4A017;
+  }
+  .menu-heading h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 32px; font-weight: 900;
+    color: #F0C040; letter-spacing: 4px;
+    text-transform: uppercase;
+  }
+  .menu-heading p {
+    font-size: 11px; letter-spacing: 4px;
+    color: rgba(245,240,232,0.55);
+    text-transform: uppercase;
+    margin-top: 2px;
+  }
+  .cat {
+    display: flex; flex-direction: column;
+    margin-bottom: 6px;
+  }
+  .cat-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 17px; font-weight: 900;
+    color: #D4A017; letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 4px 0 2px;
+    border-bottom: 1px dotted rgba(212,160,23,0.35);
+    margin-bottom: 2px;
+  }
+  .cat .row {
+    display: flex; justify-content: space-between;
+    font-size: 11px;
+    line-height: 1.4;
+    padding: 1px 0;
+  }
+  .cat .row .nm { color: #F5F0E8; font-weight: 600; }
+  .cat .row .pr { color: #F0C040; font-weight: 800; white-space: nowrap; }
+  .price-asterisk { grid-column: 1/-1; text-align:center; font-size:10px; color:rgba(212,160,23,0.55); letter-spacing:2px; margin-top:6px; }
+
+  /* BOTTOM CONTACT */
+  .bottom {
+    background: linear-gradient(0deg, #141414, #0A0A0A);
+    border-top: 3px solid #D4A017;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 32px;
+    padding: 14px 60px;
+    align-items: center;
+    position: relative;
+  }
+  .qr-box {
+    background: #F5F0E8;
+    padding: 6px;
+    border-radius: 6px;
+    width: 100px; height: 100px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .qr-box img { width:100%; height:100%; }
+  .contact {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 8px 32px;
+    text-align: center;
+  }
+  .ci { display: flex; flex-direction:column; }
+  .ci-label { font-size: 10px; letter-spacing: 3px; color: rgba(212,160,23,0.7); text-transform: uppercase; font-weight: 700; }
+  .ci-val { font-size: 24px; font-weight: 800; color: #F5F0E8; font-family: 'Playfair Display', serif; }
+  .ci-val.gold { color: #F0C040; }
+  .scan-cta { text-align: right; }
+  .scan-cta .big { font-family: 'Playfair Display', serif; font-size: 26px; color: #F0C040; font-weight: 900; letter-spacing: 2px; line-height: 1; }
+  .scan-cta .sm { font-size: 10px; letter-spacing: 3px; color: rgba(245,240,232,0.55); text-transform: uppercase; margin-top: 4px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="bg-lines"></div>
+  <div class="corner c-tl"></div><div class="corner c-tr"></div>
+  <div class="corner c-bl"></div><div class="corner c-br"></div>
+
+  <!-- TOP BANNER -->
+  <div class="top">
+    <svg class="top-logo" viewBox="0 0 540 290" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <clipPath id="bh-clip-a"><circle cx="270" cy="145" r="128"/></clipPath>
+        <linearGradient id="bh-gold-a" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stop-color="#F8E070"/>
+          <stop offset="40%" stop-color="#D4A017"/>
+          <stop offset="100%" stop-color="#9A7010"/>
+        </linearGradient>
+      </defs>
+      <circle cx="270" cy="145" r="128" fill="#060400"/>
+      <g clip-path="url(#bh-clip-a)">
+        <line x1="142" y1="33" x2="398" y2="33" stroke="#D4A017" stroke-width="1.7" opacity="0.38"/>
+        <line x1="142" y1="65" x2="398" y2="65" stroke="#D4A017" stroke-width="1.7" opacity="0.38"/>
+        <line x1="142" y1="97" x2="398" y2="97" stroke="#D4A017" stroke-width="1.7" opacity="0.38"/>
+        <line x1="142" y1="129" x2="398" y2="129" stroke="#D4A017" stroke-width="1.7" opacity="0.38"/>
+        <line x1="142" y1="161" x2="398" y2="161" stroke="#D4A017" stroke-width="1.7" opacity="0.38"/>
+        <line x1="142" y1="193" x2="398" y2="193" stroke="#D4A017" stroke-width="1.7" opacity="0.38"/>
+        <line x1="142" y1="225" x2="398" y2="225" stroke="#D4A017" stroke-width="1.7" opacity="0.38"/>
+        <line x1="142" y1="257" x2="398" y2="257" stroke="#D4A017" stroke-width="1.7" opacity="0.38"/>
+      </g>
+      <circle cx="270" cy="145" r="128" fill="none" stroke="url(#bh-gold-a)" stroke-width="5"/>
+      <circle cx="270" cy="145" r="120" fill="none" stroke="url(#bh-gold-a)" stroke-width="1.2" opacity="0.5"/>
+      <text x="270" y="131" text-anchor="middle" font-family="'Arial Black','Impact',sans-serif" font-weight="900" font-size="50" fill="url(#bh-gold-a)" letter-spacing="1.5">MAL'S FAMOUS</text>
+      <line x1="153" y1="142" x2="387" y2="142" stroke="#D4A017" stroke-width="2"/>
+      <line x1="153" y1="176" x2="387" y2="176" stroke="#D4A017" stroke-width="2"/>
+      <text x="270" y="166" text-anchor="middle" font-family="'Arial Black','Impact',sans-serif" font-weight="800" font-size="17" fill="url(#bh-gold-a)" letter-spacing="4">–SEAFOOD · &amp; · GRILL–</text>
+    </svg>
+    <h1>Mal's Famous<span>SEAFOOD &amp; GRILL</span></h1>
+    <div class="top-tagline">Food Truck<br>Fresh &amp; Flavorful<br>Made to Order</div>
+  </div>
+
+  <!-- MIDDLE -->
+  <div class="middle">
+    <div class="photos">
+      <div class="photo-card"><img src="../images/snowcrab-broil.jpg" alt=""><div class="photo-meta"><span class="photo-name">Snowcrab Broil</span><span class="photo-price">$45</span></div></div>
+      <div class="photo-card"><img src="../images/cheesesteak.jpg" alt=""><div class="photo-meta"><span class="photo-name">Cheesesteak</span><span class="photo-price">$15</span></div></div>
+      <div class="photo-card"><img src="../images/chicken-cheesesteak.jpg" alt=""><div class="photo-meta"><span class="photo-name">Chicken Cheesesteak</span><span class="photo-price">$14</span></div></div>
+      <div class="photo-card"><img src="../images/crab-fries.jpg" alt=""><div class="photo-meta"><span class="photo-name">Crab Fries</span><span class="photo-price">$15</span></div></div>
+      <div class="photo-card"><img src="../images/salmon-egg-roll.jpg" alt=""><div class="photo-meta"><span class="photo-name">Salmon Egg Roll</span><span class="photo-price">$13</span></div></div>
+      <div class="photo-card"><img src="../images/crab-egg-roll.jpg" alt=""><div class="photo-meta"><span class="photo-name">Crab Egg Roll</span><span class="photo-price">$15</span></div></div>
+    </div>
+
+    <div class="menu-side">
+      <div class="menu-heading">
+        <h2>The Menu</h2>
+        <p>Fresh · Bold · Made to Order</p>
+      </div>
+
+      <div class="cat">
+        <div class="cat-name">🦀 Seafood</div>
+        <div class="row"><span class="nm">Snowcrab Broil</span><span class="pr">$45</span></div>
+        <div class="row"><span class="nm">Shrimp over Rice</span><span class="pr">$15</span></div>
+        <div class="row"><span class="nm">Salmon over Rice</span><span class="pr">$17</span></div>
+      </div>
+      <div class="cat">
+        <div class="cat-name">🥩 Steak</div>
+        <div class="row"><span class="nm">Cheesesteak</span><span class="pr">$15</span></div>
+        <div class="row"><span class="nm">Chicken Cheesesteak</span><span class="pr">$14</span></div>
+      </div>
+
+      <div class="cat">
+        <div class="cat-name">🐟 Fish</div>
+        <div class="row"><span class="nm">Fish &amp; Fries</span><span class="pr">$20</span></div>
+        <div class="row"><span class="nm">Shrimp &amp; Fries</span><span class="pr">$20</span></div>
+        <div class="row"><span class="nm">Fish Hoagie</span><span class="pr">$15</span></div>
+        <div class="row"><span class="nm">Fried Fish / Rice</span><span class="pr">$15</span></div>
+      </div>
+      <div class="cat">
+        <div class="cat-name">🌮 Tacos</div>
+        <div class="row"><span class="nm">Salmon Tacos</span><span class="pr">$6 ea</span></div>
+        <div class="row"><span class="nm">Shrimp Tacos</span><span class="pr">$6 ea</span></div>
+        <div class="row"><span class="nm" style="font-size:10px;opacity:.7">3 for $15</span><span class="pr"></span></div>
+      </div>
+
+      <div class="cat">
+        <div class="cat-name">🍗 Chicken</div>
+        <div class="row"><span class="nm">Wings &amp; Fries</span><span class="pr">$15</span></div>
+        <div class="row"><span class="nm">Chicken over Rice</span><span class="pr">$15</span></div>
+      </div>
+      <div class="cat">
+        <div class="cat-name">🍟 Fries</div>
+        <div class="row"><span class="nm">Crab Fries</span><span class="pr">$15</span></div>
+        <div class="row"><span class="nm">Cheese Fries</span><span class="pr">$6</span></div>
+        <div class="row"><span class="nm">Regular Fries</span><span class="pr">$5</span></div>
+      </div>
+
+      <div class="cat">
+        <div class="cat-name">🥡 Sides</div>
+        <div class="row"><span class="nm">Rice</span><span class="pr">$5</span></div>
+        <div class="row"><span class="nm">Salmon Egg Roll</span><span class="pr">$13</span></div>
+        <div class="row"><span class="nm">Crab Egg Roll</span><span class="pr">$15</span></div>
+      </div>
+      <div class="cat">
+        <div class="cat-name">🥤 Drinks</div>
+        <div class="row"><span class="nm">Pineapple Iced Tea</span><span class="pr">$3</span></div>
+        <div class="row"><span class="nm">Soda</span><span class="pr">$2</span></div>
+        <div class="row"><span class="nm">Water</span><span class="pr">$2</span></div>
+      </div>
+      <div class="price-asterisk">* Prices subject to change</div>
+    </div>
+  </div>
+
+  <!-- BOTTOM CONTACT -->
+  <div class="bottom">
+    <div class="qr-box"><img src="../qr-menu.png" alt="Scan to order"></div>
+    <div class="contact">
+      <div class="ci"><span class="ci-label">📞 Text or Call</span><span class="ci-val gold">(302) 384-2469</span></div>
+      <div class="ci"><span class="ci-label">🌐 Website</span><span class="ci-val">malsfamousseafoodgrill.com</span></div>
+      <div class="ci"><span class="ci-label">📱 Social</span><span class="ci-val">@MalsFamousSeafood</span></div>
+    </div>
+    <div class="scan-cta">
+      <div class="big">SCAN TO<br>ORDER</div>
+      <div class="sm">Catering Available</div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
