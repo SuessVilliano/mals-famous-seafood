@@ -30,13 +30,20 @@
   .section-icon{font-size:28px;}
   .section-header h2{font-family:'Playfair Display',serif;font-size:26px;color:var(--gold);letter-spacing:1px;}
   .section-count{font-size:11px;color:var(--muted);letter-spacing:2px;margin-left:auto;}
-  .items-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:12px;}
+  .items-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:16px;}
   .item-card{background:var(--card-bg);border:1px solid var(--card-border);border-radius:4px;padding:18px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px;transition:border-color 0.2s,background 0.2s;cursor:default;}
   .item-card:hover{border-color:rgba(212,160,23,0.45);background:#1e1a10;}
   .item-card-left{flex:1;}
   .item-card-name{font-size:15px;font-weight:700;color:var(--white);letter-spacing:0.3px;}
   .item-card-desc{font-size:12px;color:var(--muted);margin-top:4px;line-height:1.4;}
   .item-card-price{font-size:15px;font-weight:800;color:var(--gold);white-space:nowrap;min-width:50px;text-align:right;}
+  /* Image-card variant: photo on top, text below */
+  .item-card.has-image{flex-direction:column;align-items:stretch;padding:0;overflow:hidden;}
+  .item-card.has-image .item-img-wrap{width:100%;aspect-ratio:16/10;background:#0a0a0a;overflow:hidden;}
+  .item-card.has-image .item-img{width:100%;height:100%;object-fit:cover;display:block;transition:transform 0.4s ease;}
+  .item-card.has-image:hover .item-img{transform:scale(1.04);}
+  .item-card.has-image .item-card-body{padding:14px 18px;display:flex;justify-content:space-between;align-items:baseline;gap:12px;}
+  .item-card.has-image .item-card-left{flex:1;}
   .drinks-row{display:flex;flex-wrap:wrap;gap:10px;}
   .drink-chip{background:var(--card-bg);border:1px solid var(--card-border);border-radius:3px;padding:12px 20px;display:flex;align-items:center;gap:14px;min-width:170px;transition:border-color 0.2s;}
   .drink-chip:hover{border-color:rgba(212,160,23,0.4);}
@@ -105,6 +112,7 @@ const DEFAULT_MENU_DATA={categories:[
   {id:"drinks",name:"Drinks",emoji:"🥤",items:[{id:"pineapple-iced-tea",name:"Pineapple Iced Tea",price:3,priceNote:"",available:true},{id:"soda",name:"Soda",price:2,priceNote:"",available:true},{id:"water",name:"Water",price:2,priceNote:"",available:true}]}
 ]};
 const DESCRIPTIONS={"snowcrab":"Our signature snow crab feast — broiled to perfection with bold seasoning","shrimp-rice":"Tender seasoned shrimp served over fluffy white rice","salmon-rice":"Flavorful salmon fillet served over steamed white rice","cheesesteak":"Classic Philly-style cheesesteak on a toasted roll","chicken-cheesesteak":"Tender chicken with melted cheese on a hoagie roll","salmon-tacos":"Fresh salmon with toppings in a warm flour tortilla","shrimp-tacos":"Seasoned shrimp loaded in a warm flour tortilla","fish-fries":"Golden fried fish served with crispy seasoned fries","shrimp-fries":"Crispy fried shrimp with seasoned fries","fish-hoagie":"Loaded fried fish on a toasted hoagie roll","fried-fish-rice":"Golden fried fish served over fluffy white rice","wings-fries":"Crispy wings your way, served with seasoned fries","chicken-rice":"Seasoned chicken served over fluffy white rice","crab-fries":"Seasoned fries loaded with crab — a crowd favorite","cheese-fries":"Crispy fries smothered in melted cheese","regular-fries":"Classic salted crispy fries","salmon-egg-roll":"Crispy egg roll stuffed with seasoned salmon","crab-egg-roll":"Crispy egg roll packed with savory crab"};
+const ITEM_IMAGES={"snowcrab":"images/snowcrab-broil.jpg","cheesesteak":"images/cheesesteak.jpg","chicken-cheesesteak":"images/chicken-cheesesteak.jpg","crab-fries":"images/crab-fries.jpg","salmon-egg-roll":"images/salmon-egg-roll.jpg","crab-egg-roll":"images/crab-egg-roll.jpg"};
 function getMenuData(){try{const s=localStorage.getItem('mals_menu_data');if(s)return JSON.parse(s);}catch(e){}return DEFAULT_MENU_DATA;}
 function fmtPrice(item){if(item.priceNote)return item.priceNote;return'$'+(Number.isInteger(item.price)?item.price:item.price.toFixed(2));}
 function renderMenu(){
@@ -124,7 +132,12 @@ function renderMenu(){
       html+='<div class="items-grid">';
       items.forEach(item=>{
         const desc=DESCRIPTIONS[item.id]||'';
-        html+='<div class="item-card"><div class="item-card-left"><div class="item-card-name">'+item.name+'</div>'+(desc?'<div class="item-card-desc">'+desc+'</div>':'')+'</div><div class="item-card-price">'+fmtPrice(item)+'</div></div>';
+        const img=ITEM_IMAGES[item.id];
+        if(img){
+          html+='<div class="item-card has-image"><div class="item-img-wrap"><img class="item-img" loading="lazy" alt="'+item.name+'" src="'+img+'" onerror="this.parentElement.parentElement.classList.remove(\'has-image\');this.parentElement.remove();"></div><div class="item-card-body"><div class="item-card-left"><div class="item-card-name">'+item.name+'</div>'+(desc?'<div class="item-card-desc">'+desc+'</div>':'')+'</div><div class="item-card-price">'+fmtPrice(item)+'</div></div></div>';
+        } else {
+          html+='<div class="item-card"><div class="item-card-left"><div class="item-card-name">'+item.name+'</div>'+(desc?'<div class="item-card-desc">'+desc+'</div>':'')+'</div><div class="item-card-price">'+fmtPrice(item)+'</div></div>';
+        }
       });
       html+='</div>';
     }
