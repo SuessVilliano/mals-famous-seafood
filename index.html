@@ -253,6 +253,32 @@
 
   /* ──────────── MENU SECTION ──────────── */
   #menu { background: var(--black-3); }
+  .signature-strip {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 16px;
+    margin-bottom: 48px;
+  }
+  .sig-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+    transition: border-color 0.25s, transform 0.25s;
+    display: flex;
+    flex-direction: column;
+  }
+  .sig-card:hover { border-color: rgba(212,160,23,0.55); transform: translateY(-3px); }
+  .sig-card-img-wrap { width: 100%; aspect-ratio: 4/3; overflow: hidden; background: #0a0a0a; }
+  .sig-card-img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.45s ease; }
+  .sig-card:hover .sig-card-img { transform: scale(1.06); }
+  .sig-card-body { padding: 14px 16px 16px; display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
+  .sig-card-name { font-size: 14px; font-weight: 700; color: var(--white); letter-spacing: 0.4px; }
+  .sig-card-price { font-size: 14px; font-weight: 800; color: var(--gold); white-space: nowrap; }
+  .signature-label { text-align: center; margin-bottom: 32px; }
+  .signature-label .eyebrow { font-size: 11px; letter-spacing: 5px; color: var(--gold); text-transform: uppercase; font-weight: 700; }
+  .signature-label h3 { font-family: 'Playfair Display', serif; font-size: clamp(24px, 4vw, 34px); color: var(--white); margin-top: 8px; }
+  .signature-label h3 span { color: var(--gold); }
   .menu-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -302,14 +328,18 @@
   }
   .about-visual {
     background: linear-gradient(135deg, #1a1500, #0a0800);
+    background-image: linear-gradient(180deg, rgba(10,8,0,0.35) 0%, rgba(10,8,0,0.7) 100%), url('images/seafood-hero.jpg');
+    background-size: cover;
+    background-position: center;
     border: 1px solid var(--border);
     border-radius: 4px;
     aspect-ratio: 4/5;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    gap: 20px;
+    justify-content: flex-end;
+    gap: 16px;
+    padding: 32px 24px;
     position: relative;
     overflow: hidden;
   }
@@ -317,17 +347,18 @@
     content: '';
     position: absolute;
     inset: 0;
-    background: radial-gradient(ellipse at 50% 50%, rgba(212,160,23,0.08) 0%, transparent 70%);
+    background: radial-gradient(ellipse at 50% 100%, rgba(212,160,23,0.15) 0%, transparent 70%);
   }
-  .about-crab { font-size: 100px; }
+  .about-crab { display: none; }
   .about-tagline {
     font-family: 'Playfair Display', serif;
     font-size: 28px;
-    color: var(--gold);
+    color: var(--gold-lt);
     text-align: center;
     padding: 0 20px;
     line-height: 1.3;
     position: relative;
+    text-shadow: 0 2px 16px rgba(0,0,0,0.85);
   }
   .about-stat-row {
     display: flex;
@@ -693,6 +724,14 @@
   <div class="rule"></div>
   <p class="section-sub">Everything made fresh to order. Follow us for daily specials and location updates.</p>
 
+  <div class="signature-label">
+    <div class="eyebrow">Signature Dishes</div>
+    <h3>Eat <span>With Your Eyes</span></h3>
+  </div>
+  <div class="signature-strip" id="signature-strip">
+    <!-- Rendered by JS -->
+  </div>
+
   <div class="menu-grid" id="website-menu-grid">
     <!-- Rendered by JS from shared menu data -->
   </div>
@@ -904,6 +943,41 @@
     if (item.priceNote) return item.priceNote;
     return '$' + (Number.isInteger(item.price) ? item.price : item.price.toFixed(2));
   }
+  const ITEM_IMAGES = {
+    "snowcrab": "images/snowcrab-broil.jpg",
+    "cheesesteak": "images/cheesesteak.jpg",
+    "chicken-cheesesteak": "images/chicken-cheesesteak.jpg",
+    "crab-fries": "images/crab-fries.jpg",
+    "salmon-egg-roll": "images/salmon-egg-roll.jpg",
+    "crab-egg-roll": "images/crab-egg-roll.jpg"
+  };
+  // Order of signature dishes when shown on the homepage
+  const SIGNATURE_ORDER = ["snowcrab","cheesesteak","chicken-cheesesteak","crab-fries","salmon-egg-roll","crab-egg-roll"];
+
+  function renderSignatureStrip() {
+    const strip = document.getElementById('signature-strip');
+    if (!strip) return;
+    const data = getMenuData();
+    const flatItems = {};
+    data.categories.forEach(c => c.items.forEach(i => { if (i.available) flatItems[i.id] = i; }));
+    let html = '';
+    SIGNATURE_ORDER.forEach(id => {
+      const item = flatItems[id];
+      const img = ITEM_IMAGES[id];
+      if (!item || !img) return;
+      html += `<a class="sig-card" href="/menu#${id}" aria-label="${item.name}">
+        <div class="sig-card-img-wrap">
+          <img class="sig-card-img" loading="lazy" alt="${item.name}" src="${img}" onerror="this.closest('.sig-card').style.display='none'">
+        </div>
+        <div class="sig-card-body">
+          <span class="sig-card-name">${item.name}</span>
+          <span class="sig-card-price">${fmtPrice(item)}</span>
+        </div>
+      </a>`;
+    });
+    strip.innerHTML = html;
+  }
+
   function renderWebsiteMenu() {
     const grid = document.getElementById('website-menu-grid');
     if (!grid) return;
@@ -920,6 +994,7 @@
     });
     grid.innerHTML = html;
   }
+  renderSignatureStrip();
   renderWebsiteMenu();
 
   function handleSubmit(e) {
