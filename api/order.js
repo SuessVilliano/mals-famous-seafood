@@ -1,9 +1,10 @@
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
-  const { firstName, lastName, email, phone, orderItems, pickupDay, pickupTime, orderNotes } = req.body;
+  // Field names match exactly what order/index.html sends
+  const { firstName, lastName, email, phone, pickupTime, orderItems, orderTotal, notes } = req.body;
 
-  if (!firstName || !email || !orderItems || !pickupDay || !pickupTime) {
+  if (!firstName || !email || !orderItems || !pickupTime) {
     return res.status(400).json({ error: 'Missing required fields' });
   }
 
@@ -27,10 +28,10 @@ export default async function handler(req, res) {
         phone: phone || '',
         tags: ['new-order', 'website-order'],
         customFields: [
-          { key: 'order_items', field_value: orderItems },
-          { key: 'pickup_day', field_value: pickupDay },
-          { key: 'pickup_time', field_value: pickupTime },
-          { key: 'order_notes', field_value: orderNotes || '' }
+          { key: 'order_items',  field_value: orderItems },
+          { key: 'pickup_time',  field_value: pickupTime },
+          { key: 'order_total',  field_value: orderTotal || '' },
+          { key: 'order_notes',  field_value: notes || '' }
         ],
         source: 'Website Order Form'
       })
@@ -58,17 +59,17 @@ export default async function handler(req, res) {
           contactId,
           emailFrom: 'orders@malsfamousseafoodgrill.com',
           emailTo: '273maljones@gmail.com',
-          subject: `🦀 New Order — ${firstName} ${lastName || ''}`,
+          subject: `New Order — ${firstName} ${lastName || ''}`,
           html: `
-            <h2>🦀 New Order Received</h2>
+            <h2>New Order Received</h2>
             <p><strong>Customer:</strong> ${firstName} ${lastName || ''}</p>
             <p><strong>Email:</strong> ${email}</p>
             <p><strong>Phone:</strong> ${phone || 'Not provided'}</p>
             <hr>
             <p><strong>Order:</strong> ${orderItems}</p>
-            <p><strong>Pickup Day:</strong> ${pickupDay}</p>
+            <p><strong>Order Total:</strong> ${orderTotal || 'N/A'}</p>
             <p><strong>Pickup Time:</strong> ${pickupTime}</p>
-            <p><strong>Notes:</strong> ${orderNotes || 'None'}</p>
+            <p><strong>Notes:</strong> ${notes || 'None'}</p>
             <hr>
             <p>Log into GHL to confirm or reject this order:<br>
             <a href="https://app.gohighlevel.com">Open GoHighLevel CRM</a></p>
