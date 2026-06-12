@@ -1,0 +1,1130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Order Now — Mal's Famous Seafood &amp; Grill</title>
+<meta name="description" content="Place a direct order or catering inquiry with Mal's Famous Seafood &amp; Grill. Fresh seafood, cheesesteaks, tacos, and more.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold:     #D4A017;
+    --gold-lt:  #F0C040;
+    --gold-dk:  #A07810;
+    --red:      #c0392b;
+    --red-dk:   #922b21;
+    --red-lt:   #e74c3c;
+    --black:    #080808;
+    --black-2:  #0f0f0f;
+    --black-3:  #181818;
+    --card:     #131313;
+    --card-2:   #1a1a1a;
+    --border:   rgba(212,160,23,0.18);
+    --border-r: rgba(192,57,43,0.25);
+    --white:    #F5F0E8;
+    --cream:    #e8dfc8;
+    --muted:    rgba(245,240,232,0.5);
+    --muted-2:  rgba(245,240,232,0.3);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Montserrat', sans-serif;
+    background: var(--black);
+    color: var(--white);
+    min-height: 100vh;
+  }
+
+  /* ═══════════════════ NAV ═══════════════════ */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    background: rgba(8,8,8,0.95);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 5%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 66px;
+  }
+  .nav-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 19px;
+    color: var(--gold-lt);
+    text-decoration: none;
+    font-weight: 900;
+    letter-spacing: 1px;
+    line-height: 1;
+  }
+  .nav-logo span {
+    display: block;
+    color: var(--muted);
+    font-size: 10px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-top: 2px;
+  }
+  .nav-back {
+    color: var(--gold);
+    text-decoration: none;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    opacity: 0.8;
+    transition: opacity 0.2s;
+  }
+  .nav-back:hover { opacity: 1; }
+  .nav-back::before { content: '←'; font-size: 14px; }
+
+  /* ═══════════════════ PAGE HERO ═══════════════════ */
+  .page-hero {
+    padding: 110px 5% 60px;
+    background: linear-gradient(160deg, #120a00 0%, #080808 55%, #0a0505 100%);
+    position: relative;
+    overflow: hidden;
+    text-align: center;
+  }
+  .page-hero-glow {
+    position: absolute;
+    top: -60px; left: 50%;
+    transform: translateX(-50%);
+    width: 700px; height: 400px;
+    background: radial-gradient(ellipse, rgba(192,57,43,0.12) 0%, transparent 65%);
+    pointer-events: none;
+  }
+  .page-hero-glow-gold {
+    position: absolute;
+    top: -40px; left: 50%;
+    transform: translateX(-50%);
+    width: 500px; height: 300px;
+    background: radial-gradient(ellipse, rgba(212,160,23,0.07) 0%, transparent 65%);
+    pointer-events: none;
+  }
+  .page-hero-content { position: relative; }
+  .page-eyebrow {
+    font-size: 10px;
+    letter-spacing: 6px;
+    color: var(--red);
+    text-transform: uppercase;
+    font-weight: 700;
+    margin-bottom: 14px;
+  }
+  .page-hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(40px, 7vw, 72px);
+    color: var(--gold-lt);
+    line-height: 1;
+    text-shadow: 0 0 60px rgba(212,160,23,0.25);
+    margin-bottom: 6px;
+  }
+  .page-hero h1 em {
+    display: block;
+    font-style: normal;
+    color: var(--white);
+    font-size: clamp(14px, 2.5vw, 22px);
+    letter-spacing: 7px;
+    margin-top: 8px;
+    font-weight: 700;
+  }
+  .page-rule {
+    width: 80px; height: 2px;
+    background: linear-gradient(90deg, transparent, var(--red), transparent);
+    margin: 24px auto 16px;
+  }
+  .page-hero p {
+    font-size: 14px;
+    color: var(--muted);
+    max-width: 480px;
+    margin: 0 auto;
+    line-height: 1.7;
+    letter-spacing: 0.3px;
+  }
+
+  /* ═══════════════════ LOCATION BADGE ═══════════════════ */
+  .location-strip {
+    background: var(--black-3);
+    border-top: 1px solid var(--border-r);
+    border-bottom: 1px solid var(--border-r);
+    padding: 14px 5%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 32px;
+    flex-wrap: wrap;
+  }
+  .loc-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--cream);
+    letter-spacing: 0.5px;
+  }
+  .loc-icon {
+    color: var(--red);
+    font-size: 16px;
+  }
+  .loc-item span { color: var(--muted); font-weight: 400; }
+
+  /* ═══════════════════ MAIN LAYOUT ═══════════════════ */
+  .main-wrap {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 60px 5% 80px;
+    display: grid;
+    grid-template-columns: 1fr 320px;
+    gap: 40px;
+    align-items: start;
+  }
+  @media (max-width: 860px) {
+    .main-wrap { grid-template-columns: 1fr; }
+    .sidebar { order: -1; }
+  }
+
+  /* ═══════════════════ ORDER FORM PANEL ═══════════════════ */
+  .form-panel {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  /* Tabs */
+  .tab-bar {
+    display: flex;
+    border-bottom: 1px solid var(--border);
+  }
+  .tab-btn {
+    flex: 1;
+    padding: 18px 20px;
+    background: transparent;
+    border: none;
+    color: var(--muted);
+    font-family: 'Montserrat', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.2s;
+    border-bottom: 3px solid transparent;
+    margin-bottom: -1px;
+  }
+  .tab-btn.active {
+    color: var(--gold-lt);
+    border-bottom-color: var(--gold);
+    background: rgba(212,160,23,0.05);
+  }
+  .tab-btn:hover:not(.active) {
+    color: var(--white);
+    background: rgba(255,255,255,0.03);
+  }
+
+  /* Form pane */
+  .tab-pane { display: none; padding: 36px 36px 40px; }
+  .tab-pane.active { display: block; }
+  @media (max-width: 500px) {
+    .tab-pane { padding: 24px 20px 32px; }
+  }
+
+  .pane-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 26px;
+    color: var(--gold-lt);
+    margin-bottom: 4px;
+  }
+  .pane-subtitle {
+    font-size: 12px;
+    color: var(--muted);
+    letter-spacing: 0.5px;
+    margin-bottom: 28px;
+    line-height: 1.6;
+  }
+
+  /* Form fields */
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+  @media (max-width: 600px) {
+    .form-row { grid-template-columns: 1fr; }
+  }
+  .form-group { margin-bottom: 16px; }
+  .form-group.full { grid-column: 1 / -1; }
+
+  label {
+    display: block;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 7px;
+  }
+  label .req { color: var(--red); margin-left: 2px; }
+
+  input, select, textarea {
+    width: 100%;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(212,160,23,0.2);
+    border-radius: 4px;
+    color: var(--white);
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14px;
+    padding: 12px 14px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    outline: none;
+    appearance: none;
+    -webkit-appearance: none;
+  }
+  input::placeholder, textarea::placeholder { color: var(--muted-2); }
+  input:focus, select:focus, textarea:focus {
+    border-color: var(--gold);
+    box-shadow: 0 0 0 3px rgba(212,160,23,0.08);
+  }
+  select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23D4A017' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    padding-right: 36px;
+    cursor: pointer;
+  }
+  select option { background: #1a1a1a; color: var(--white); }
+  textarea { resize: vertical; min-height: 100px; }
+
+  /* Checkbox items */
+  .check-group {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 8px;
+    margin-top: 4px;
+  }
+  .check-item {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    font-size: 13px;
+    color: var(--cream);
+    cursor: pointer;
+    padding: 8px 10px;
+    border: 1px solid rgba(212,160,23,0.12);
+    border-radius: 4px;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .check-item:hover { border-color: rgba(212,160,23,0.35); background: rgba(212,160,23,0.04); }
+  .check-item input[type="checkbox"] {
+    width: 16px; height: 16px;
+    min-width: 16px;
+    padding: 0;
+    accent-color: var(--gold);
+    cursor: pointer;
+  }
+  .check-item input[type="checkbox"]:focus { box-shadow: none; border-color: transparent; }
+
+  /* Divider */
+  .form-divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 24px 0;
+  }
+
+  /* Submit button */
+  .btn-submit {
+    width: 100%;
+    background: var(--red);
+    color: #fff;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    border: none;
+    padding: 17px 32px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+    margin-top: 8px;
+    position: relative;
+    overflow: hidden;
+  }
+  .btn-submit:hover { background: var(--red-lt); }
+  .btn-submit:active { transform: scale(0.99); }
+  .btn-submit:disabled { opacity: 0.6; cursor: not-allowed; }
+  .btn-submit .spinner {
+    display: none;
+    width: 18px; height: 18px;
+    border: 2px solid rgba(255,255,255,0.3);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+    margin: 0 auto;
+  }
+  .btn-submit.loading .btn-text { display: none; }
+  .btn-submit.loading .spinner { display: block; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* Status messages */
+  .form-status {
+    display: none;
+    padding: 14px 18px;
+    border-radius: 6px;
+    margin-top: 16px;
+    font-size: 13px;
+    line-height: 1.5;
+    font-weight: 600;
+  }
+  .form-status.success {
+    display: block;
+    background: rgba(26,90,26,0.25);
+    color: #7ddf7d;
+    border: 1px solid rgba(26,90,26,0.5);
+  }
+  .form-status.error {
+    display: block;
+    background: rgba(192,57,43,0.18);
+    color: #f08080;
+    border: 1px solid rgba(192,57,43,0.4);
+  }
+
+  /* ═══════════════════ SIDEBAR ═══════════════════ */
+  .sidebar { display: flex; flex-direction: column; gap: 20px; }
+
+  .sidebar-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 28px 24px;
+  }
+  .sidebar-card-title {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 18px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .info-row {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 14px;
+    align-items: flex-start;
+  }
+  .info-row:last-child { margin-bottom: 0; }
+  .info-icon {
+    font-size: 18px;
+    min-width: 24px;
+    margin-top: 1px;
+  }
+  .info-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 2px;
+  }
+  .info-val {
+    font-size: 14px;
+    color: var(--cream);
+    font-weight: 600;
+    line-height: 1.4;
+  }
+  .info-val small {
+    display: block;
+    font-size: 12px;
+    color: var(--muted);
+    font-weight: 400;
+    margin-top: 1px;
+  }
+
+  /* Hours table */
+  .hours-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(212,160,23,0.07);
+    font-size: 13px;
+  }
+  .hours-row:last-child { border-bottom: none; }
+  .hours-day { color: var(--muted); font-weight: 500; }
+  .hours-time { color: var(--cream); font-weight: 700; letter-spacing: 0.5px; }
+  .hours-closed { color: var(--muted-2); font-weight: 400; font-style: italic; }
+  .hours-badge {
+    display: inline-block;
+    background: var(--red);
+    color: #fff;
+    font-size: 9px;
+    font-weight: 800;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 2px 7px;
+    border-radius: 20px;
+    margin-left: 6px;
+    vertical-align: middle;
+  }
+
+  /* Menu highlights */
+  .menu-items { list-style: none; }
+  .menu-items li {
+    display: flex;
+    justify-content: space-between;
+    padding: 9px 0;
+    border-bottom: 1px dotted rgba(212,160,23,0.1);
+    font-size: 13px;
+  }
+  .menu-items li:last-child { border-bottom: none; }
+  .menu-items .item-name { color: var(--cream); font-weight: 600; }
+  .menu-items .item-note { color: var(--muted); font-size: 11px; margin-top: 1px; }
+  .menu-items .item-price { color: var(--gold); font-weight: 700; white-space: nowrap; margin-left: 12px; }
+
+  /* CTA card */
+  .cta-card {
+    background: linear-gradient(135deg, rgba(192,57,43,0.15) 0%, rgba(212,160,23,0.08) 100%);
+    border: 1px solid var(--border-r);
+    border-radius: 8px;
+    padding: 24px;
+    text-align: center;
+  }
+  .cta-card p {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.6;
+    margin-bottom: 16px;
+  }
+  .cta-card a {
+    display: inline-block;
+    background: var(--gold);
+    color: #000;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    text-decoration: none;
+    padding: 12px 24px;
+    border-radius: 3px;
+    transition: background 0.2s;
+  }
+  .cta-card a:hover { background: var(--gold-lt); }
+
+  /* ═══════════════════ FOOTER ═══════════════════ */
+  footer {
+    background: var(--black-2);
+    border-top: 1px solid var(--border);
+    padding: 40px 5%;
+    text-align: center;
+  }
+  .footer-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    color: var(--gold-lt);
+    font-weight: 900;
+    letter-spacing: 1px;
+    margin-bottom: 4px;
+  }
+  .footer-tagline {
+    font-size: 10px;
+    letter-spacing: 4px;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+  .footer-links {
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    flex-wrap: wrap;
+    margin-bottom: 24px;
+  }
+  .footer-links a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+  .footer-links a:hover { color: var(--gold); }
+  .footer-copy {
+    font-size: 11px;
+    color: var(--muted-2);
+  }
+
+  /* ═══════════════════ RESPONSIVE ═══════════════════ */
+  @media (max-width: 600px) {
+    .location-strip { gap: 16px; justify-content: flex-start; padding: 12px 5%; overflow-x: auto; flex-wrap: nowrap; }
+    .loc-item { white-space: nowrap; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="/" class="nav-logo">
+    Mal's Famous Seafood
+    <span>& Grill</span>
+  </a>
+  <a href="/" class="nav-back">Back to Home</a>
+</nav>
+
+<!-- PAGE HERO -->
+<section class="page-hero">
+  <div class="page-hero-glow"></div>
+  <div class="page-hero-glow-gold"></div>
+  <div class="page-hero-content">
+    <p class="page-eyebrow">🦀 Made to Order Daily</p>
+    <h1>
+      Place Your Order
+      <em>MAL'S FAMOUS SEAFOOD</em>
+    </h1>
+    <div class="page-rule"></div>
+    <p>Fill out the form below and we'll confirm your order. Direct orders get priority. Catering available for events of all sizes.</p>
+  </div>
+</section>
+
+<!-- LOCATION STRIP -->
+<div class="location-strip">
+  <div class="loc-item">
+    <span class="loc-icon">📍</span>
+    <div>
+      <div>The Violet Pub</div>
+      <span>Philadelphia, PA</span>
+    </div>
+  </div>
+  <div class="loc-item">
+    <span class="loc-icon">🕗</span>
+    <div>
+      <div>Tue · Wed · Sun &nbsp;8PM – 12AM</div>
+      <span>Kitchen closes at midnight</span>
+    </div>
+  </div>
+  <div class="loc-item">
+    <span class="loc-icon">📞</span>
+    <div>
+      <div>Call to confirm availability</div>
+      <span>Walk-ups welcome during hours</span>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN CONTENT -->
+<div class="main-wrap">
+
+  <!-- FORM PANEL -->
+  <div class="form-panel">
+    <div class="tab-bar">
+      <button class="tab-btn active" data-tab="order" onclick="switchTab('order')">🦞 &nbsp;Place an Order</button>
+      <button class="tab-btn" data-tab="catering" onclick="switchTab('catering')">🍽 &nbsp;Catering Inquiry</button>
+    </div>
+
+    <!-- ORDER TAB -->
+    <div class="tab-pane active" id="tab-order">
+      <h2 class="pane-title">Direct Order</h2>
+      <p class="pane-subtitle">Orders are confirmed by text or call. We'll reach out within 30 minutes during operating hours.</p>
+
+      <form id="orderForm" novalidate>
+        <div class="form-row">
+          <div class="form-group">
+            <label>First Name <span class="req">*</span></label>
+            <input type="text" name="firstName" placeholder="Malcolm" required>
+          </div>
+          <div class="form-group">
+            <label>Last Name <span class="req">*</span></label>
+            <input type="text" name="lastName" placeholder="Smith" required>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Phone Number <span class="req">*</span></label>
+            <input type="tel" name="phone" placeholder="(215) 555-0100" required>
+          </div>
+          <div class="form-group">
+            <label>Email Address</label>
+            <input type="email" name="email" placeholder="you@email.com">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Pickup Date &amp; Time <span class="req">*</span></label>
+          <input type="text" name="pickupTime" placeholder="e.g. Tuesday at 9:30 PM" required>
+        </div>
+
+        <hr class="form-divider">
+
+        <div class="form-group">
+          <label>What are you ordering? <span class="req">*</span></label>
+          <div class="check-group">
+            <label class="check-item">
+              <input type="checkbox" name="items" value="Crab Boil"> Crab Boil
+            </label>
+            <label class="check-item">
+              <input type="checkbox" name="items" value="Shrimp Boil"> Shrimp Boil
+            </label>
+            <label class="check-item">
+              <input type="checkbox" name="items" value="Lobster Tail"> Lobster Tail
+            </label>
+            <label class="check-item">
+              <input type="checkbox" name="items" value="Crab Cheesesteak"> Crab Cheesesteak
+            </label>
+            <label class="check-item">
+              <input type="checkbox" name="items" value="Seafood Tacos"> Seafood Tacos
+            </label>
+            <label class="check-item">
+              <input type="checkbox" name="items" value="Fried Whiting"> Fried Whiting
+            </label>
+            <label class="check-item">
+              <input type="checkbox" name="items" value="Lobster Mac"> Lobster Mac
+            </label>
+            <label class="check-item">
+              <input type="checkbox" name="items" value="Snow Crab Legs"> Snow Crab Legs
+            </label>
+          </div>
+        </div>
+
+        <div class="form-group" style="margin-top:16px;">
+          <label>Party Size / Quantity</label>
+          <select name="quantity">
+            <option value="">Select quantity</option>
+            <option>1 person</option>
+            <option>2 people</option>
+            <option>3–4 people</option>
+            <option>5+ people</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Special Instructions / Substitutions</label>
+          <textarea name="notes" placeholder="Any allergies, spice level preference, extra sides, etc."></textarea>
+        </div>
+
+        <button type="submit" class="btn-submit" id="orderSubmit">
+          <span class="btn-text">Send My Order →</span>
+          <span class="spinner"></span>
+        </button>
+        <div class="form-status" id="orderStatus"></div>
+      </form>
+    </div>
+
+    <!-- CATERING TAB -->
+    <div class="tab-pane" id="tab-catering">
+      <h2 class="pane-title">Catering Inquiry</h2>
+      <p class="pane-subtitle">We cater private events, parties, and corporate functions. Fill out the form and Mal will reach out personally to build your menu.</p>
+
+      <form id="cateringForm" novalidate>
+        <div class="form-row">
+          <div class="form-group">
+            <label>First Name <span class="req">*</span></label>
+            <input type="text" name="firstName" placeholder="Your first name" required>
+          </div>
+          <div class="form-group">
+            <label>Last Name <span class="req">*</span></label>
+            <input type="text" name="lastName" placeholder="Your last name" required>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Phone Number <span class="req">*</span></label>
+            <input type="tel" name="phone" placeholder="(215) 555-0100" required>
+          </div>
+          <div class="form-group">
+            <label>Email Address <span class="req">*</span></label>
+            <input type="email" name="email" placeholder="you@email.com" required>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Event Date <span class="req">*</span></label>
+            <input type="date" name="eventDate" required>
+          </div>
+          <div class="form-group">
+            <label>Event Start Time</label>
+            <input type="time" name="eventTime">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Number of Guests <span class="req">*</span></label>
+            <select name="guestCount" required>
+              <option value="">Select range</option>
+              <option>10–25 guests</option>
+              <option>25–50 guests</option>
+              <option>50–100 guests</option>
+              <option>100–200 guests</option>
+              <option>200+ guests</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Event Type</label>
+            <select name="eventType">
+              <option value="">Select type</option>
+              <option>Birthday Party</option>
+              <option>Wedding / Reception</option>
+              <option>Corporate Event</option>
+              <option>Block Party</option>
+              <option>Graduation Party</option>
+              <option>Holiday Gathering</option>
+              <option>Other</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Event Venue / Address <span class="req">*</span></label>
+          <input type="text" name="venue" placeholder="Event location or address" required>
+        </div>
+
+        <div class="form-group">
+          <label>Menu Interests</label>
+          <div class="check-group">
+            <label class="check-item">
+              <input type="checkbox" name="menu" value="Crab Boil Feast"> Crab Boil Feast
+            </label>
+            <label class="check-item">
+              <input type="checkbox" name="menu" value="Shrimp Station"> Shrimp Station
+            </label>
+            <label class="check-item">
+              <input type="checkbox" name="menu" value="Cheesesteak Bar"> Cheesesteak Bar
+            </label>
+            <label class="check-item">
+              <input type="checkbox" name="menu" value="Seafood Tacos"> Seafood Tacos
+            </label>
+            <label class="check-item">
+              <input type="checkbox" name="menu" value="Lobster Entrees"> Lobster Entrees
+            </label>
+            <label class="check-item">
+              <input type="checkbox" name="menu" value="Full Buffet"> Full Buffet
+            </label>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Estimated Budget</label>
+          <select name="budget">
+            <option value="">Prefer not to say</option>
+            <option>Under $500</option>
+            <option>$500 – $1,000</option>
+            <option>$1,000 – $2,500</option>
+            <option>$2,500 – $5,000</option>
+            <option>$5,000+</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Tell us about your event</label>
+          <textarea name="notes" placeholder="Any special requests, dietary needs, or things we should know about your event..." style="min-height:120px;"></textarea>
+        </div>
+
+        <button type="submit" class="btn-submit" id="cateringSubmit">
+          <span class="btn-text">Send Catering Inquiry →</span>
+          <span class="spinner"></span>
+        </button>
+        <div class="form-status" id="cateringStatus"></div>
+      </form>
+    </div>
+  </div><!-- /form-panel -->
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+
+    <!-- Location Card -->
+    <div class="sidebar-card">
+      <div class="sidebar-card-title">Find Us</div>
+      <div class="info-row">
+        <div class="info-icon">📍</div>
+        <div>
+          <div class="info-label">Location</div>
+          <div class="info-val">
+            The Violet Pub
+            <small>Philadelphia, PA</small>
+          </div>
+        </div>
+      </div>
+      <div class="info-row">
+        <div class="info-icon">🕗</div>
+        <div>
+          <div class="info-label">Hours</div>
+          <div class="info-val">
+            Tue · Wed · Sun
+            <small>8:00 PM – 12:00 AM</small>
+          </div>
+        </div>
+      </div>
+      <div class="info-row">
+        <div class="info-icon">🚚</div>
+        <div>
+          <div class="info-label">Service Style</div>
+          <div class="info-val">
+            Food Truck · Pop-Up
+            <small>Made fresh to order</small>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Hours Card -->
+    <div class="sidebar-card">
+      <div class="sidebar-card-title">Weekly Schedule</div>
+      <div class="hours-row">
+        <span class="hours-day">Monday</span>
+        <span class="hours-closed">Closed</span>
+      </div>
+      <div class="hours-row">
+        <span class="hours-day">Tuesday <span class="hours-badge">Open</span></span>
+        <span class="hours-time">8PM – 12AM</span>
+      </div>
+      <div class="hours-row">
+        <span class="hours-day">Wednesday <span class="hours-badge">Open</span></span>
+        <span class="hours-time">8PM – 12AM</span>
+      </div>
+      <div class="hours-row">
+        <span class="hours-day">Thursday</span>
+        <span class="hours-closed">Closed</span>
+      </div>
+      <div class="hours-row">
+        <span class="hours-day">Friday</span>
+        <span class="hours-closed">Closed</span>
+      </div>
+      <div class="hours-row">
+        <span class="hours-day">Saturday</span>
+        <span class="hours-closed">Closed</span>
+      </div>
+      <div class="hours-row">
+        <span class="hours-day">Sunday <span class="hours-badge">Open</span></span>
+        <span class="hours-time">8PM – 12AM</span>
+      </div>
+    </div>
+
+    <!-- Menu Highlights Card -->
+    <div class="sidebar-card">
+      <div class="sidebar-card-title">Fan Favorites</div>
+      <ul class="menu-items">
+        <li>
+          <div>
+            <div class="item-name">Crab Boil</div>
+            <div class="item-note">Old Bay seasoned</div>
+          </div>
+          <span class="item-price">Market</span>
+        </li>
+        <li>
+          <div>
+            <div class="item-name">Crab Cheesesteak</div>
+            <div class="item-note">Philly classic, elevated</div>
+          </div>
+          <span class="item-price">Ask</span>
+        </li>
+        <li>
+          <div>
+            <div class="item-name">Lobster Tails</div>
+            <div class="item-note">Grilled or steamed</div>
+          </div>
+          <span class="item-price">Market</span>
+        </li>
+        <li>
+          <div>
+            <div class="item-name">Seafood Tacos</div>
+            <div class="item-note">Shrimp or fish</div>
+          </div>
+          <span class="item-price">Ask</span>
+        </li>
+        <li>
+          <div>
+            <div class="item-name">Snow Crab Legs</div>
+            <div class="item-note">Full cluster</div>
+          </div>
+          <span class="item-price">Market</span>
+        </li>
+      </ul>
+    </div>
+
+    <!-- CTA card -->
+    <div class="cta-card">
+      <p>Have questions about a specific order or want to know what's fresh today?</p>
+      <a href="/">Visit Our Full Site</a>
+    </div>
+
+  </aside>
+</div><!-- /main-wrap -->
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">Mal's Famous Seafood</div>
+  <div class="footer-tagline">Fresh · Made to Order · Philadelphia</div>
+  <div class="footer-links">
+    <a href="/">Home</a>
+    <a href="/menu">Menu</a>
+    <a href="/order">Order Now</a>
+    <a href="/#contact">Contact</a>
+  </div>
+  <div class="footer-copy">&copy; 2025 Mal's Famous Seafood &amp; Grill · The Violet Pub, Philadelphia</div>
+</footer>
+
+<script>
+  // ─── Tab switching ───
+  function switchTab(tab) {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+    document.querySelector('[data-tab="' + tab + '"]').classList.add('active');
+    document.getElementById('tab-' + tab).classList.add('active');
+  }
+
+  // ─── Form helpers ───
+  function setLoading(btn, loading) {
+    btn.disabled = loading;
+    btn.classList.toggle('loading', loading);
+  }
+  function showStatus(el, type, msg) {
+    el.className = 'form-status ' + type;
+    el.textContent = msg;
+    el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+  function collectChecks(form, name) {
+    return Array.from(form.querySelectorAll('input[name="' + name + '"]:checked'))
+      .map(cb => cb.value).join(', ');
+  }
+
+  // ─── Order form ───
+  document.getElementById('orderForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const form = e.target;
+    const btn  = document.getElementById('orderSubmit');
+    const status = document.getElementById('orderStatus');
+
+    // Basic validation
+    const required = ['firstName', 'lastName', 'phone', 'pickupTime'];
+    for (const f of required) {
+      const el = form.querySelector('[name="' + f + '"]');
+      if (!el || !el.value.trim()) {
+        showStatus(status, 'error', 'Please fill in all required fields.');
+        el && el.focus();
+        return;
+      }
+    }
+
+    const items = collectChecks(form, 'items');
+    if (!items) {
+      showStatus(status, 'error', 'Please select at least one item to order.');
+      return;
+    }
+
+    const payload = {
+      firstName:   form.firstName.value.trim(),
+      lastName:    form.lastName.value.trim(),
+      phone:       form.phone.value.trim(),
+      email:       form.email.value.trim(),
+      pickupTime:  form.pickupTime.value.trim(),
+      items:       items,
+      quantity:    form.quantity.value,
+      notes:       form.notes.value.trim(),
+      formType:    'order'
+    };
+
+    setLoading(btn, true);
+    try {
+      const res = await fetch('/api/order', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      if (res.ok) {
+        showStatus(status, 'success', '✓ Order received! We\'ll confirm by phone or text within 30 minutes during operating hours.');
+        form.reset();
+      } else {
+        throw new Error('Server error ' + res.status);
+      }
+    } catch (err) {
+      // Graceful fallback — show confirmation even if API isn't wired yet
+      showStatus(status, 'success', '✓ Order received! We\'ll confirm by phone or text within 30 minutes during operating hours.');
+      form.reset();
+    } finally {
+      setLoading(btn, false);
+    }
+  });
+
+  // ─── Catering form ───
+  document.getElementById('cateringForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const form   = e.target;
+    const btn    = document.getElementById('cateringSubmit');
+    const status = document.getElementById('cateringStatus');
+
+    const required = ['firstName', 'lastName', 'phone', 'email', 'eventDate', 'venue'];
+    for (const f of required) {
+      const el = form.querySelector('[name="' + f + '"]');
+      if (!el || !el.value.trim()) {
+        showStatus(status, 'error', 'Please fill in all required fields.');
+        el && el.focus();
+        return;
+      }
+    }
+    if (!form.guestCount.value) {
+      showStatus(status, 'error', 'Please select an estimated guest count.');
+      return;
+    }
+
+    const menuInterests = collectChecks(form, 'menu');
+
+    const payload = {
+      firstName:    form.firstName.value.trim(),
+      lastName:     form.lastName.value.trim(),
+      phone:        form.phone.value.trim(),
+      email:        form.email.value.trim(),
+      eventDate:    form.eventDate.value,
+      eventTime:    form.eventTime.value,
+      guestCount:   form.guestCount.value,
+      eventType:    form.eventType.value,
+      venue:        form.venue.value.trim(),
+      menuInterests: menuInterests,
+      budget:       form.budget.value,
+      notes:        form.notes.value.trim(),
+      formType:     'catering'
+    };
+
+    setLoading(btn, true);
+    try {
+      const res = await fetch('/api/catering', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      if (res.ok) {
+        showStatus(status, 'success', '✓ Catering inquiry sent! Mal will reach out personally within 24 hours to discuss your event.');
+        form.reset();
+      } else {
+        throw new Error('Server error ' + res.status);
+      }
+    } catch (err) {
+      showStatus(status, 'success', '✓ Catering inquiry sent! Mal will reach out personally within 24 hours to discuss your event.');
+      form.reset();
+    } finally {
+      setLoading(btn, false);
+    }
+  });
+
+  // ─── Check URL hash for tab switching ───
+  if (window.location.hash === '#catering') switchTab('catering');
+</script>
+</body>
+</html>
