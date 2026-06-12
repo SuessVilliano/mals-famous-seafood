@@ -573,6 +573,52 @@
     .location-strip { gap: 16px; justify-content: flex-start; padding: 12px 5%; overflow-x: auto; flex-wrap: nowrap; }
     .loc-item { white-space: nowrap; }
   }
+
+  /* ─── Order menu selector ─────────────────── */
+  .menu-cat-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin: 0 0 8px;
+    padding-bottom: 4px;
+    border-bottom: 1px solid rgba(212,160,23,0.2);
+  }
+  .order-items-grid { display: flex; flex-direction: column; gap: 6px; margin-bottom: 4px; }
+  .order-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(212,160,23,0.1);
+    border-radius: 8px;
+    padding: 8px 12px;
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s;
+  }
+  .order-item:hover { background: rgba(212,160,23,0.06); border-color: rgba(212,160,23,0.25); }
+  .order-item:has(.order-cb:checked) { background: rgba(212,160,23,0.10); border-color: rgba(212,160,23,0.45); }
+  .order-item .order-cb { accent-color: var(--gold); width: 16px; height: 16px; flex-shrink: 0; }
+  .oi-name { flex: 1; color: var(--cream); font-size: 13px; font-weight: 600; }
+  .oi-price { color: var(--gold); font-size: 13px; font-weight: 700; white-space: nowrap; margin-right: 8px; }
+  .qty-spin {
+    width: 52px; padding: 3px 6px; border-radius: 6px; border: 1px solid rgba(212,160,23,0.3);
+    background: rgba(0,0,0,0.4); color: var(--white); font-size: 13px; text-align: center;
+  }
+  .order-total-bar {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-top: 18px; padding: 14px 18px;
+    background: linear-gradient(135deg, rgba(212,160,23,0.15), rgba(192,57,43,0.10));
+    border: 1px solid rgba(212,160,23,0.4); border-radius: 10px;
+    font-size: 16px; font-weight: 700; color: var(--white);
+  }
+  .order-total-bar #orderTotalDisplay { color: var(--gold); font-size: 20px; }
+  @media (max-width: 500px) {
+    .order-item { padding: 7px 9px; }
+    .oi-name { font-size: 12px; }
+    .qty-spin { width: 44px; }
+  }
 </style>
 </head>
 <body>
@@ -673,43 +719,77 @@
 
         <div class="form-group">
           <label>What are you ordering? <span class="req">*</span></label>
-          <div class="check-group">
-            <label class="check-item">
-              <input type="checkbox" name="items" value="Crab Boil"> Crab Boil
-            </label>
-            <label class="check-item">
-              <input type="checkbox" name="items" value="Shrimp Boil"> Shrimp Boil
-            </label>
-            <label class="check-item">
-              <input type="checkbox" name="items" value="Lobster Tail"> Lobster Tail
-            </label>
-            <label class="check-item">
-              <input type="checkbox" name="items" value="Crab Cheesesteak"> Crab Cheesesteak
-            </label>
-            <label class="check-item">
-              <input type="checkbox" name="items" value="Seafood Tacos"> Seafood Tacos
-            </label>
-            <label class="check-item">
-              <input type="checkbox" name="items" value="Fried Whiting"> Fried Whiting
-            </label>
-            <label class="check-item">
-              <input type="checkbox" name="items" value="Lobster Mac"> Lobster Mac
-            </label>
-            <label class="check-item">
-              <input type="checkbox" name="items" value="Snow Crab Legs"> Snow Crab Legs
-            </label>
-          </div>
-        </div>
+          <p style="color:var(--muted);font-size:12px;margin:4px 0 12px;">Check items, set quantities — your total updates live.</p>
 
-        <div class="form-group" style="margin-top:16px;">
-          <label>Party Size / Quantity</label>
-          <select name="quantity">
-            <option value="">Select quantity</option>
-            <option>1 person</option>
-            <option>2 people</option>
-            <option>3–4 people</option>
-            <option>5+ people</option>
-          </select>
+          <!-- SEAFOOD -->
+          <div class="menu-cat-label">🦀 Seafood</div>
+          <div class="order-items-grid">
+            <label class="order-item"><input type="checkbox" class="order-cb" data-price="45" data-name="Snowcrab Seafood Broil"><span class="oi-name">Snowcrab Seafood Broil</span><span class="oi-price">$45</span><input type="number" class="qty-spin" value="1" min="1" max="10"></label>
+            <label class="order-item"><input type="checkbox" class="order-cb" data-price="15" data-name="Shrimp over Rice"><span class="oi-name">Shrimp over Rice</span><span class="oi-price">$15</span><input type="number" class="qty-spin" value="1" min="1" max="10"></label>
+            <label class="order-item"><input type="checkbox" class="order-cb" data-price="17" data-name="Salmon over Rice"><span class="oi-name">Salmon over Rice</span><span class="oi-price">$17</span><input type="number" class="qty-spin" value="1" min="1" max="10"></label>
+          </div>
+
+          <!-- STEAK -->
+          <div class="menu-cat-label" style="margin-top:14px;">🥩 Steak</div>
+          <div class="order-items-grid">
+            <label class="order-item"><input type="checkbox" class="order-cb" data-price="15" data-name="Cheesesteak"><span class="oi-name">Cheesesteak</span><span class="oi-price">$15</span><input type="number" class="qty-spin" value="1" min="1" max="10"></label>
+            <label class="order-item"><input type="checkbox" class="order-cb" data-price="14" data-name="Chicken Cheesesteak"><span class="oi-name">Chicken Cheesesteak</span><span class="oi-price">$14</span><input type="number" class="qty-spin" value="1" min="1" max="10"></label>
+          </div>
+
+          <!-- TACOS -->
+          <div class="menu-cat-label" style="margin-top:14px;">🌮 Tacos</div>
+          <div class="order-items-grid">
+            <label class="order-item"><input type="checkbox" class="order-cb" data-price="6" data-name="Salmon Taco (single)"><span class="oi-name">Salmon Taco (single)</span><span class="oi-price">$6</span><input type="number" class="qty-spin" value="1" min="1" max="10"></label>
+            <label class="order-item"><input type="checkbox" class="order-cb" data-price="15" data-name="Salmon Tacos (3 pack)"><span class="oi-name">Salmon Tacos (3 pack)</span><span class="oi-price">$15</span><input type="number" class="qty-spin" value="1" min="1" max="10"></label>
+            <label class="order-item"><input type="checkbox" class="order-cb" data-price="6" data-name="Shrimp Taco (single)"><span class="oi-name">Shrimp Taco (single)</span><span class="oi-price">$6</span><input type="number" class="qty-spin" value="1" min="1" max="10"></label>
+            <label class="order-item"><input type="checkbox" class="order-cb" data-price="15" data-name="Shrimp Tacos (3 pack)"><span class="oi-name">Shrimp Tacos (3 pack)</span><span class="oi-price">$15</span><input type="number" class="qty-spin" value="1" min="1" max="10"></label>
+          </div>
+
+          <!-- FISH & COMBOS -->
+          <div class="menu-cat-label" style="margin-top:14px;">🐟 Fish &amp; Combos</div>
+          <div class="order-items-grid">
+            <label class="order-item"><input type="checkbox" class="order-cb" data-price="20" data-name="Fish & Fries"><span class="oi-name">Fish &amp; Fries</span><span class="oi-price">$20</span><input type="number" class="qty-spin" value="1" min="1" max="10"></label>
+            <label class="order-item"><input type="checkbox" class="order-cb" data-price="20" data-name="Shrimp & Fries"><span class="oi-name">Shrimp &amp; Fries</span><span class="oi-price">$20</span><input type="number" class="qty-spin" value="1" min="1" max="10"></label>
+            <label class="order-item"><input type="checkbox" class="order-cb" data-price="15" data-name="Fish Hoagie"><span class="oi-name">Fish Hoagie</span><span class="oi-price">$15</span><input type="number" class="qty-spin" value="1" min="1" max="10"></label>
+            <label class="order-item"><input type="checkbox" class="order-cb" data-price="15" data-name="Fried Fish over Rice"><span class="oi-name">Fried Fish over Rice</span><span class="oi-price">$15</span><input type="number" class="qty-spin" value="1" min="1" max="10"></label>
+          </div>
+
+          <!-- CHICKEN -->
+          <div class="menu-cat-label" style="margin-top:14px;">🍗 Chicken</div>
+          <div class="order-items-grid">
+            <label class="order-item"><input type="checkbox" class="order-cb" data-price="15" data-name="Wings & Fries"><span class="oi-name">Wings &amp; Fries</span><span class="oi-price">$15</span><input type="number" class="qty-spin" value="1" min="1" max="10"></label>
+            <label class="order-item"><input type="checkbox" class="order-cb" data-price="15" data-name="Chicken over Rice"><span class="oi-name">Chicken over Rice</span><span class="oi-price">$15</span><input type="number" class="qty-spin" value="1" min="1" max="10"></label>
+          </div>
+
+          <!-- FRIES -->
+          <div class="menu-cat-label" style="margin-top:14px;">🍟 Fries</div>
+          <div class="order-items-grid">
+            <label class="order-item"><input type="checkbox" class="order-cb" data-price="15" data-name="Crab Fries"><span class="oi-name">Crab Fries</span><span class="oi-price">$15</span><input type="number" class="qty-spin" value="1" min="1" max="10"></label>
+            <label class="order-item"><input type="checkbox" class="order-cb" data-price="6" data-name="Cheese Fries"><span class="oi-name">Cheese Fries</span><span class="oi-price">$6</span><input type="number" class="qty-spin" value="1" min="1" max="10"></label>
+            <label class="order-item"><input type="checkbox" class="order-cb" data-price="5" data-name="Regular Fries"><span class="oi-name">Regular Fries</span><span class="oi-price">$5</span><input type="number" class="qty-spin" value="1" min="1" max="10"></label>
+          </div>
+
+          <!-- SIDES & EGG ROLLS -->
+          <div class="menu-cat-label" style="margin-top:14px;">🥢 Sides &amp; Egg Rolls</div>
+          <div class="order-items-grid">
+            <label class="order-item"><input type="checkbox" class="order-cb" data-price="13" data-name="Salmon Egg Roll"><span class="oi-name">Salmon Egg Roll</span><span class="oi-price">$13</span><input type="number" class="qty-spin" value="1" min="1" max="10"></label>
+            <label class="order-item"><input type="checkbox" class="order-cb" data-price="15" data-name="Crab Egg Roll"><span class="oi-name">Crab Egg Roll</span><span class="oi-price">$15</span><input type="number" class="qty-spin" value="1" min="1" max="10"></label>
+            <label class="order-item"><input type="checkbox" class="order-cb" data-price="5" data-name="Rice"><span class="oi-name">Rice</span><span class="oi-price">$5</span><input type="number" class="qty-spin" value="1" min="1" max="10"></label>
+          </div>
+
+          <!-- DRINKS -->
+          <div class="menu-cat-label" style="margin-top:14px;">🥤 Drinks</div>
+          <div class="order-items-grid">
+            <label class="order-item"><input type="checkbox" class="order-cb" data-price="3" data-name="Pineapple Iced Tea"><span class="oi-name">Pineapple Iced Tea</span><span class="oi-price">$3</span><input type="number" class="qty-spin" value="1" min="1" max="10"></label>
+            <label class="order-item"><input type="checkbox" class="order-cb" data-price="2" data-name="Soda"><span class="oi-name">Soda</span><span class="oi-price">$2</span><input type="number" class="qty-spin" value="1" min="1" max="10"></label>
+            <label class="order-item"><input type="checkbox" class="order-cb" data-price="2" data-name="Water"><span class="oi-name">Water</span><span class="oi-price">$2</span><input type="number" class="qty-spin" value="1" min="1" max="10"></label>
+          </div>
+
+          <!-- ORDER TOTAL -->
+          <div class="order-total-bar" id="orderTotalBar">
+            <span>Order Total</span>
+            <span id="orderTotalDisplay">$0.00</span>
+          </div>
         </div>
 
         <div class="form-group">
@@ -1005,6 +1085,31 @@
       .map(cb => cb.value).join(', ');
   }
 
+  // ─── Order total calculator ───
+  function calcOrderTotal() {
+    let total = 0;
+    document.querySelectorAll('.order-cb:checked').forEach(cb => {
+      const qty = parseInt(cb.closest('.order-item').querySelector('.qty-spin').value) || 1;
+      total += parseFloat(cb.dataset.price) * qty;
+    });
+    document.getElementById('orderTotalDisplay').textContent = '$' + total.toFixed(2);
+    return total;
+  }
+  function buildOrderItems() {
+    const parts = [];
+    document.querySelectorAll('.order-cb:checked').forEach(cb => {
+      const qty = parseInt(cb.closest('.order-item').querySelector('.qty-spin').value) || 1;
+      const price = parseFloat(cb.dataset.price);
+      parts.push(qty + 'x ' + cb.dataset.name + ' ($' + (qty * price).toFixed(2) + ')');
+    });
+    return parts.join(', ');
+  }
+  document.addEventListener('change', function(e) {
+    if (e.target.classList.contains('order-cb') || e.target.classList.contains('qty-spin')) {
+      calcOrderTotal();
+    }
+  });
+
   // ─── Order form ───
   document.getElementById('orderForm').addEventListener('submit', async function(e) {
     e.preventDefault();
@@ -1023,11 +1128,13 @@
       }
     }
 
-    const items = collectChecks(form, 'items');
-    if (!items) {
+    const orderItems = buildOrderItems();
+    if (!orderItems) {
       showStatus(status, 'error', 'Please select at least one item to order.');
       return;
     }
+
+    const orderTotal = calcOrderTotal();
 
     const payload = {
       firstName:   form.firstName.value.trim(),
@@ -1035,8 +1142,8 @@
       phone:       form.phone.value.trim(),
       email:       form.email.value.trim(),
       pickupTime:  form.pickupTime.value.trim(),
-      items:       items,
-      quantity:    form.quantity.value,
+      orderItems:  orderItems,
+      orderTotal:  '$' + orderTotal.toFixed(2),
       notes:       form.notes.value.trim(),
       formType:    'order'
     };
@@ -1049,21 +1156,23 @@
         body: JSON.stringify(payload)
       });
       if (res.ok) {
-        showStatus(status, 'success', '✓ Order received! We\'ll confirm by phone or text within 30 minutes during operating hours.');
+        showStatus(status, 'success', "✓ Order received! We'll confirm by phone or text within 30 minutes during operating hours.");
         form.reset();
+        calcOrderTotal();
       } else {
         throw new Error('Server error ' + res.status);
       }
     } catch (err) {
       // Graceful fallback — show confirmation even if API isn't wired yet
-      showStatus(status, 'success', '✓ Order received! We\'ll confirm by phone or text within 30 minutes during operating hours.');
+      showStatus(status, 'success', "✓ Order received! We'll confirm by phone or text within 30 minutes during operating hours.");
       form.reset();
+      calcOrderTotal();
     } finally {
       setLoading(btn, false);
     }
   });
 
-  // ─── Catering form ───
+    // ─── Catering form ───
   document.getElementById('cateringForm').addEventListener('submit', async function(e) {
     e.preventDefault();
     const form   = e.target;
