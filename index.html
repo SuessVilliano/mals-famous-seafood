@@ -438,6 +438,19 @@
     transition: background 0.2s;
   }
   .form-submit:hover { background: var(--gold-lt); }
+  .form-tabs { display: flex; gap: 8px; margin-bottom: 20px; }
+  .form-tab { flex: 1; padding: 10px; border: 2px solid rgba(212,160,23,0.3); background: rgba(255,255,255,0.04); color: var(--white); border-radius: 8px; cursor: pointer; font-size: 14px; font-weight: 600; transition: all 0.2s; }
+  .form-tab.active { background: var(--gold); color: var(--black); border-color: var(--gold); }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  @media (max-width: 480px) { .form-row { grid-template-columns: 1fr; } }
+  .form-status { padding: 12px 16px; border-radius: 8px; margin-top: 12px; font-size: 14px; }
+  .form-status.success { background: rgba(42,122,42,0.2); color: #7ddf7d; border: 1px solid rgba(42,122,42,0.4); }
+  .form-status.error { background: rgba(192,57,43,0.2); color: #f08080; border: 1px solid rgba(192,57,43,0.4); }
+  .contact-form-container { display: flex; flex-direction: column; }
+  .info-card { display: flex; gap: 16px; align-items: flex-start; margin-bottom: 20px; }
+  .info-icon { font-size: 20px; flex-shrink: 0; }
+  .info-card h4 { font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); font-weight: 700; margin-bottom: 3px; }
+  .info-card p { font-size: 14px; color: var(--muted); line-height: 1.5; }
   .contact-info-list { display: flex; flex-direction: column; gap: 20px; margin-top: 8px; }
   .contact-info-item { display: flex; gap: 16px; align-items: flex-start; }
   .contact-info-icon { font-size: 20px; flex-shrink: 0; }
@@ -784,71 +797,125 @@
 </section>
 
 <!-- CONTACT / ORDER -->
-<section id="contact">
-  <div class="section-label">Get in Touch</div>
-  <h2 class="section-title">Order, Cater &amp;<br><span>Connect</span></h2>
-  <div class="rule"></div>
-  <p class="section-sub">Interested in catering your event? Have a question? Reach out and we'll get back to you fast.</p>
-
-  <div class="contact-grid">
-    <!-- Form -->
-    <div class="contact-card">
-      <h3>Send a Message</h3>
-      <p>Catering inquiries, questions, or just saying hi — we love to hear from you.</p>
-      <form class="contact-form" onsubmit="handleSubmit(event)">
-        <input class="form-input" type="text" placeholder="Your Name" required>
-        <input class="form-input" type="email" placeholder="Email Address" required>
-        <input class="form-input" type="tel" placeholder="Phone Number">
-        <select class="form-select">
-          <option value="">Inquiry Type</option>
-          <option>Catering Request</option>
-          <option>General Question</option>
-          <option>Online Order Help</option>
-          <option>Partnership / Event</option>
-        </select>
-        <textarea class="form-textarea" placeholder="Tell us about your event or question..."></textarea>
-        <button type="submit" class="form-submit">Send Message</button>
-      </form>
+<section id="contact" class="contact-section">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-tag">Get in Touch</span>
+      <h2 class="section-title">Order, Cater &amp;<br>Connect</h2>
     </div>
+    <div class="contact-grid">
+      <div class="contact-form-container">
 
-    <!-- Info -->
-    <div class="contact-card">
-      <h3>Find Us</h3>
-      <p>Follow us on social media for daily location updates, specials, and more.</p>
-      <div class="contact-info-list">
-        <div class="contact-info-item">
-          <span class="contact-info-icon">📍</span>
-          <div>
-            <div class="contact-info-label">Location</div>
-            <div class="contact-info-text">Follow us for daily location updates</div>
-          </div>
+        <!-- Tab Switcher -->
+        <div class="form-tabs">
+          <button class="form-tab active" onclick="switchTab('order', this)">🦀 Place an Order</button>
+          <button class="form-tab" onclick="switchTab('catering', this)">🥡 Catering Inquiry</button>
         </div>
-        <div class="contact-info-item">
-          <span class="contact-info-icon">🕐</span>
-          <div>
-            <div class="contact-info-label">Hours</div>
-            <div class="contact-info-text">Check social media for current hours</div>
+
+        <!-- ORDER FORM -->
+        <form id="order-form" class="contact-form active-form" onsubmit="handleOrderSubmit(event)">
+          <div class="form-row">
+            <input class="form-input" type="text" id="order-firstName" placeholder="First Name" required>
+            <input class="form-input" type="text" id="order-lastName" placeholder="Last Name">
           </div>
-        </div>
-        <div class="contact-info-item">
-          <span class="contact-info-icon">📞</span>
-          <div>
-            <div class="contact-info-label">Phone / Text</div>
-            <div class="contact-info-text">Available via DM or contact form</div>
+          <input class="form-input" type="email" id="order-email" placeholder="Email Address" required>
+          <input class="form-input" type="tel" id="order-phone" placeholder="Phone Number (optional)">
+          <textarea class="form-textarea" id="order-items" placeholder="What would you like to order? (e.g. 2 shrimp plates, 1 crab cake)" required rows="3"></textarea>
+          <div class="form-row">
+            <select class="form-select" id="order-pickupDay" required>
+              <option value="">Pickup Day</option>
+              <option value="Tuesday">Tuesday</option>
+              <option value="Wednesday">Wednesday</option>
+              <option value="Sunday">Sunday</option>
+            </select>
+            <select class="form-select" id="order-pickupTime" required>
+              <option value="">Pickup Time</option>
+              <option value="8:00 PM">8:00 PM</option>
+              <option value="8:30 PM">8:30 PM</option>
+              <option value="9:00 PM">9:00 PM</option>
+              <option value="9:30 PM">9:30 PM</option>
+              <option value="10:00 PM">10:00 PM</option>
+              <option value="10:30 PM">10:30 PM</option>
+              <option value="11:00 PM">11:00 PM</option>
+              <option value="11:30 PM">11:30 PM</option>
+            </select>
           </div>
-        </div>
-        <div class="contact-info-item">
-          <span class="contact-info-icon">🥡</span>
-          <div>
-            <div class="contact-info-label">Catering</div>
-            <div class="contact-info-text">Private events, pop-ups, corporate catering available</div>
+          <textarea class="form-textarea" id="order-notes" placeholder="Special requests, allergies, or notes (optional)" rows="2"></textarea>
+          <button type="submit" class="form-submit" id="order-submit-btn">Place My Order 🦀</button>
+          <div id="order-status" class="form-status" style="display:none;"></div>
+        </form>
+
+        <!-- CATERING FORM -->
+        <form id="catering-form" class="contact-form" style="display:none;" onsubmit="handleCateringSubmit(event)">
+          <div class="form-row">
+            <input class="form-input" type="text" id="cat-firstName" placeholder="First Name" required>
+            <input class="form-input" type="text" id="cat-lastName" placeholder="Last Name">
           </div>
-        </div>
+          <input class="form-input" type="email" id="cat-email" placeholder="Email Address" required>
+          <input class="form-input" type="tel" id="cat-phone" placeholder="Phone Number" required>
+          <input class="form-input" type="date" id="cat-eventDate" required>
+          <input class="form-input" type="text" id="cat-eventLocation" placeholder="Event Location / Address" required>
+          <div class="form-row">
+            <input class="form-input" type="number" id="cat-guestCount" placeholder="# of Guests" required min="1">
+            <select class="form-select" id="cat-eventType">
+              <option value="">Event Type</option>
+              <option value="Birthday Party">Birthday Party</option>
+              <option value="Wedding">Wedding</option>
+              <option value="Corporate Event">Corporate Event</option>
+              <option value="Graduation">Graduation</option>
+              <option value="Holiday Party">Holiday Party</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          <textarea class="form-textarea" id="cat-menuNotes" placeholder="Menu requests, dietary notes, or special instructions" rows="3"></textarea>
+          <select class="form-select" id="cat-budget">
+            <option value="">Estimated Budget (optional)</option>
+            <option value="Under $500">Under $500</option>
+            <option value="$500–$1000">$500–$1,000</option>
+            <option value="$1000–$2500">$1,000–$2,500</option>
+            <option value="$2500+">$2,500+</option>
+            <option value="Not Sure">Not Sure</option>
+          </select>
+          <button type="submit" class="form-submit" id="catering-submit-btn">Request Catering Info 🦀</button>
+          <div id="catering-status" class="form-status" style="display:none;"></div>
+        </form>
+
       </div>
-      <div class="social-links">
-        <a href="#" class="social-link">Instagram</a>
-        <a href="#" class="social-link">Facebook</a>
-        <a href="#" class="social-link">TikTok</a>
+
+      <div class="contact-info">
+        <div class="info-card">
+          <span class="info-icon">📍</span>
+          <div>
+            <h4>Regular Location</h4>
+            <p>Violet Pub — 22 Marrows Road<br>Newark, Delaware<br>Tue · Wed · Sun · 8PM–12AM</p>
+          </div>
+        </div>
+        <div class="info-card">
+          <span class="info-icon">🕐</span>
+          <div>
+            <h4>Hours</h4>
+            <p>Tuesday, Wednesday, Sunday<br>8:00 PM – 12:00 AM<br>Event pop-ups — follow us for updates</p>
+          </div>
+        </div>
+        <div class="info-card">
+          <span class="info-icon">📞</span>
+          <div>
+            <h4>Reach Us</h4>
+            <p>Use the form or DM us on Instagram<br>for fastest response</p>
+          </div>
+        </div>
+        <div class="info-card">
+          <span class="info-icon">🥡</span>
+          <div>
+            <h4>Catering</h4>
+            <p>Private events, pop-ups,<br>corporate catering available</p>
+          </div>
+        </div>
+        <div class="social-links">
+          <a href="#" class="social-link">Instagram</a>
+          <a href="#" class="social-link">Facebook</a>
+          <a href="#" class="social-link">TikTok</a>
+        </div>
       </div>
     </div>
   </div>
@@ -997,18 +1064,105 @@
   renderSignatureStrip();
   renderWebsiteMenu();
 
-  function handleSubmit(e) {
+  // Tab switcher
+  function switchTab(tab, btn) {
+    document.querySelectorAll('.form-tab').forEach(t => t.classList.remove('active'));
+    btn.classList.add('active');
+    if (tab === 'order') {
+      document.getElementById('order-form').style.display = '';
+      document.getElementById('catering-form').style.display = 'none';
+    } else {
+      document.getElementById('order-form').style.display = 'none';
+      document.getElementById('catering-form').style.display = '';
+    }
+  }
+
+  // Order form submission
+  async function handleOrderSubmit(e) {
     e.preventDefault();
-    const btn = e.target.querySelector('.form-submit');
-    btn.textContent = '✓ Message Sent!';
-    btn.style.background = '#2a7a2a';
-    btn.style.color = '#fff';
-    setTimeout(() => {
-      btn.textContent = 'Send Message';
-      btn.style.background = '';
-      btn.style.color = '';
-      e.target.reset();
-    }, 3000);
+    const btn = document.getElementById('order-submit-btn');
+    const status = document.getElementById('order-status');
+    btn.disabled = true;
+    btn.textContent = 'Submitting...';
+    status.style.display = 'none';
+
+    try {
+      const res = await fetch('/api/order', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          firstName: document.getElementById('order-firstName').value.trim(),
+          lastName: document.getElementById('order-lastName').value.trim(),
+          email: document.getElementById('order-email').value.trim(),
+          phone: document.getElementById('order-phone').value.trim(),
+          orderItems: document.getElementById('order-items').value.trim(),
+          pickupDay: document.getElementById('order-pickupDay').value,
+          pickupTime: document.getElementById('order-pickupTime').value,
+          orderNotes: document.getElementById('order-notes').value.trim()
+        })
+      });
+      const data = await res.json();
+      if (res.ok) {
+        status.style.display = 'block';
+        status.className = 'form-status success';
+        status.innerHTML = "🦀 Order submitted! Mal will confirm by email shortly. Check your inbox.";
+        e.target.reset();
+      } else {
+        throw new Error(data.error || 'Submission failed');
+      }
+    } catch(err) {
+      status.style.display = 'block';
+      status.className = 'form-status error';
+      status.textContent = 'Something went wrong. Please DM us on Instagram or try again.';
+    } finally {
+      btn.disabled = false;
+      btn.textContent = 'Place My Order 🦀';
+    }
+  }
+
+  // Catering form submission
+  async function handleCateringSubmit(e) {
+    e.preventDefault();
+    const btn = document.getElementById('catering-submit-btn');
+    const status = document.getElementById('catering-status');
+    btn.disabled = true;
+    btn.textContent = 'Submitting...';
+    status.style.display = 'none';
+
+    try {
+      const res = await fetch('/api/catering', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          firstName: document.getElementById('cat-firstName').value.trim(),
+          lastName: document.getElementById('cat-lastName').value.trim(),
+          email: document.getElementById('cat-email').value.trim(),
+          phone: document.getElementById('cat-phone').value.trim(),
+          eventDate: document.getElementById('cat-eventDate').value,
+          eventLocation: document.getElementById('cat-eventLocation').value.trim(),
+          guestCount: document.getElementById('cat-guestCount').value,
+          eventType: document.getElementById('cat-eventType').value,
+          menuNotes: document.getElementById('cat-menuNotes').value.trim(),
+          budget: document.getElementById('cat-budget').value
+        })
+      });
+      const data = await res.json();
+      if (res.ok) {
+        status.style.display = 'block';
+        status.className = 'form-status success';
+        status.innerHTML = "🦀 Got it! Mal will reach out within 24 hours to discuss your event.";
+        e.target.reset();
+      } else {
+        throw new Error(data.error || 'Submission failed');
+      }
+    } catch(err) {
+      status.style.display = 'block';
+      status.className = 'form-status error';
+      status.textContent = 'Something went wrong. Please DM us on Instagram or try again.';
+    } finally {
+      btn.disabled = false;
+      btn.textContent = 'Request Catering Info 🦀';
+    }
   }
 </script>
 
