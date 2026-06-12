@@ -1,10 +1,39 @@
 {
   "rewrites": [
-    {"source": "/menu", "destination": "/menu.html"},
-    {"source": "/admin", "destination": "/admin.html"},
-    {"source": "/print-menu", "destination": "/print-menu.html"},
-    {"source": "/knowledge-base", "destination": "/knowledge-base.html"},
-    {"source": "/wraps", "destination": "/wraps/index.html"}
+    {
+      "source": "/menu",
+      "destination": "/menu.html"
+    },
+    {
+      "source": "/admin",
+      "destination": "/admin.html"
+    },
+    {
+      "source": "/print-menu",
+      "destination": "/print-menu.html"
+    },
+    {
+      "source": "/knowledge-base",
+      "destination": "/knowledge-base.html"
+    },
+    {
+      "source": "/wraps",
+      "destination": "/wraps/index.html"
+    },
+    {
+      "source": "/order",
+      "destination": "/order/index.html"
+    }
   ],
-  "headers": [{"source": "/(.*)", "headers": [{"key": "Cache-Control", "value": "no-cache"}]}]
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-cache"
+        }
+      ]
+    }
+  ]
 }
