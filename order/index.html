@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Order Now — Mal's Famous Seafood &amp; Grill</title>
 <meta name="description" content="Place a direct order or catering inquiry with Mal's Famous Seafood &amp; Grill. Fresh seafood, cheesesteaks, tacos, and more.">
+<link rel="icon" type="image/x-icon" href="/favicon.ico">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <script>(function(){var t=localStorage.getItem('mals_theme');if(t==='light')document.documentElement.setAttribute('data-theme','light')})();</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -874,9 +876,24 @@
           </div>
         </div>
 
-        <div class="form-group">
-          <label>Pickup Date &amp; Time <span class="req">*</span></label>
-          <input type="text" name="pickupTime" placeholder="e.g. Tuesday at 9:30 PM" required>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Pickup Day <span class="req">*</span></label>
+            <select name="pickupDay" id="pickupDay" required>
+              <option value="">Select a day</option>
+              <option value="Monday">Monday</option>
+              <option value="Tuesday">Tuesday</option>
+              <option value="Wednesday">Wednesday</option>
+              <option value="Thursday">Thursday</option>
+              <option value="Friday">Friday</option>
+              <option value="Saturday">Saturday</option>
+              <option value="Sunday">Sunday</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Pickup Time <span class="req">*</span></label>
+            <input type="time" name="pickupTimeInput" id="pickupTimeInput" required>
+          </div>
         </div>
 
         <hr class="form-divider">
@@ -1288,7 +1305,7 @@
     const status = document.getElementById('orderStatus');
 
     // Basic validation
-    const required = ['firstName', 'lastName', 'phone', 'pickupTime'];
+    const required = ['firstName', 'lastName', 'phone'];
     for (const f of required) {
       const el = form.querySelector('[name="' + f + '"]');
       if (!el || !el.value.trim()) {
@@ -1296,6 +1313,16 @@
         el && el.focus();
         return;
       }
+    }
+    if (!form.pickupDay.value) {
+      showStatus(status, 'error', 'Please select a pickup day.');
+      form.pickupDay.focus();
+      return;
+    }
+    if (!form.pickupTimeInput.value) {
+      showStatus(status, 'error', 'Please select a pickup time.');
+      form.pickupTimeInput.focus();
+      return;
     }
 
     const orderItems = buildOrderItems();
@@ -1306,12 +1333,20 @@
 
     const orderTotal = calcOrderTotal();
 
+    // Build pickupTime string: "Tuesday at 9:30 PM"
+    const rawTime = form.pickupTimeInput.value; // "21:30"
+    const [hh, mm] = rawTime.split(':').map(Number);
+    const period = hh >= 12 ? 'PM' : 'AM';
+    const h12 = hh % 12 || 12;
+    const formattedTime = h12 + ':' + String(mm).padStart(2, '0') + ' ' + period;
+    const pickupTimeStr = form.pickupDay.value + ' at ' + formattedTime;
+
     const payload = {
       firstName:   form.firstName.value.trim(),
       lastName:    form.lastName.value.trim(),
       phone:       form.phone.value.trim(),
       email:       form.email.value.trim(),
-      pickupTime:  form.pickupTime.value.trim(),
+      pickupTime:  pickupTimeStr,
       orderItems:  orderItems,
       orderTotal:  '$' + orderTotal.toFixed(2),
       notes:       form.notes.value.trim(),
