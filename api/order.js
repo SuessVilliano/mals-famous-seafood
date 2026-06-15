@@ -13,11 +13,11 @@ export default async function handler(req, res) {
 
   try {
     // 1. Create or update contact in GHL
-    const contactRes = await fetch('https://services.leadconnectorhq.com/contacts/', {
+    const contactRes = await fetch('https://services.leadconnectorhq.com/contacts/upsert', {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${GHL_TOKEN}`,
-        'Version': '2021-07-28',
+        'Version': 'v3',
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
@@ -51,7 +51,7 @@ export default async function handler(req, res) {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${GHL_TOKEN}`,
-          'Version': '2021-07-28',
+          'Version': 'v3',
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
@@ -61,7 +61,7 @@ export default async function handler(req, res) {
           emailTo: '273maljones@gmail.com',
           subject: `New Order — ${firstName} ${lastName || ''}`,
           html: `
-            <h2>New Order Received</h2>
+	 	  <h2>New Order Received</h2>
             <p><strong>Customer:</strong> ${firstName} ${lastName || ''}</p>
             <p><strong>Email:</strong> ${email}</p>
             <p><strong>Phone:</strong> ${phone || 'Not provided'}</p>

@@ -12,11 +12,11 @@ export default async function handler(req, res) {
   const LOCATION_ID = 'y5UtZ6XKTKjdp9sEcGZO';
 
   try {
-    const contactRes = await fetch('https://services.leadconnectorhq.com/contacts/', {
+    const contactRes = await fetch('https://services.leadconnectorhq.com/contacts/upsert', {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${GHL_TOKEN}`,
-        'Version': '2021-07-28',
+        'Version': 'v3',
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
@@ -53,7 +53,7 @@ export default async function handler(req, res) {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${GHL_TOKEN}`,
-          'Version': '2021-07-28',
+          'Version': 'v3',
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
