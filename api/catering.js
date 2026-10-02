@@ -8,7 +8,11 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'Missing required fields' });
   }
 
-  const GHL_TOKEN = process.env.GHL_TOKEN || 'pit-769db85c-648a-4eb6-b0b3-362477e3db61';
+  // GHL Private Integration Token comes only from the server env (Vercel). Never hardcode it.
+  const GHL_TOKEN = process.env.GHL_TOKEN;
+  if (!GHL_TOKEN) {
+    return res.status(503).json({ error: 'GHL is not configured on the server' });
+  }
   const LOCATION_ID = 'y5UtZ6XKTKjdp9sEcGZO';
 
   try {
